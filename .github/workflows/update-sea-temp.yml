@@ -1,0 +1,43 @@
+name: Update sea temperature test data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 8 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Update data.json timestamp
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+
+          with open("data.json", "r") as f:
+              data = json.load(f)
+
+          data["updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+          data["source"] = "GitHub Actions test update"
+
+          with open("data.json", "w") as f:
+              json.dump(data, f, indent=2)
+
+          print(json.dumps(data, indent=2))
+          PY
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data.json
+          git commit -m "Update sea temperature test timestamp" || echo "No changes to commit"
+          git push

@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "sea_temp_c": 10.0,
-  "updated": "2026-06-07 11:30 UTC",
-  "source": "Manual observation",
+  "sea_temp_c": 99.9,
+  "updated": "2026-06-07 13:16 UTC",
+  "source": "Python test",
   "location": "Whitley Bay, near PSC",
   "sample_lat": 55.044,
   "sample_lon": -1.445,
-  "sample_method": "Apple Watch measurement, close to Panama Swimming Club"
+  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
 }

@@ -6,5 +6,6 @@
   "location": "Whitley Bay, near PSC",
   "sample_lat": 55.044,
   "sample_lon": -1.445,
-  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
+  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
+  "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2"
 }

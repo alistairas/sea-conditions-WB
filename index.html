@@ -1,11 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Whitley Bay Sea Conditions</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sea Conditions | Whitley Bay</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f7f8;
+      color: #102027;
+    }
+
+    .page {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 18px;
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-size: 14px;
+      color: #607d8b;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .label {
+      color: #607d8b;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .temp {
+      font-size: 58px;
+      font-weight: 700;
+      letter-spacing: -2px;
+    }
+
+    .temp span {
+      font-size: 28px;
+      vertical-align: super;
+    }
+
+    .status {
+      font-size: 18px;
+      margin-top: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .small-card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    .value {
+      font-size: 22px;
+      font-weight: 650;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #607d8b;
+      line-height: 1.45;
+      margin-top: 18px;
+    }
+
+    .footer {
+      font-size: 13px;
+      color: #78909c;
+      margin-top: 24px;
+      line-height: 1.5;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Whitley Bay Sea Conditions</h1>
-  <p>Sea temperature coming soon.</p>
+  <main class="page">
+    <section class="header">
+      <div class="eyebrow">Whitley Bay · near Panama Swimming Club</div>
+      <h1>Sea Conditions</h1>
+    </section>
+
+    <section class="card">
+      <div class="label">Sea surface temperature</div>
+      <div class="temp">--<span>°C</span></div>
+      <div class="status">Live EO data coming soon</div>
+    </section>
+
+    <section class="grid">
+      <div class="small-card">
+        <div class="label">Source</div>
+        <div class="value">Copernicus</div>
+      </div>
+
+      <div class="small-card">
+        <div class="label">Location</div>
+        <div class="value">PSC offshore</div>
+      </div>
+
+      <div class="small-card">
+        <div class="label">Updated</div>
+        <div class="value">Pending</div>
+      </div>
+
+      <div class="small-card">
+        <div class="label">Status</div>
+        <div class="value">Prototype</div>
+      </div>
+    </section>
+
+    <p class="note">
+      This page will use free Earth Observation sea surface temperature data
+      sampled close to Panama Swimming Club. It is intended as a guide to
+      sea conditions, not a safety assessment.
+    </p>
+
+    <footer class="footer">
+      Built as a reusable prototype for live sea temperature, local observations,
+      and future comparison with historic PSC bathing water records.
+    </footer>
+  </main>
 </body>
 </html>

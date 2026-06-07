@@ -24,11 +24,12 @@ OUT_FILE = "psc_sst.nc"
 username = os.environ["COPERNICUS_USERNAME"]
 password = os.environ["COPERNICUS_PASSWORD"]
 
-# Use yesterday/today window because latest daily SST may lag slightly
-end = datetime.now(timezone.utc).date()
-start = end - timedelta(days=2)
+end = datetime.now(timezone.utc).date() - timedelta(days=1)
+start = end
 
 OUT_DIR.mkdir(exist_ok=True)
+
+print("Starting Copernicus subset request...")
 
 result = copernicusmarine.subset(
     dataset_id=DATASET_ID,
@@ -46,6 +47,8 @@ result = copernicusmarine.subset(
     overwrite=True,
     disable_progress_bar=True,
 )
+
+print("Subset complete")
 
 ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 

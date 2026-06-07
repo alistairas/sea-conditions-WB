@@ -3,7 +3,7 @@
   "sea_temp_c": 11.0,
   "updated": "2026-06-06 08:33",
   "source": "Apple Watch",
-  "location": "Whitley Bay, near PSC"
+  "location": "Whitley Bay, near PSC",
   "sample_lat": 55.044,
   "sample_lon": -1.445,
   "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"

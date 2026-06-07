@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "sea_temp_c": 99.9,
-  "updated": "2026-06-07 13:16 UTC",
-  "source": "Python test",
+  "sea_temp_c": 11.0,
+  "updated": "2026-06-07 21:08 UTC",
+  "source": "Copernicus authentication test",
+  "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
   "location": "Whitley Bay, near PSC",
   "sample_lat": 55.044,
   "sample_lon": -1.445,
-  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
-  "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2"
+  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
 }

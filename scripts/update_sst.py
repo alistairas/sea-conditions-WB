@@ -34,6 +34,7 @@ OUT_FILE = "psc_sst.nc"
 
 username = os.environ["COPERNICUS_USERNAME"]
 password = os.environ["COPERNICUS_PASSWORD"]
+print("Credentials found", flush=True)
 
 end = datetime.now(timezone.utc).date() - timedelta(days=1)
 start = end

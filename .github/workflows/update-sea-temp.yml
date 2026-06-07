@@ -25,4 +25,5 @@ jobs:
           git config user.email "github-actions@github.com"
           git add data.json
           git commit -m "Update sea temperature data" || echo "No changes to commit"
+          git pull --rebase origin main
           git push

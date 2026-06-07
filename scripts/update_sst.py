@@ -1,19 +1,19 @@
-print("Script started")
+print("Script started", flush=True)
 
 import json
-print("json imported")
+print("json imported", flush=True)
 
 import os
-print("os imported")
+print("os imported", flush=True)
 
 from datetime import datetime, timedelta, timezone
-print("datetime, timedelta, timezone imported")
+print("datetime, timedelta, timezone imported", flush=True)
 
 import copernicusmarine
-print("copernicusmarine imported")
+print("copernicusmarine imported", flush=True)
 
 import xarray as xr
-print("xarray imported")
+print("xarray imported", flush=True)
 
 from pathlib import Path
 
@@ -40,7 +40,7 @@ start = end
 
 OUT_DIR.mkdir(exist_ok=True)
 
-print("Starting Copernicus subset request...")
+print("Starting Copernicus subset request...", flush=True)
 
 result = copernicusmarine.subset(
     dataset_id=DATASET_ID,
@@ -59,7 +59,7 @@ result = copernicusmarine.subset(
     disable_progress_bar=True,
 )
 
-print("Subset complete")
+print("Subset complete", flush=True)
 
 ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 

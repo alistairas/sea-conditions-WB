@@ -114,12 +114,12 @@
     <section class="grid">
       <div class="small-card">
         <div class="label">Source</div>
-        <div class="value">Copernicus</div>
+        <div class="value" id="source">--</div>
       </div>
 
       <div class="small-card">
         <div class="label">Location</div>
-        <div class="value">PSC offshore</div>
+        <div class="value" id="location">--</div>
       </div>
 
       <div class="small-card">
@@ -154,6 +154,12 @@ async function loadData() {
 
   document.getElementById('updated').textContent =
     'Updated: ' + data.updated;
+
+  document.getElementById('source').textContent =
+    data.source;
+
+  document.getElementById('location').textContent =
+    data.location;
 }
 
 loadData();

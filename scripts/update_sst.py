@@ -1,10 +1,21 @@
+print("Script started")
+
 import json
+print("json imported")
+
 import os
+print("os imported")
+
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
+print("datetime, timedelta, timezone imported")
 
 import copernicusmarine
+print("copernicusmarine imported")
+
 import xarray as xr
+print("xarray imported")
+
+from pathlib import Path
 
 DATASET_ID = "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2"
 VARIABLE = "analysed_sst"

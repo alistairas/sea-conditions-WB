@@ -37,7 +37,9 @@ password = os.environ["COPERNICUS_PASSWORD"]
 print("Credentials found", flush=True)
 
 end = datetime.now(timezone.utc).date() - timedelta(days=1)
-start = end - timedelta(days=1)
+start = end
+
+print(f"Requesting from {start} to {end}", flush=True)
 
 OUT_DIR.mkdir(exist_ok=True)
 
@@ -63,6 +65,7 @@ result = copernicusmarine.subset(
 print("Subset complete", flush=True)
 
 ds = xr.open_dataset(OUT_DIR / OUT_FILE)
+print(ds["time"].values, flush=True)
 
 sst = ds[VARIABLE].isel(time=-1)
 nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")

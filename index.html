@@ -152,8 +152,8 @@ async function loadData() {
   const response = await fetch('data.json');
   const data = await response.json();
 
-  document.getElementById('temperature').innerHTML =
-    data.sea_temp_c + '<span>°C</span>';
+  document.getElementById('temperature').textContent =
+  data.sea_temp_c;
 
   document.getElementById('observation-date').textContent =
     'Observation date: ' + data.sst_date;

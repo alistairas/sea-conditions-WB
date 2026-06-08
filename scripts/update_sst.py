@@ -98,5 +98,31 @@ data = {
     "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
 }
 
+history = []
+
+try:
+    with open("history.json", "r") as f:
+        history = json.load(f)
+except:
+    pass
+
+temp_change = None
+
+if len(history) > 0:
+    previous_temp = history[-1]["sea_temp_c"]
+    temp_change = round(sst_c - previous_temp, 1)
+
+data["temp_change_24h"] = temp_change
+
+history.append({
+    "date": sst_time,
+    "sea_temp_c": sst_c
+})
+
+history = history[-365:]
+
+with open("history.json", "w") as f:
+    json.dump(history, f, indent=2)
+
 with open("data.json", "w") as f:
     json.dump(data, f, indent=2)

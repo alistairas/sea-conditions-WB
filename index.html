@@ -163,6 +163,22 @@ async function loadData() {
 
   document.getElementById('updated-small').textContent =
     data.updated;
+    
+    const change = data.temp_change_24h;
+
+let trendText = "";
+
+if (change === null) {
+  trendText = "";
+} else if (change > 0) {
+  trendText = ` ↑ ${change}°`;
+} else if (change < 0) {
+  trendText = ` ↓ ${Math.abs(change)}°`;
+} else {
+  trendText = " → 0°";
+}
+
+document.getElementById('trend').textContent = trendText;
 }
 
 loadData();

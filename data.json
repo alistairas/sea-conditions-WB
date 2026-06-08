@@ -1,6 +1,7 @@
 {
   "version": 1,
   "sea_temp_c": 10.8,
+  "temp_change_24h": 0.3,
   "updated": "2026-06-07 21:55 UTC",
   "source": "Copernicus Marine OSTIA NRT",
   "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",

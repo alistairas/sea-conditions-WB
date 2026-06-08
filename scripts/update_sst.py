@@ -72,10 +72,10 @@ nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")
 sst_kelvin = float(nearest.values)
 sst_c = round(sst_kelvin - 273.15, 1)
 
-sst_prev = ds[VARIABLE].isel(time=-2)
-nearest_prev = sst_prev.sel(latitude=LAT, longitude=LON, method="nearest")
-sst_prev_c = round(float(nearest_prev.values) - 273.15, 1)
-temp_change = round(sst_c - sst_prev_c, 1)
+#sst_prev = ds[VARIABLE].isel(time=-2)
+#nearest_prev = sst_prev.sel(latitude=LAT, longitude=LON, method="nearest")
+#sst_prev_c = round(float(nearest_prev.values) - 273.15, 1)
+#temp_change = round(sst_c - sst_prev_c, 1)
 
 sst_time = str(ds["time"].values[-1])[:10]
 actual_lat = float(nearest["latitude"].values)
@@ -84,7 +84,7 @@ actual_lon = float(nearest["longitude"].values)
 data = {
     "version": 1,
     "sea_temp_c": sst_c,
-    "temp_change_24h": temp_change,
+#    "temp_change_24h": temp_change,
     "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     "source": "Copernicus Marine OSTIA NRT",
     "dataset": DATASET_ID,

@@ -116,7 +116,7 @@
     </section>
 
     <section class="card">
-      <div class="label">Sea surface temperature</div>
+      <div class="label" id="measurement">Sea temperature</div>
       <div class="temp">
   <span id="temperature">--</span><span>°C</span>
   <span id="trend" style="font-size:22px;"></span>
@@ -162,6 +162,8 @@
 async function loadData() {
   const response = await fetch('data.json');
   const data = await response.json();
+document.getElementById('measurement').textContent =
+  data.measurement || 'Sea temperature';
 
   document.getElementById('temperature').textContent =
   data.sea_temp_c;

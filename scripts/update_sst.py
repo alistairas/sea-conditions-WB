@@ -95,7 +95,9 @@ data = {
     "sample_lon": LON,
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
-    "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
+    "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
+    "measurement": "Analysed sea surface temperature",
+    "units": "°C"
 }
 
 history = []

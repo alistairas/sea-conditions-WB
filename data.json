@@ -1,16 +1,18 @@
 {
   "version": 1,
   "sea_temp_c": 10.8,
-  "temp_change_24h": 0.2,
-  "updated": "2026-06-08 20:46 UTC",
+  "updated": "2026-06-09 11:31 UTC",
   "source": "Copernicus Marine OSTIA NRT",
   "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
   "variable": "analysed_sst",
-  "sst_date": "2026-06-07",
+  "sst_date": "2026-06-08",
   "location": "Whitley Bay, near PSC",
   "sample_lat": 55.044,
   "sample_lon": -1.445,
   "actual_pixel_lat": 55.025001525878906,
   "actual_pixel_lon": -1.4249999523162842,
-  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club"
+  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
+  "measurement": "Analysed sea surface temperature",
+  "units": "\u00b0C",
+  "temp_change_24h": null
 }

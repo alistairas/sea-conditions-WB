@@ -1,1 +1,18 @@
-psc_archive_lookup.json
+{
+  "06-10": [
+    {
+      "year": 2025,
+      "water_temp_c": 13,
+      "swimmers": 13,
+      "notes": "Sunny at first gradually clouding over..."
+    }
+  ],
+  "06-11": [
+    {
+      "year": 2024,
+      "water_temp_c": 12,
+      "swimmers": 11,
+      "notes": "A mixture of heavy cloud..."
+    }
+  ]
+}

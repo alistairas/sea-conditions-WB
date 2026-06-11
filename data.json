@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sea_temp_c": 10.9,
-  "updated": "2026-06-11 12:18 UTC",
+  "updated": "2026-06-11 22:27 UTC",
   "source": "Copernicus Marine OSTIA NRT",
   "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
   "variable": "analysed_sst",
@@ -11,7 +11,7 @@
   "sample_lon": -1.4479198,
   "actual_pixel_lat": 55.025001525878906,
   "actual_pixel_lon": -1.4249999523162842,
-  "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
+  "sample_method": "Nearest OSTIA SST pixel to selected offshore point near Panama Swimming Club",
   "measurement": "Analysed sea surface temperature",
   "units": "\u00b0C",
   "temp_change_24h": 0.0

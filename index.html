@@ -157,7 +157,10 @@
       <div class="status" id="observation-date">Observation date: Loading...</div>
       <div class="badge">Earth Observation data</div>
     </section>
-
+    <section class="card">
+      <div class="label">Last 7 days</div>
+      <canvas id="temp-chart" height="180"></canvas>
+    </section>
     <section class="grid">
       <div class="small-card">
         <div class="label">Source</div>
@@ -197,6 +200,7 @@
       and future comparison with historic PSC bathing water records.
     </footer>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
 async function loadData() {
   const response = await fetch('data.json');
@@ -252,6 +256,42 @@ if (change === null) {
 }
 
 document.getElementById('trend').textContent = trendText;
+const historyResponse = await fetch('history.json');
+const history = await historyResponse.json();
+
+const lastSeven = history.slice(-7);
+
+const labels = lastSeven.map(item => item.date.slice(5));
+const temps = lastSeven.map(item => item.sea_temp_c);
+
+new Chart(document.getElementById('temp-chart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Sea temperature °C',
+      data: temps,
+      tension: 0.3
+    }]
+  },
+  options: {
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+scales: {
+  y: {
+    suggestedMin: Math.min(...temps) - 0.5,
+    suggestedMax: Math.max(...temps) + 0.5,
+    title: {
+      display: true,
+      text: '°C'
+    }
+  }
+}
+  }
+});
 }
 
 loadData();

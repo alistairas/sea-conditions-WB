@@ -20,14 +20,14 @@ from pathlib import Path
 DATASET_ID = "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2"
 VARIABLE = "analysed_sst"
 
-LAT = 55.044
-LON = -1.445
+LAT = 55.0519527
+LON = -1.4479198
 
 # Small offshore box around PSC
-MIN_LAT = 55.02
+MIN_LAT = 55.03
 MAX_LAT = 55.07
-MIN_LON = -1.50
-MAX_LON = -1.40
+MIN_LON = -1.47
+MAX_LON = -1.42
 
 OUT_DIR = Path("copernicus-data")
 OUT_FILE = "psc_sst.nc"
@@ -95,7 +95,7 @@ data = {
     "sample_lon": LON,
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
-    "sample_method": "Nearest valid offshore SST pixel close to Panama Swimming Club",
+    "sample_method": "Nearest OSTIA SST pixel to selected offshore point near Panama Swimming Club",
     "measurement": "Analysed sea surface temperature",
     "units": "°C"
 }

@@ -105,6 +105,39 @@
   color: #607d8b;
   font-size: 13px;
 }
+.archive-card {
+  margin-top: 28px;
+  padding: 20px;
+  border-radius: 18px;
+  background: #eaf1f3;
+  color: #102027;
+}
+
+.archive-kicker {
+  font-size: 13px;
+  color: #607d8b;
+  margin-bottom: 4px;
+}
+
+.archive-card h2 {
+  font-size: 22px;
+  margin: 0 0 14px 0;
+}
+
+.archive-card p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.archive-meta {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.archive-notes {
+  margin-top: 12px;
+}
   </style>
 </head>
 
@@ -147,10 +180,11 @@
       </div>
     </section>
 
-    <section class="card">
-  <div class="label">From the Archives</div>
+<section class="archive-card">
+  <div class="archive-kicker">From the PSC logbook</div>
+  <h2>From the Archives</h2>
   <div id="archive-entry">Loading...</div>
-   </section>
+</section>
 
     <p class="note">
       This page will use free Earth Observation sea surface temperature data
@@ -176,12 +210,15 @@ const entries = archiveData.entries;
 console.log(entries.length);
 const latestEntry = entries[entries.length - 1];
 
-document.getElementById('archive-entry').innerHTML = `
-  <strong>${latestEntry.date_display}</strong><br>
-  ${latestEntry.water_temp_c}°C • ${latestEntry.swimmers} swimmers<br><br>
-  ${latestEntry.notes}
+  document.getElementById('archive-entry').innerHTML = `
+  <div class="archive-meta">
+    ${latestEntry.date_display}<br>
+    ${latestEntry.water_temp_c}°C • ${latestEntry.swimmers} swimmers
+  </div>
+  <div class="archive-notes">
+    ${latestEntry.notes}
+  </div>
 `;
-  
 document.getElementById('measurement').textContent =
   data.measurement || 'Sea temperature';
 

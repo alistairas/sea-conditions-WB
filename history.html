@@ -50,6 +50,12 @@ Refresh
     <button onclick="showRange(30)">Month</button>
     <button onclick="showRange(365)">Year</button>
     <button onclick="showRange(null)">All</button>
+    <button onclick="toggleCalendar()"> Start date</button>
+
+  	<div id="calendarBox" style="display:none; margin-top:10px;">
+    	<input type="date" id="startDate">
+    	<button onclick="applyStartDate()">Apply</button>
+	</div>
 </div>
 
 <canvas id="chart"></canvas>
@@ -57,84 +63,121 @@ Refresh
 <div class="stats" id="stats"></div>
 
 <script>
-
 let historyData = [];
 let chart;
+let startDateFilter = null;
 
 fetch("history.json")
-    .then(r => r.json())
-    .then(data => {
-        historyData = data;
-        showRange(null);
-    });
+  .then(r => r.json())
+  .then(data => {
+    historyData = data;
+    showRange(null);
+  });
 
 function showRange(days) {
 
-    let data = historyData;
+  let data = historyData;
 
-    if (days) {
-        const cutoff = new Date();
-        cutoff.setDate(cutoff.getDate() - days);
+  // preset range filter (week/month/year)
+  if (days) {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
 
-        data = data.filter(item =>
-            new Date(item.date) >= cutoff
-        );
-    }
-
-    const labels = data.map(x => x.date);
-    const temps = data.map(x => x.sea_temp_c);
-
-    if (chart) chart.destroy();
-
-    chart = new Chart(
-        document.getElementById("chart"),
-        {
-            type: "line",
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: "Sea Temperature (°C)",
-                    data: temps,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        title: {
-                            display: true,
-                            text: "°C"
-                        }
-                    }
-                }
-            }
-        }
+    data = data.filter(item =>
+      new Date(item.date) >= cutoff
     );
+  }
 
-    updateStats(temps);
+  // custom start-date filter (calendar)
+  if (startDateFilter) {
+    data = data.filter(item =>
+      new Date(item.date) >= startDateFilter
+    );
+  }
+
+  const labels = data.map(x => x.date);
+  const temps = data.map(x => x.sea_temp_c);
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Sea Temperature (°C)",
+        data: temps,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "°C"
+          }
+        }
+      }
+    }
+  });
+
+  updateStats(temps);
 }
 
 function updateStats(temps) {
 
-    if (!temps.length) {
-        document.getElementById("stats").innerHTML =
-            "No data available";
-        return;
-    }
-
-    const min = Math.min(...temps);
-    const max = Math.max(...temps);
-    const avg =
-        temps.reduce((a,b) => a+b, 0) / temps.length;
-
+  if (!temps.length) {
     document.getElementById("stats").innerHTML =
-        `Min: ${min.toFixed(1)}°C |
-         Max: ${max.toFixed(1)}°C |
-         Avg: ${avg.toFixed(1)}°C |
-         Records: ${temps.length}`;
+      "No data available";
+    return;
+  }
+
+  const min = Math.min(...temps);
+  const max = Math.max(...temps);
+  const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
+
+  document.getElementById("stats").innerHTML =
+    `Min: ${min.toFixed(1)}°C |
+     Max: ${max.toFixed(1)}°C |
+     Avg: ${avg.toFixed(1)}°C |
+     Records: ${temps.length}`;
+}
+
+/* ---------------------------
+   Calendar controls
+----------------------------*/
+
+function toggleCalendar() {
+  const box = document.getElementById("calendarBox");
+
+  if (!box) return;
+
+  box.style.display = (box.style.display === "none" || !box.style.display)
+    ? "block"
+    : "none";
+}
+
+function applyStartDate() {
+  const val = document.getElementById("startDate").value;
+
+  if (!val) return;
+
+  startDateFilter = new Date(val);
+
+  // re-render using current view
+  showRange(null);
+}
+
+function clearStartDate() {
+  startDateFilter = null;
+
+  const input = document.getElementById("startDate");
+  if (input) input.value = "";
+
+  showRange(null);
 }
 </script>
-
 </body>
 </html>

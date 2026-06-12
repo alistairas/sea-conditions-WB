@@ -171,13 +171,13 @@
 
 <body>
   <main class="page">
-    <section class="header">
+<section class="header">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;">
     <div>
       <div class="eyebrow">North Tyneside</div>
       <h1>Sea Conditions</h1>
     </div>
-<div>
+
     <button onclick="location.reload()" class="refresh-btn">
       ↻
     </button>
@@ -256,15 +256,6 @@ const formattedDate = observationDate.toLocaleDateString('en-GB', {
 document.getElementById('observation-date').textContent =
   'Observation date: ' + formattedDate;
 
-  document.getElementById('source').textContent =
-    data.source;
-
-  document.getElementById('location').textContent =
-  data.sample_area || data.location;
-
-  document.getElementById('updated-small').textContent =
-    data.updated;
-    
     document.getElementById('data-note').textContent =
   `Data source: Copernicus Marine OSTIA Near Real Time analysis. Produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
     const change = data.temp_change_24h;

@@ -58,6 +58,13 @@
       font-size: 28px;
       vertical-align: super;
     }
+    
+    #trend {
+  font-size: 18px;
+  color: #607d8b;
+  margin-left: 12px;
+  font-weight: 500;
+}
 
     .status {
       font-size: 18px;
@@ -144,24 +151,44 @@
   line-height: 1.45;
   margin-top: 16px;
 }
+.refresh-btn {
+  border: none;
+  background: white;
+  color: #607d8b;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 16px;
+}
+
+.refresh-btn:hover {
+  background: #eef4f6;
+}
   </style>
 </head>
 
 <body>
   <main class="page">
     <section class="header">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div>
       <div class="eyebrow">Whitley Bay · near Panama Swimming Club</div>
       <h1>Sea Conditions</h1>
-    </section>
-		<button onclick="location.reload()" class="refresh-btn">
-  		Refresh
-		</button>
+    </div>
+<div>
+    <button onclick="location.reload()" class="refresh-btn">
+      ↻
+    </button>
+  </div>
+</section>
     <a href="history.html" style="text-decoration:none; color:inherit;">
   		<section class="card">
 		    <div class="label" id="measurement">Sea temperature</div>
 		    <div class="temp">
 					<span id="temperature">--</span><span>°C</span>
-      		<span id="trend" style="font-size:22px;"></span>
+      		<span id="trend"></span>
     		</div>
 			</a>
       <div class="status" id="observation-date">Observation date: Loading...</div>
@@ -239,8 +266,16 @@ document.getElementById('measurement').textContent =
   document.getElementById('temperature').textContent =
   data.sea_temp_c;
 
-  document.getElementById('observation-date').textContent =
-    'Observation date: ' + data.sst_date;
+  const observationDate = new Date(data.sst_date);
+
+const formattedDate = observationDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric'
+});
+
+document.getElementById('observation-date').textContent =
+  'Observation date: ' + formattedDate;
 
   document.getElementById('source').textContent =
     data.source;

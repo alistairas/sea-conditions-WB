@@ -36,7 +36,7 @@ username = os.environ["COPERNICUS_USERNAME"]
 password = os.environ["COPERNICUS_PASSWORD"]
 print("Credentials found", flush=True)
 
-end = datetime.now(timezone.utc).date() - timedelta(days=1)
+end = datetime.now(timezone.utc).date() - timedelta(days=2)
 start = end
 
 print(f"Requesting from {start} to {end}", flush=True)

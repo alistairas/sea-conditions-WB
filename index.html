@@ -147,13 +147,17 @@
       <div class="eyebrow">Whitley Bay · near Panama Swimming Club</div>
       <h1>Sea Conditions</h1>
     </section>
-
-    <section class="card">
-      <div class="label" id="measurement">Sea temperature</div>
-      <div class="temp">
-  <span id="temperature">--</span><span>°C</span>
-  <span id="trend" style="font-size:22px;"></span>
-</div>
+		<button onclick="location.reload()" class="refresh-btn">
+  		Refresh
+		</button>
+    <a href="history.html" style="text-decoration:none; color:inherit;">
+  		<section class="card">
+		    <div class="label" id="measurement">Sea temperature</div>
+		    <div class="temp">
+					<span id="temperature">--</span><span>°C</span>
+      		<span id="trend" style="font-size:22px;"></span>
+    		</div>
+			</a>
       <div class="status" id="observation-date">Observation date: Loading...</div>
       <div class="badge">Earth Observation data</div>
     </section>

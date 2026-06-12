@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Sea Temperature History</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: sans-serif;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 8px 14px;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.stats {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.1em;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Sea Temperature History</h1>
+<button onclick="location.reload()" class="refresh-btn">
+Refresh
+</button>
+<div class="controls">
+    <button onclick="showRange(7)">Week</button>
+    <button onclick="showRange(30)">Month</button>
+    <button onclick="showRange(365)">Year</button>
+    <button onclick="showRange(null)">All</button>
+    <button onclick="toggleCalendar()"> Start date</button>
+
+  	<div id="calendarBox" style="display:none; margin-top:10px;">
+    	<input type="date" id="startDate">
+    	<button onclick="applyStartDate()">Apply</button>
+	</div>
+</div>
+
+<canvas id="chart"></canvas>
+
+<div class="stats" id="stats"></div>
+
+<script>
+let historyData = [];
+let chart;
+let startDateFilter = null;
+
+fetch("history.json")
+  .then(r => r.json())
+  .then(data => {
+    historyData = data;
+    showRange(null);
+  });
+
+function showRange(days) {
+
+  let data = historyData;
+
+  // preset range filter (week/month/year)
+  if (days) {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+
+    data = data.filter(item =>
+      new Date(item.date) >= cutoff
+    );
+  }
+
+  // custom start-date filter (calendar)
+  if (startDateFilter) {
+    data = data.filter(item =>
+      new Date(item.date) >= startDateFilter
+    );
+  }
+
+  const labels = data.map(x => x.date);
+  const temps = data.map(x => x.sea_temp_c);
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Sea Temperature (°C)",
+        data: temps,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: "°C"
+          }
+        }
+      }
+    }
+  });
+
+  updateStats(temps);
+}
+
+function updateStats(temps) {
+
+  if (!temps.length) {
+    document.getElementById("stats").innerHTML =
+      "No data available";
+    return;
+  }
+
+  const min = Math.min(...temps);
+  const max = Math.max(...temps);
+  const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
+
+  document.getElementById("stats").innerHTML =
+    `Min: ${min.toFixed(1)}°C |
+     Max: ${max.toFixed(1)}°C |
+     Avg: ${avg.toFixed(1)}°C |
+     Records: ${temps.length}`;
+}
+
+/* ---------------------------
+   Calendar controls
+----------------------------*/
+
+function toggleCalendar() {
+  const box = document.getElementById("calendarBox");
+
+  if (!box) return;
+
+  box.style.display = (box.style.display === "none" || !box.style.display)
+    ? "block"
+    : "none";
+}
+
+function applyStartDate() {
+  const val = document.getElementById("startDate").value;
+
+  if (!val) return;
+
+  startDateFilter = new Date(val);
+
+  // re-render using current view
+  showRange(null);
+}
+
+function clearStartDate() {
+  startDateFilter = null;
+
+  const input = document.getElementById("startDate");
+  if (input) input.value = "";
+
+  showRange(null);
+}
+</script>
+</body>
+</html>

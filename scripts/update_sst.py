@@ -23,15 +23,11 @@ VARIABLE = "analysed_sst"
 LAT = 55.0519527
 LON = -1.4479198
 
-# Small offshore box around PSC
-#MIN_LAT = 55.03
-#MAX_LAT = 55.07
-#MIN_LON = -1.47
-#MAX_LON = -1.42
-MIN_LAT = 54.95
-MAX_LAT = 55.15
-MIN_LON = -1.55
-MAX_LON = -1.30
+# Small offshore box around Whitley Bay
+MIN_LAT = 55.00
+MAX_LAT = 55.09
+MIN_LON = -1.50
+MAX_LON = -1.40
 
 OUT_DIR = Path("copernicus-data")
 OUT_FILE = "psc_sst.nc"
@@ -51,7 +47,7 @@ print("Starting Copernicus subset request...", flush=True)
 
 result = copernicusmarine.subset(
     dataset_id=DATASET_ID,
-    variables=[VARIABLE],
+    variables=[VARIABLE, "analysis_error"],
     minimum_longitude=MIN_LON,
     maximum_longitude=MAX_LON,
     minimum_latitude=MIN_LAT,
@@ -72,27 +68,16 @@ ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 print(ds["time"].values, flush=True)
 print("Latitudes:", ds.latitude.values, flush=True)
 print("Longitudes:", ds.longitude.values, flush=True)
-import numpy as np
 
-sst_grid = ds[VARIABLE].isel(time=-1)
-
-print("Available sea cells:", flush=True)
-
-for lat in ds.latitude.values:
-    for lon in ds.longitude.values:
-        value = float(sst_grid.sel(latitude=lat, longitude=lon).values)
-        if np.isfinite(value):
-            temp_c = round(value - 273.15, 1)
-            print(
-                f"{lat:.3f}, {lon:.3f} = {temp_c}C "
-                f"https://www.google.com/maps?q={lat},{lon}",
-                flush=True
-            )
 sst = ds[VARIABLE].isel(time=-1)
 nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")
+print("Requested sample:", LAT, LON, flush=True)
+print("Selected OSTIA cell:", float(nearest["latitude"].values), float(nearest["longitude"].values), flush=True)
 sst_kelvin = float(nearest.values)
 sst_c = round(sst_kelvin - 273.15, 1)
-
+error = ds["analysis_error"].isel(time=-1)
+nearest_error = error.sel(latitude=LAT, longitude=LON, method="nearest")
+error_c = round(float(nearest_error.values), 1)
 #sst_prev = ds[VARIABLE].isel(time=-2)
 #nearest_prev = sst_prev.sel(latitude=LAT, longitude=LON, method="nearest")
 #sst_prev_c = round(float(nearest_prev.values) - 273.15, 1)
@@ -111,14 +96,17 @@ data = {
     "dataset": DATASET_ID,
     "variable": VARIABLE,
     "sst_date": sst_time,
-    "location": "Whitley Bay, near PSC",
+    "location": "North Tyneside coast",
+    "sample_area": "North Tyneside coast",
     "sample_lat": LAT,
     "sample_lon": LON,
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
     "sample_method": "Nearest OSTIA SST pixel to selected offshore point near Panama Swimming Club",
     "measurement": "Analysed sea surface temperature",
-    "units": "°C"
+    "units": "°C",
+    "grid_resolution": "0.05 degrees",
+    "analysis_error_c": error_c
 }
 
 history = []

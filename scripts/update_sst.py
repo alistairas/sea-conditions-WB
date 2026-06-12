@@ -66,6 +66,8 @@ print("Subset complete", flush=True)
 
 ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 print(ds["time"].values, flush=True)
+print("Latitudes:", ds.latitude.values, flush=True)
+print("Longitudes:", ds.longitude.values, flush=True)
 
 sst = ds[VARIABLE].isel(time=-1)
 nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")

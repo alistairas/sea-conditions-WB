@@ -24,10 +24,14 @@ LAT = 55.0519527
 LON = -1.4479198
 
 # Small offshore box around PSC
-MIN_LAT = 55.03
-MAX_LAT = 55.07
-MIN_LON = -1.47
-MAX_LON = -1.42
+#MIN_LAT = 55.03
+#MAX_LAT = 55.07
+#MIN_LON = -1.47
+#MAX_LON = -1.42
+MIN_LAT = 54.95
+MAX_LAT = 55.15
+MIN_LON = -1.55
+MAX_LON = -1.30
 
 OUT_DIR = Path("copernicus-data")
 OUT_FILE = "psc_sst.nc"
@@ -68,7 +72,22 @@ ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 print(ds["time"].values, flush=True)
 print("Latitudes:", ds.latitude.values, flush=True)
 print("Longitudes:", ds.longitude.values, flush=True)
+import numpy as np
 
+sst_grid = ds[VARIABLE].isel(time=-1)
+
+print("Available sea cells:", flush=True)
+
+for lat in ds.latitude.values:
+    for lon in ds.longitude.values:
+        value = float(sst_grid.sel(latitude=lat, longitude=lon).values)
+        if np.isfinite(value):
+            temp_c = round(value - 273.15, 1)
+            print(
+                f"{lat:.3f}, {lon:.3f} = {temp_c}C "
+                f"https://www.google.com/maps?q={lat},{lon}",
+                flush=True
+            )
 sst = ds[VARIABLE].isel(time=-1)
 nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")
 sst_kelvin = float(nearest.values)

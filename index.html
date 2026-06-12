@@ -138,6 +138,12 @@
 .archive-notes {
   margin-top: 12px;
 }
+.footer-note {
+  font-size: 12px;
+  color: #78909c;
+  line-height: 1.45;
+  margin-top: 16px;
+}
   </style>
 </head>
 
@@ -159,7 +165,7 @@
     		</div>
 			</a>
       <div class="status" id="observation-date">Observation date: Loading...</div>
-      <div class="badge">Earth Observation data</div>
+      <div class="badge">Earth Observation + Met Office analysis</div>
     </section>
     <section class="card">
       <div class="label">Last 7 days</div>
@@ -186,7 +192,9 @@
         <div class="value">Prototype</div>
       </div>
     </section>
-
+<p class="footer-note" id="data-note">
+  Data source: Copernicus Marine OSTIA Near Real Time analysis.
+</p>
 <section class="archive-card">
   <div class="archive-kicker">From the PSC logbook</div>
   <h2>From the Archives</h2>
@@ -194,9 +202,7 @@
 </section>
 
     <p class="note">
-      This page will use free Earth Observation sea surface temperature data
-      sampled close to Panama Swimming Club. It is intended as a guide to
-      sea conditions, not a safety assessment.
+      Sea temperature is derived from the Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations. Values represent the nearest available grid cell for the North Tyneside coast and should be treated as one source of information on local sea conditions, not a safety assessment.
     </p>
 
     <footer class="footer">
@@ -240,11 +246,13 @@ document.getElementById('measurement').textContent =
     data.source;
 
   document.getElementById('location').textContent =
-    data.location;
+  data.sample_area || data.location;
 
   document.getElementById('updated-small').textContent =
     data.updated;
     
+    document.getElementById('data-note').textContent =
+  `Data source: Copernicus Marine OSTIA Near Real Time analysis. Produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
     const change = data.temp_change_24h;
 
 let trendText = "";

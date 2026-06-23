@@ -71,6 +71,20 @@ WEATHER_CODES = {
     95: "Thunderstorm"
 }
 
+def uv_category(uv):
+    if uv is None:
+        return None
+    elif uv < 3:
+        return "Low"
+    elif uv < 6:
+        return "Moderate"
+    elif uv < 8:
+        return "High"
+    elif uv < 11:
+        return "Very High"
+    else:
+        return "Extreme"
+
 def compass_direction(degrees):
     directions = [
         "N","NNE","NE","ENE",
@@ -168,6 +182,7 @@ data = {
 "wind_speed_kmh": current["wind_speed_10m"],
 "wind_direction_deg": current["wind_direction_10m"],
 "uv_index": current["uv_index"],
+"uv_category": uv_category(current["uv_index"]),
 "weather_code": current["weather_code"],
 "forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
 "wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None

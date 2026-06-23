@@ -1,3 +1,4 @@
 copernicusmarine
 xarray
 netcdf4
+requests

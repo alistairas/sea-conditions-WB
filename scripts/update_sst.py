@@ -31,13 +31,16 @@ weather_url = "https://api.open-meteo.com/v1/forecast"
 params = {
     "latitude": LAT,
     "longitude": LON,
-    "current": "temperature_2m,wind_speed_10m,wind_direction_10m,uv_index,weather_code",
+    "current": "temperature_2m,wind_speed_10m,wind_direction_10m,weather_code",
+    "daily": "uv_index_max",
     "timezone": "Europe/London"
 }
 
 try:
     weather = requests.get(weather_url, params=params, timeout=20).json()
     current = weather["current"]
+    daily = weather["daily"]
+    uv_max = daily["uv_index_max"][0]
     print("Weather data fetched", flush=True)
 except Exception as e:
     print(f"Weather fetch failed: {e}", flush=True)
@@ -45,9 +48,9 @@ except Exception as e:
         "temperature_2m": None,
         "wind_speed_10m": None,
         "wind_direction_10m": None,
-        "uv_index": None,
         "weather_code": None
     }
+    uv_max = None
     
 WEATHER_CODES = {
     0: "Clear",
@@ -181,8 +184,8 @@ data = {
     "air_temp_c": current["temperature_2m"],
 "wind_speed_kmh": current["wind_speed_10m"],
 "wind_direction_deg": current["wind_direction_10m"],
-"uv_index": current["uv_index"],
-"uv_category": uv_category(current["uv_index"]),
+"uv_max": uv_max,
+"uv_category": uv_category(uv_max),
 "weather_code": current["weather_code"],
 "forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
 "wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None

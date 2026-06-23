@@ -23,6 +23,19 @@ VARIABLE = "analysed_sst"
 LAT = 55.0519527
 LON = -1.4479198
 
+weather_url = "https://api.open-meteo.com/v1/forecast"
+
+params = {
+    "latitude": LAT,
+    "longitude": LON,
+    "current": "temperature_2m,wind_speed_10m,wind_direction_10m,uv_index,weather_code",
+    "timezone": "Europe/London"
+}
+
+weather = requests.get(weather_url, params=params, timeout=20).json()
+current = weather["current"]
+print("Weather data fetched", flush=True)
+
 # Small offshore box around Whitley Bay
 MIN_LAT = 55.00
 MAX_LAT = 55.09
@@ -106,7 +119,12 @@ data = {
     "measurement": "Analysed sea surface temperature",
     "units": "°C",
     "grid_resolution": "0.05 degrees",
-    "analysis_error_c": error_c
+    "analysis_error_c": error_c,
+    "air_temp_c": current["temperature_2m"],
+"wind_speed_kmh": current["wind_speed_10m"],
+"wind_direction_deg": current["wind_direction_10m"],
+"uv_index": current["uv_index"],
+"weather_code": current["weather_code"]
 }
 
 history = []

@@ -9,6 +9,9 @@ print("os imported", flush=True)
 from datetime import datetime, timedelta, timezone
 print("datetime, timedelta, timezone imported", flush=True)
 
+import requests
+print("requests imported", flush=True)
+
 import copernicusmarine
 print("copernicusmarine imported", flush=True)
 
@@ -32,9 +35,50 @@ params = {
     "timezone": "Europe/London"
 }
 
-weather = requests.get(weather_url, params=params, timeout=20).json()
-current = weather["current"]
-print("Weather data fetched", flush=True)
+try:
+    weather = requests.get(weather_url, params=params, timeout=20).json()
+    current = weather["current"]
+    print("Weather data fetched", flush=True)
+except Exception as e:
+    print(f"Weather fetch failed: {e}", flush=True)
+    current = {
+        "temperature_2m": None,
+        "wind_speed_10m": None,
+        "wind_direction_10m": None,
+        "uv_index": None,
+        "weather_code": None
+    }
+    
+WEATHER_CODES = {
+    0: "Clear",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Fog",
+    48: "Rime fog",
+    51: "Light drizzle",
+    53: "Moderate drizzle",
+    55: "Dense drizzle",
+    61: "Light rain",
+    63: "Moderate rain",
+    65: "Heavy rain",
+    71: "Light snow",
+    73: "Moderate snow",
+    75: "Heavy snow",
+    80: "Rain showers",
+    81: "Heavy showers",
+    82: "Violent showers",
+    95: "Thunderstorm"
+}
+
+def compass_direction(degrees):
+    directions = [
+        "N","NNE","NE","ENE",
+        "E","ESE","SE","SSE",
+        "S","SSW","SW","WSW",
+        "W","WNW","NW","NNW"
+    ]
+    return directions[round(degrees / 22.5) % 16]
 
 # Small offshore box around Whitley Bay
 MIN_LAT = 55.00
@@ -124,7 +168,9 @@ data = {
 "wind_speed_kmh": current["wind_speed_10m"],
 "wind_direction_deg": current["wind_direction_10m"],
 "uv_index": current["uv_index"],
-"weather_code": current["weather_code"]
+"weather_code": current["weather_code"],
+"forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
+"wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None
 }
 
 history = []
@@ -142,6 +188,8 @@ if len(history) > 0:
     temp_change = round(sst_c - previous_temp, 1)
 
 data["temp_change_24h"] = temp_change
+
+history = [h for h in history if h["date"] != sst_time]
 
 history.append({
     "date": sst_time,

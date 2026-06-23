@@ -257,6 +257,9 @@ document.getElementById('forecast').textContent =
 document.getElementById('uv').textContent =
   data.uv_index;
   
+  document.getElementById('uv').textContent =
+  `${data.uv_category} (${data.uv_index.toFixed(1)})`;
+  
   const archiveResponse = await fetch('PSC_Log_Vol06_archive.json');
 const archiveData = await archiveResponse.json();
 

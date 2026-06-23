@@ -182,6 +182,27 @@
     </button>
   </div>
 </section>
+<section class="grid">
+  <div class="small-card">
+    <div class="label">Air</div>
+    <div class="value" id="air-temp">--</div>
+  </div>
+
+  <div class="small-card">
+    <div class="label">Wind</div>
+    <div class="value" id="wind">--</div>
+  </div>
+
+  <div class="small-card">
+    <div class="label">Forecast</div>
+    <div class="value" id="forecast">--</div>
+  </div>
+
+  <div class="small-card">
+    <div class="label">UV</div>
+    <div class="value" id="uv">--</div>
+  </div>
+</section>
     <a href="history.html" style="text-decoration:none; color:inherit;">
   		<section class="card">
 		    <div class="label" id="measurement">Sea temperature</div>
@@ -220,6 +241,18 @@
 async function loadData() {
   const response = await fetch('data.json');
   const data = await response.json();
+  
+  document.getElementById('air-temp').textContent =
+  data.air_temp_c + '°C';
+
+document.getElementById('wind').textContent =
+  `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction}`;
+
+document.getElementById('forecast').textContent =
+  data.forecast;
+
+document.getElementById('uv').textContent =
+  data.uv_index;
   
   const archiveResponse = await fetch('PSC_Log_Vol06_archive.json');
 const archiveData = await archiveResponse.json();

@@ -367,8 +367,6 @@ const latestEntry = entries[entries.length - 1];
     ${latestEntry.notes}
   </div>
 `;
-document.getElementById('measurement').textContent =
-  data.measurement || 'Sea temp';
 
 document.getElementById('temperature').textContent =
   `${data.sea_temp_c}°C`;

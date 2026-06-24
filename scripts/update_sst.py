@@ -77,6 +77,28 @@ WEATHER_CODES = {
     95: "Thunderstorm"
 }
 
+WEATHER_ICONS = {
+    0: "☀️",   # Clear
+    1: "🌤️",   # Mainly clear
+    2: "⛅",   # Partly cloudy
+    3: "☁️",   # Overcast
+    45: "🌫️",  # Fog
+    48: "🌫️",  # Rime fog
+    51: "🌦️",  # Light drizzle
+    53: "🌦️",  # Moderate drizzle
+    55: "🌧️",  # Dense drizzle
+    61: "🌦️",  # Light rain
+    63: "🌧️",  # Moderate rain
+    65: "⛈️",  # Heavy rain
+    71: "🌨️",  # Light snow
+    73: "❄️",   # Moderate snow
+    75: "❄️",   # Heavy snow
+    80: "🌦️",  # Rain showers
+    81: "🌧️",  # Heavy showers
+    82: "⛈️",  # Violent showers
+    95: "⛈️",  # Thunderstorm
+}
+
 def uv_category(uv):
     if uv is None:
         return None
@@ -203,6 +225,7 @@ data = {
     "uv_max": uv_max,
     "uv_category": uv_category(uv_max),
     "weather_code": current["weather_code"],
+    "weather_icon": WEATHER_ICONS.get(current["weather_code"], "❔"),
     "forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
     "wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None
 }

@@ -192,7 +192,7 @@ data = {
     "sample_lon": LON,
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
-    "sample_method": "Nearest OSTIA SST pixel to selected offshore point near Panama Swimming Club",
+    "sample_method": ""sample_method": "Nearest available OSTIA SST grid cell for the North Tyneside coast",
     "measurement": "Sea temperature",
     "units": "°C",
     "grid_resolution": "0.05 degrees",

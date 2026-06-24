@@ -229,6 +229,10 @@
     </div>
 <section class="grid">
   <div class="small-card">
+    <div class="label">Next tide</div>
+    <div class="value" id="next-tide">--</div>
+  </div>
+  <div class="small-card">
     <div class="label">Air temp</div>
     <div class="value" id="air-temp">--</div>
   </div>
@@ -279,6 +283,33 @@
 async function loadData() {
   const response = await fetch('data.json');
   const data = await response.json();
+  
+  const tideResponse = await fetch('tide_history.json');
+const tideHistory = await tideResponse.json();
+
+const now = new Date();
+
+const allTideEvents = tideHistory
+  .flatMap(day => day.events.map(event => ({
+    ...event,
+    station: day.station
+  })))
+  .filter(event => new Date(event.time) > now)
+  .sort((a, b) => new Date(a.time) - new Date(b.time));
+
+const nextTide = allTideEvents[0];
+
+if (nextTide) {
+  const tideTime = new Date(nextTide.time).toLocaleTimeString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  document.getElementById('next-tide').textContent =
+  `${nextTide.type} ${tideTime} · ${nextTide.height_m}m`;
+} else {
+  document.getElementById('next-tide').textContent = "--";
+}
   
   document.getElementById('air-temp').textContent =
   data.air_temp_c + '°C';

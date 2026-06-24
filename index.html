@@ -287,11 +287,11 @@ document.getElementById('forecast').textContent =
   `${weatherIcon[data.weather_code] || ""} ${data.forecast || "--"}`.trim();
 
 const uvIcon = {
-  "Low": "🟢",
-  "Moderate": "🟡",
-  "High": "🟠",
-  "Very High": "🔴",
-  "Extreme": "🟣"
+  "Low": "🟢",        // 0-2.9
+  "Moderate": "🟡",   // 3-5.9
+  "High": "🟠",       // 6-7.9
+  "Very High": "🔴",  // 8-10.9
+  "Extreme": "🟣"     // 11+
 };
 
 if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {

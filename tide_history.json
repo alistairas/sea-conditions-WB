@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-06-24",
+    "station": "North Shields",
+    "events": [
+      { "type": "Low", "time": "2026-06-24T00:31:00+01:00", "height_m": 1.1 },
+      { "type": "High", "time": "2026-06-24T06:48:00+01:00", "height_m": 4.6 }
+    ]
+  }
+]

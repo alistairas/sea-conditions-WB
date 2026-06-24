@@ -262,25 +262,25 @@ document.getElementById('wind').textContent =
   `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction}`;
 
 const weatherIcon = {
-  0: "☀️",
-  1: "🌤️",
-  2: "⛅",
-  3: "☁️",
-  45: "🌫️",
-  48: "🌫️",
-  51: "🌦️",
-  53: "🌦️",
-  55: "🌧️",
-  61: "🌧️",
-  63: "🌧️",
-  65: "⛈️",
-  71: "🌨️",
-  73: "🌨️",
-  75: "❄️",
-  80: "🌦️",
-  81: "🌧️",
-  82: "⛈️",
-  95: "⛈️"
+  0: "☀️",   // Clear
+  1: "🌤️",   // Mainly clear
+  2: "⛅",   // Partly cloudy
+  3: "☁️",   // Overcast
+  45: "🌫️",  // Fog
+  48: "🌫️",  // Rime fog
+  51: "🌦️",  // Light drizzle
+  53: "🌦️",  // Moderate drizzle
+  55: "🌧️",  // Dense drizzle
+  61: "🌦️",  // Light rain
+  63: "🌧️",  // Moderate rain
+  65: "⛈️",  // Heavy rain
+  71: "🌨️",  // Light snow
+  73: "❄️",   // Moderate snow
+  75: "❄️",   // Heavy snow
+  80: "🌦️",  // Rain showers
+  81: "🌧️",  // Heavy showers
+  82: "⛈️",  // Violent showers
+  95: "⛈️"   // Thunderstorm
 };
 
 document.getElementById('forecast').textContent =

@@ -298,7 +298,9 @@ if (nextTide) {
   });
 
   document.getElementById('next-tide').textContent =
-  `${nextTide.type} ${tideTime} · ${nextTide.height_m}m`;
+  nextTide.height_m !== undefined
+    ? `${nextTide.type} ${tideTime} · ${nextTide.height_m}m`
+    : `${nextTide.type} ${tideTime}`;
 } else {
   document.getElementById('next-tide').textContent = "--";
 }
@@ -368,8 +370,8 @@ const latestEntry = entries[entries.length - 1];
 document.getElementById('measurement').textContent =
   data.measurement || 'Sea temp';
 
-  document.getElementById('temperature').textContent =
-  data.sea_temp_c;
+document.getElementById('temperature').textContent =
+  `${data.sea_temp_c}°C`;
 
   const observationDate = new Date(data.sst_date);
 

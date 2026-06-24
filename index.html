@@ -262,15 +262,22 @@ document.getElementById('wind').textContent =
   `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction}`;
 
 document.getElementById('forecast').textContent =
-  data.forecast;
+  `${data.weather_icon} ${data.forecast}`;
+
+const uvIcon = {
+  "Low": "🟢",
+  "Moderate": "🟡",
+  "High": "🟠",
+  "Very High": "🔴",
+  "Extreme": "🟣"
+};
 
 if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {
   document.getElementById('uv').textContent =
-    `${data.uv_category} (${data.uv_max.toFixed(1)})`;
+    `${uvIcon[data.uv_category] || ""} ${data.uv_category} (${data.uv_max.toFixed(1)})`;
 } else {
   document.getElementById('uv').textContent = "--";
 }
-
   const archiveResponse = await fetch('PSC_Log_Vol06_archive.json');
 const archiveData = await archiveResponse.json();
 

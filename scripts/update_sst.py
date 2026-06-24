@@ -193,7 +193,7 @@ data = {
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
     "sample_method": "Nearest OSTIA SST pixel to selected offshore point near Panama Swimming Club",
-    "measurement": "Analysed sea surface temperature",
+    "measurement": "Sea temperature",
     "units": "°C",
     "grid_resolution": "0.05 degrees",
     "analysis_error_c": error_c,

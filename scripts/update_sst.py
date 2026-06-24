@@ -12,6 +12,9 @@ print("datetime, timedelta, timezone imported", flush=True)
 import requests
 print("requests imported", flush=True)
 
+import time
+print("time imported", flush=True)
+
 import copernicusmarine
 print("copernicusmarine imported", flush=True)
 
@@ -119,24 +122,37 @@ OUT_DIR.mkdir(exist_ok=True)
 
 print("Starting Copernicus subset request...", flush=True)
 
-result = copernicusmarine.subset(
-    dataset_id=DATASET_ID,
-    variables=[VARIABLE, "analysis_error"],
-    minimum_longitude=MIN_LON,
-    maximum_longitude=MAX_LON,
-    minimum_latitude=MIN_LAT,
-    maximum_latitude=MAX_LAT,
-    start_datetime=f"{start}T00:00:00",
-    end_datetime=f"{end}T23:59:59",
-    username=username,
-    password=password,
-    output_directory=str(OUT_DIR),
-    output_filename=OUT_FILE,
-    overwrite=True,
-    disable_progress_bar=True,
-)
+for attempt in range(1, 4):
+    try:
+        print(f"Copernicus subset attempt {attempt}/3", flush=True)
 
-print("Subset complete", flush=True)
+        result = copernicusmarine.subset(
+            dataset_id=DATASET_ID,
+            variables=[VARIABLE, "analysis_error"],
+            minimum_longitude=MIN_LON,
+            maximum_longitude=MAX_LON,
+            minimum_latitude=MIN_LAT,
+            maximum_latitude=MAX_LAT,
+            start_datetime=f"{start}T00:00:00",
+            end_datetime=f"{end}T23:59:59",
+            username=username,
+            password=password,
+            output_directory=str(OUT_DIR),
+            output_filename=OUT_FILE,
+            overwrite=True,
+            disable_progress_bar=True,
+        )
+
+        print("Subset complete", flush=True)
+        break
+
+    except Exception as e:
+        print(f"Copernicus subset attempt {attempt} failed: {e}", flush=True)
+
+        if attempt == 3:
+            raise
+
+        time.sleep(60)
 
 ds = xr.open_dataset(OUT_DIR / OUT_FILE)
 print(ds["time"].values, flush=True)

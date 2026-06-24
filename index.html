@@ -214,7 +214,7 @@
 </section>
 <div>
 <section class="card hero-card">
-  <div class="label" id="measurement">Sea temperature</div>
+  <div class="label" id="measurement">Sea temp</div>
 
   <div class="hero-temp-row">
     <div class="temp">
@@ -229,7 +229,7 @@
     </div>
 <section class="grid">
   <div class="small-card">
-    <div class="label">Air</div>
+    <div class="label">Air temp</div>
     <div class="value" id="air-temp">--</div>
   </div>
 
@@ -253,7 +253,7 @@
       <div class="label">Last 7 days</div>
       <canvas id="temp-chart" height="180"></canvas>
       <p><a href="history.html" style="text-decoration:none; color:inherit;">
-      Sea Temp History </a></p>
+      Sea temp history </a></p>
     </section>
 <p class="footer-note" id="data-note">
   Data source: Copernicus Marine OSTIA Near Real Time analysis.
@@ -343,7 +343,7 @@ const latestEntry = entries[entries.length - 1];
   </div>
 `;
 document.getElementById('measurement').textContent =
-  data.measurement || 'Sea temperature';
+  data.measurement || 'Sea temp';
 
   document.getElementById('temperature').textContent =
   data.sea_temp_c;

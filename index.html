@@ -297,16 +297,17 @@ document.getElementById('observation-date').textContent =
 
     document.getElementById('data-note').textContent =
   `Data source: Copernicus Marine OSTIA Near Real Time analysis. Produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
-    const change = data.temp_change_24h;
+const rawChange = data.temp_change_24h;
+const change = Number(rawChange);
 
 let trendText = "";
 
-if (change === null) {
+if (rawChange === null || rawChange === undefined || Number.isNaN(change)) {
   trendText = "";
 } else if (change > 0) {
-  trendText = ` ↑ ${change.toFixed(1)}°C`;
+  trendText = `↑ ${change.toFixed(1)}°C`;
 } else if (change < 0) {
-  trendText = ` ↓ ${Math.abs(change).toFixed(1)}°C`;
+  trendText = `↓ ${Math.abs(change).toFixed(1)}°C`;
 } else {
   trendText = "No change";
 }

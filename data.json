@@ -25,5 +25,18 @@
   "weather_code": 3,
   "forecast": "Overcast",
   "wind_direction": "ESE",
-  "temp_change_24h": 0.1
+  "temp_change_24h": 0.1,
+  "next_tide": {
+      "type": "High",
+      "time": "2026-06-24T18:42:00+01:00",
+      "height_m": 4.7,
+        "station": "North Shields"
+    },
+    "today_tides": [
+      {
+        "type": "Low",
+        "time": "2026-06-24T00:31:00+01:00",
+        "height_m": 1.1
+      }
+      ]
 }

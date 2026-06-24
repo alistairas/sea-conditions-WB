@@ -64,9 +64,17 @@
   color: #607d8b;
   font-weight: 500;
 }
+.trend-up {
+  color: #2e7d32;
+}
+
+.trend-down {
+  color: #c62828;
+}
 
     .status {
-      font-size: 18px;
+      font-size:14px;
+      color:#607d8b;
       margin-top: 8px;
     }
 
@@ -182,6 +190,18 @@
     </button>
   </div>
 </section>
+<div>
+  		<section class="card">
+		    <div class="label" id="measurement">Sea Surface Temperature</div>
+		    <div class="temp">
+					<span id="temperature">--</span><span>°C</span>
+      		<br><span id="trend"></span>
+    		</div>
+
+      <div class="status" id="observation-date">Observation date: Loading...</div>
+      <div class="badge">Earth Observation + Met Office analysis</div>
+    </section>
+    </div>
 <section class="grid">
   <div class="small-card">
     <div class="label">Air</div>
@@ -203,18 +223,7 @@
     <div class="value" id="uv">--</div>
   </div>
 </section>
-<div>
-  		<section class="card">
-		    <div class="label" id="measurement">Sea Surface Temperature</div>
-		    <div class="temp">
-					<span id="temperature">--</span><span>°C</span>
-      		<br><span id="trend"></span>
-    		</div>
 
-      <div class="status" id="observation-date">Observation date: Loading...</div>
-      <div class="badge">Earth Observation + Met Office analysis</div>
-    </section>
-    </div>
     <section class="card">
       <div class="label">Last 7 days</div>
       <canvas id="temp-chart" height="180"></canvas>
@@ -231,7 +240,8 @@
 </section>
 
     <p class="note">
-      Sea temperature is derived from the Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations. Values represent the nearest available grid cell for the North Tyneside coast and should be treated as one source of information on local sea conditions, not a safety assessment.
+      Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations. 
+      <br>Values represent the nearest available grid cell for the North Tyneside coast and should be treated as one source of information on local sea conditions, not a safety assessment.
     </p>
 
     <footer class="footer">
@@ -296,7 +306,7 @@ document.getElementById('observation-date').textContent =
   'Observation date: ' + formattedDate;
 
     document.getElementById('data-note').textContent =
-  `Data source: Copernicus Marine OSTIA Near Real Time analysis. Produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
+  `Data source: Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations.. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
 const rawChange = data.temp_change_24h;
 const change = Number(rawChange);
 
@@ -312,13 +322,29 @@ if (rawChange === null || rawChange === undefined || Number.isNaN(change)) {
   trendText = "No change";
 }
 
-document.getElementById('trend').textContent = trendText;
+const trendEl = document.getElementById('trend');
+trendEl.textContent = trendText;
+trendEl.className = "";
+
+if (change > 0) {
+  trendEl.classList.add("trend-up");
+} else if (change < 0) {
+  trendEl.classList.add("trend-down");
+}
+
 const historyResponse = await fetch('history.json');
 const history = await historyResponse.json();
 
 const lastSeven = history.slice(-7);
 
-const labels = lastSeven.map(item => item.date.slice(5));
+const labels = lastSeven.map(item => {
+  const date = new Date(item.date);
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short'
+  });
+});
+
 const temps = lastSeven.map(item => item.sea_temp_c);
 
 new Chart(document.getElementById('temp-chart'), {

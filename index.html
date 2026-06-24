@@ -59,6 +59,27 @@
       vertical-align: super;
     }
     
+    .hero-card {
+  padding: 20px 22px;
+}
+
+.hero-temp-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 12px 0 18px;
+}
+
+.hero-temp-row .temp {
+  line-height: 1;
+}
+
+#trend {
+  font-size: 18px;
+  color: #607d8b;
+  font-weight: 500;
+}
+    
     #trend {
   font-size: 18px;
   color: #607d8b;
@@ -79,11 +100,12 @@
     }
 
     .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
     }
-
+    
     .small-card {
       background: white;
       border-radius: 18px;
@@ -181,8 +203,8 @@
 <section class="header">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;">
     <div>
-      <div class="eyebrow">North Tyneside</div>
-      <h1>Sea Conditions</h1>
+      <div class="eyebrow">Whitley Bay</div>
+      <h1>Beach Conditions</h1>
     </div>
 
     <button onclick="location.reload()" class="refresh-btn">
@@ -191,16 +213,19 @@
   </div>
 </section>
 <div>
-  		<section class="card">
-		    <div class="label" id="measurement">Sea Surface Temperature</div>
-		    <div class="temp">
-					<span id="temperature">--</span><span>°C</span>
-      		<br><span id="trend"></span>
-    		</div>
+<section class="card hero-card">
+  <div class="label" id="measurement">Sea temperature</div>
 
-      <div class="status" id="observation-date">Observation date: Loading...</div>
-      <div class="badge">Earth Observation + Met Office analysis</div>
-    </section>
+  <div class="hero-temp-row">
+    <div class="temp">
+      <span id="temperature">--</span><span>°C</span>
+    </div>
+    <span id="trend"></span>
+  </div>
+
+  <div class="status" id="observation-date">Observation date: Loading...</div>
+  <div class="badge">Earth Observation + Met Office analysis</div>
+</section>
     </div>
 <section class="grid">
   <div class="small-card">

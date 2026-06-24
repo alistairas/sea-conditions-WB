@@ -254,12 +254,13 @@ document.getElementById('wind').textContent =
 document.getElementById('forecast').textContent =
   data.forecast;
 
-document.getElementById('uv').textContent =
-  data.uv_index;
-  
+if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {
   document.getElementById('uv').textContent =
-  `${data.uv_category} (${data.uv_index.toFixed(1)})`;
-  
+    `${data.uv_category} (${data.uv_max.toFixed(1)})`;
+} else {
+  document.getElementById('uv').textContent = "--";
+}
+
   const archiveResponse = await fetch('PSC_Log_Vol06_archive.json');
 const archiveData = await archiveResponse.json();
 

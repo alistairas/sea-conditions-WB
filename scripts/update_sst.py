@@ -193,7 +193,7 @@ data = {
     "actual_pixel_lat": actual_lat,
     "actual_pixel_lon": actual_lon,
     "sample_method": "Nearest available OSTIA SST grid cell for the North Tyneside coast",
-    "measurement": "Sea temperature",
+    "measurement": "Sea temp",
     "units": "°C",
     "grid_resolution": "0.05 degrees",
     "analysis_error_c": error_c,

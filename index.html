@@ -261,8 +261,30 @@ async function loadData() {
 document.getElementById('wind').textContent =
   `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction}`;
 
+const weatherIcon = {
+  0: "☀️",
+  1: "🌤️",
+  2: "⛅",
+  3: "☁️",
+  45: "🌫️",
+  48: "🌫️",
+  51: "🌦️",
+  53: "🌦️",
+  55: "🌧️",
+  61: "🌧️",
+  63: "🌧️",
+  65: "⛈️",
+  71: "🌨️",
+  73: "🌨️",
+  75: "❄️",
+  80: "🌦️",
+  81: "🌧️",
+  82: "⛈️",
+  95: "⛈️"
+};
+
 document.getElementById('forecast').textContent =
-  `${data.weather_icon} ${data.forecast}`;
+  `${weatherIcon[data.weather_code] || ""} ${data.forecast || "--"}`.trim();
 
 const uvIcon = {
   "Low": "🟢",

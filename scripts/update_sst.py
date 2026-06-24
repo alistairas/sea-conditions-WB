@@ -215,6 +215,8 @@ try:
 except:
     pass
 
+history = [h for h in history if h["date"] != sst_time]
+
 temp_change = None
 
 if len(history) > 0:
@@ -222,8 +224,6 @@ if len(history) > 0:
     temp_change = round(sst_c - previous_temp, 1)
 
 data["temp_change_24h"] = temp_change
-
-history = [h for h in history if h["date"] != sst_time]
 
 history.append({
     "date": sst_time,

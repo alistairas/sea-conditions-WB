@@ -377,13 +377,15 @@ if (rawChange === null || rawChange === undefined || Number.isNaN(change)) {
 }
 
 const trendEl = document.getElementById('trend');
+
 trendEl.textContent = trendText;
-trendEl.className = "";
+
+trendEl.classList.remove('trend-up', 'trend-down');
 
 if (change > 0) {
-  trendEl.classList.add("trend-up");
+  trendEl.classList.add('trend-up');
 } else if (change < 0) {
-  trendEl.classList.add("trend-down");
+  trendEl.classList.add('trend-down');
 }
 
 const historyResponse = await fetch('history.json');

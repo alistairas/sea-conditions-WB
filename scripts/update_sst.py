@@ -198,13 +198,13 @@ data = {
     "grid_resolution": "0.05 degrees",
     "analysis_error_c": error_c,
     "air_temp_c": current["temperature_2m"],
-"wind_speed_kmh": current["wind_speed_10m"],
-"wind_direction_deg": current["wind_direction_10m"],
-"uv_max": uv_max,
-"uv_category": uv_category(uv_max),
-"weather_code": current["weather_code"],
-"forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
-"wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None
+    "wind_speed_kmh": current["wind_speed_10m"],
+    "wind_direction_deg": current["wind_direction_10m"],
+    "uv_max": uv_max,
+    "uv_category": uv_category(uv_max),
+    "weather_code": current["weather_code"],
+    "forecast": WEATHER_CODES.get(current["weather_code"], "Unknown") if current["weather_code"] is not None else None,
+    "wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None
 }
 
 history = []

@@ -1,1 +1,219 @@
-x
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PSC Logbook Archive | Whitley Bay</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f7f8;
+  color: #102027;
+}
+
+.page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 18px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  color: #607d8b;
+  margin-bottom: 6px;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.label {
+  color: #607d8b;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 650;
+}
+
+.meta {
+  color: #607d8b;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.notes {
+  font-size: 16px;
+  line-height: 1.45;
+  margin-top: 14px;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+button, .back-link {
+  border: none;
+  background: white;
+  color: #607d8b;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-decoration: none;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 16px;
+  font-size: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.footer {
+  font-size: 13px;
+  color: #78909c;
+  margin-top: 24px;
+  line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+
+<section class="header">
+  <div class="eyebrow">Panama Swimming Club</div>
+  <h1>Logbook Archive</h1>
+</section>
+
+<div class="controls">
+  <a class="back-link" href="index.html">← Conditions</a>
+  <button onclick="showRandomEntry()">Random entry</button>
+</div>
+
+<input
+  id="search"
+  type="search"
+  placeholder="Search notes, dates, weather, swimmers..."
+  oninput="renderEntries()"
+/>
+
+<section class="card">
+  <div class="label">Archive</div>
+  <div class="value" id="archive-count">Loading...</div>
+  <div class="meta" id="archive-meta"></div>
+</section>
+
+<div id="entries"></div>
+
+<footer class="footer">
+  These entries are drawn from digitised PSC logbook records. The original scans remain the source of truth.
+</footer>
+
+</main>
+
+<script>
+let archiveEntries = [];
+
+fetch("PSC_Log_Vol06_archive.json")
+  .then(response => response.json())
+  .then(data => {
+    archiveEntries = data.entries || [];
+
+    document.getElementById("archive-count").textContent =
+      `${archiveEntries.length} entries`;
+
+    document.getElementById("archive-meta").textContent =
+      `${data.archive || "PSC swim log"} · ${data.volume || ""}`;
+
+    renderEntries();
+  });
+
+function renderEntries(entriesToShow) {
+  const searchTerm = document.getElementById("search").value.toLowerCase();
+
+  let entries = entriesToShow || archiveEntries;
+
+  if (searchTerm) {
+    entries = archiveEntries.filter(entry => {
+      const searchableText = [
+        entry.date,
+        entry.date_display,
+        entry.water_temp_c,
+        entry.swimmers,
+        entry.notes,
+        entry.source
+      ].join(" ").toLowerCase();
+
+      return searchableText.includes(searchTerm);
+    });
+  }
+
+  entries = [...entries].sort((a, b) =>
+    new Date(b.date) - new Date(a.date)
+  );
+
+  const container = document.getElementById("entries");
+
+  if (!entries.length) {
+    container.innerHTML = `
+      <section class="card">
+        <div class="value">No matching entries</div>
+      </section>
+    `;
+    return;
+  }
+
+  container.innerHTML = entries.map(entry => `
+    <section class="card">
+      <div class="label">${entry.date_display || entry.date}</div>
+      <div class="value">
+        ${entry.water_temp_c !== null && entry.water_temp_c !== undefined ? entry.water_temp_c + "°C" : ""}
+        ${entry.swimmers !== null && entry.swimmers !== undefined ? " · " + entry.swimmers + " swimmers" : ""}
+      </div>
+      <div class="notes">${entry.notes || ""}</div>
+      <div class="meta">${entry.source || ""}</div>
+    </section>
+  `).join("");
+}
+
+function showRandomEntry() {
+  if (!archiveEntries.length) return;
+
+  const randomEntry =
+    archiveEntries[Math.floor(Math.random() * archiveEntries.length)];
+
+  document.getElementById("search").value = "";
+  renderEntries([randomEntry]);
+}
+</script>
+</body>
+</html>

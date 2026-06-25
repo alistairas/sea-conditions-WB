@@ -150,7 +150,7 @@ input[type="date"] {
 </section>
 <footer class="footer">
   Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations.
-  Hollow points are estimated between available daily readings.
+  The line includes estimated values between available daily readings. Dots show actual readings.
 </footer>
 <section class="card">
   <div class="label">Summary</div>
@@ -270,12 +270,13 @@ const temps = chartData.map(x => x.sea_temp_c);
   label: "Sea temperature °C",
   data: temps,
   tension: 0.3,
-  pointBackgroundColor: chartData.map(item =>
-    item.estimated ? "#ffffff" : "#36A2EB"
-  ),
-  pointBorderColor: "#36A2EB",
+
   pointRadius: chartData.map(item =>
-    item.estimated ? 5 : 4
+    item.estimated ? 0 : 4
+  ),
+
+  pointHoverRadius: chartData.map(item =>
+    item.estimated ? 0 : 5
   )
 }]
     },

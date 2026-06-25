@@ -246,7 +246,7 @@
   Observation date: Loading...
 </p>
     <section class="card">
-      <div class="label">Last 7 days</div>
+      <div class="label">Last 7 days + outlook</div>
       <canvas id="temp-chart" height="180"></canvas>
       <p><a href="history.html" style="text-decoration:none; color:inherit;">
       Sea temp history → </a></p>
@@ -453,14 +453,65 @@ const labels = lastSeven.map(item => {
 
 const temps = lastSeven.map(item => item.sea_temp_c);
 
+function addForecastDays(data, daysAhead = 2) {
+  const output = [...data];
+
+  const actuals = data.filter(item => !item.estimated);
+
+  if (actuals.length < 2) return output;
+
+  const last = actuals[actuals.length - 1];
+  const previous = actuals[actuals.length - 2];
+
+  const dailyChange = last.sea_temp_c - previous.sea_temp_c;
+
+  for (let i = 1; i <= daysAhead; i++) {
+    const forecastDate = new Date(last.date);
+    forecastDate.setDate(forecastDate.getDate() + i);
+
+    output.push({
+      date: forecastDate.toISOString().slice(0, 10),
+      sea_temp_c: Number((last.sea_temp_c + dailyChange * i).toFixed(1)),
+      forecast: true
+    });
+  }
+
+  return output;
+}
+
+const chartPoints = addForecastDays(lastSeven, 2);
+
+const chartLabels = chartPoints.map(item => {
+  const date = new Date(item.date);
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short'
+  });
+});
+
+const chartTemps = chartPoints.map(item => item.sea_temp_c);
+
 new Chart(document.getElementById('temp-chart'), {
   type: 'line',
   data: {
-    labels: labels,
+    labels: chartLabels,
     datasets: [{
       label: 'Sea temperature °C',
-      data: temps,
-      tension: 0.3
+      data: chartTemps,
+      tension: 0.3,
+      segment: {
+        borderDash: ctx =>
+          chartPoints[ctx.p0DataIndex]?.forecast || chartPoints[ctx.p1DataIndex]?.forecast
+            ? [6, 6]
+            : undefined
+      },
+      pointBackgroundColor: chartPoints.map(item =>
+        item.estimated || item.forecast ? '#ffffff' : '#36A2EB'
+      ),
+      pointBorderColor: '#36A2EB',
+      pointRadius: chartPoints.map(item =>
+        item.estimated || item.forecast ? 5 : 4
+      )
     }]
   },
   options: {
@@ -471,8 +522,8 @@ new Chart(document.getElementById('temp-chart'), {
     },
 scales: {
   y: {
-    suggestedMin: Math.min(...temps) - 0.5,
-    suggestedMax: Math.max(...temps) + 0.5,
+    suggestedMin: Math.min(...chartTemps) - 0.5,
+suggestedMax: Math.max(...chartTemps) + 0.5,
     title: {
       display: true,
       text: '°C'

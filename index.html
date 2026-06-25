@@ -442,7 +442,7 @@ function fillMissingDays(data) {
 }
 const recentHistory = history.slice(-14);
 const lastSeven = fillMissingDays(recentHistory).slice(-7);
-
+const chartData = lastSeven;
 const labels = lastSeven.map(item => {
   const date = new Date(item.date);
   return date.toLocaleDateString('en-GB', {
@@ -496,23 +496,20 @@ new Chart(document.getElementById('temp-chart'), {
   data: {
     labels: chartLabels,
     datasets: [{
-      label: 'Sea temperature °C',
-      data: chartTemps,
-      tension: 0.3,
-      segment: {
-        borderDash: ctx =>
-          chartPoints[ctx.p0DataIndex]?.forecast || chartPoints[ctx.p1DataIndex]?.forecast
-            ? [6, 6]
-            : undefined
-      },
-      pointBackgroundColor: chartPoints.map(item =>
-        item.estimated || item.forecast ? '#ffffff' : '#36A2EB'
-      ),
-      pointBorderColor: '#36A2EB',
-      pointRadius: chartPoints.map(item =>
-        item.estimated || item.forecast ? 5 : 4
-      )
-    }]
+  label: 'Sea temperature °C',
+  data: temps,
+  tension: 0.3,
+
+  pointRadius: chartData.map(item =>
+    item.estimated ? 0 : 4
+  ),
+
+  pointHoverRadius: chartData.map(item =>
+    item.estimated ? 0 : 5
+  ),
+
+  borderWidth: 3
+}]
   },
   options: {
     plugins: {

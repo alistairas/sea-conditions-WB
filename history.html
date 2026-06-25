@@ -215,7 +215,7 @@ function fillMissingDays(data) {
 
       filled.push({
         date: estimateDate.toISOString().slice(0, 10),
-        sea_temp_c: Number(estimatedTemp.toFixed(1)),
+        sea_temp_c: estimatedTemp,
         estimated: true
       });
     }

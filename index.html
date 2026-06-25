@@ -366,7 +366,7 @@ document.getElementById('observation-date').textContent =
   'Observation date: ' + formattedDate;
 
     document.getElementById('data-note').textContent =
-  `Data source: Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations.. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
+  `Data source: Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
 const rawChange = data.temp_change_24h;
 const change = Number(rawChange);
 
@@ -397,7 +397,51 @@ if (change > 0) {
 const historyResponse = await fetch('history.json');
 const history = await historyResponse.json();
 
-const lastSeven = history.slice(-7);
+function fillMissingDays(data) {
+  const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const filled = [];
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const current = sorted[i];
+    const next = sorted[i + 1];
+
+    filled.push({
+      date: current.date,
+      sea_temp_c: current.sea_temp_c,
+      estimated: false
+    });
+
+    const currentDate = new Date(current.date);
+    const nextDate = new Date(next.date);
+    const daysBetween = Math.round((nextDate - currentDate) / (1000 * 60 * 60 * 24));
+
+    for (let d = 1; d < daysBetween; d++) {
+      const estimateDate = new Date(currentDate);
+      estimateDate.setDate(currentDate.getDate() + d);
+
+      const estimatedTemp =
+        current.sea_temp_c +
+        ((next.sea_temp_c - current.sea_temp_c) * d / daysBetween);
+
+      filled.push({
+        date: estimateDate.toISOString().slice(0, 10),
+        sea_temp_c: Number(estimatedTemp.toFixed(1)),
+        estimated: true
+      });
+    }
+  }
+
+  if (sorted.length) {
+    filled.push({
+      ...sorted[sorted.length - 1],
+      estimated: false
+    });
+  }
+
+  return filled;
+}
+const recentHistory = history.slice(-14);
+const lastSeven = fillMissingDays(recentHistory).slice(-7);
 
 const labels = lastSeven.map(item => {
   const date = new Date(item.date);

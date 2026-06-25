@@ -2,65 +2,180 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sea Temperature History</title>
+<title>Sea Temp History | Whitley Bay</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
-    font-family: sans-serif;
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f7f8;
+  color: #102027;
+}
+
+.page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 18px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  color: #607d8b;
+  margin-bottom: 6px;
 }
 
 h1 {
-    text-align: center;
+  font-size: 30px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.label {
+  color: #607d8b;
+  font-size: 15px;
+  margin-bottom: 12px;
 }
 
 .controls {
-    text-align: center;
-    margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-button {
-    padding: 8px 14px;
-    margin: 4px;
-    cursor: pointer;
+button, .back-link {
+  border: none;
+  background: white;
+  color: #607d8b;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-decoration: none;
 }
 
-.stats {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 1.1em;
+button:hover, .back-link:hover {
+  background: #eef4f6;
+}
+
+input[type="date"] {
+  padding: 8px 10px;
+  border: 1px solid #d6e1e5;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat-card {
+  background: #eaf1f3;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.stat-label {
+  color: #607d8b;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.footer {
+  font-size: 13px;
+  color: #78909c;
+  margin-top: 24px;
+  line-height: 1.5;
 }
 </style>
 </head>
 
 <body>
+<main class="page">
 
-<h1>Sea Surface Temperature History</h1>
-<button onclick="location.reload()" class="refresh-btn">
-Refresh
-</button>
+<section class="header">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div>
+      <div class="eyebrow">Whitley Bay</div>
+      <h1>Sea Temp History</h1>
+    </div>
+
+    <button onclick="location.reload()">↻</button>
+  </div>
+</section>
+
 <div class="controls">
-    <button onclick="showRange(7)">Week</button>
-    <button onclick="showRange(14)">Fortnight</button>
-    <button onclick="showRange(31)">Month</button>
-    <button onclick="showRange(null)">All</button>
-    <button onclick="toggleCalendar()"> Start date</button>
-
-  	<div id="calendarBox" style="display:none; margin-top:10px;">
-    	<input type="date" id="startDate">
-    	<button onclick="applyStartDate()">Apply</button>
-	</div>
+  <a class="back-link" href="index.html">← Conditions</a>
+  <button onclick="showRange(7)">Week</button>
+  <button onclick="showRange(14)">Fortnight</button>
+  <button onclick="showRange(31)">Month</button>
+  <button onclick="showRange(null)">All</button>
+  <button onclick="toggleCalendar()">Start date</button>
 </div>
 
-<canvas id="chart"></canvas>
+<div id="calendarBox" style="display:none; margin-bottom:16px;">
+  <input type="date" id="startDate">
+  <button onclick="applyStartDate()">Apply</button>
+  <button onclick="clearStartDate()">Clear</button>
+</div>
 
-<div class="stats" id="stats"></div>
+<section class="card">
+  <div class="label" id="chart-label">Sea temperature trend</div>
+  <canvas id="chart" height="220"></canvas>
+</section>
+
+<section class="card">
+  <div class="label">Summary</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Min</div>
+      <div class="stat-value" id="stat-min">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Max</div>
+      <div class="stat-value" id="stat-max">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Average</div>
+      <div class="stat-value" id="stat-avg">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Records</div>
+      <div class="stat-value" id="stat-records">--</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  Sea temperature data is derived from Copernicus Marine OSTIA analysis and recorded as a daily local history for Whitley Bay.
+</footer>
+
+</main>
 
 <script>
 let historyData = [];
@@ -71,14 +186,12 @@ fetch("history.json")
   .then(r => r.json())
   .then(data => {
     historyData = data;
-    showRange(null);
+    showRange(7);
   });
 
 function showRange(days) {
-
   let data = historyData;
 
-  // preset range filter (week/month/year)
   if (days) {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - days);
@@ -88,14 +201,20 @@ function showRange(days) {
     );
   }
 
-  // custom start-date filter (calendar)
   if (startDateFilter) {
     data = data.filter(item =>
       new Date(item.date) >= startDateFilter
     );
   }
 
-  const labels = data.map(x => x.date);
+  const labels = data.map(item => {
+    const date = new Date(item.date);
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short'
+    });
+  });
+
   const temps = data.map(x => x.sea_temp_c);
 
   if (chart) chart.destroy();
@@ -105,15 +224,22 @@ function showRange(days) {
     data: {
       labels: labels,
       datasets: [{
-        label: "Sea Temperature (°C)",
+        label: "Sea temperature °C",
         data: temps,
         tension: 0.3
       }]
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
       scales: {
         y: {
+          suggestedMin: temps.length ? Math.min(...temps) - 0.5 : undefined,
+          suggestedMax: temps.length ? Math.max(...temps) + 0.5 : undefined,
           title: {
             display: true,
             text: "°C"
@@ -127,10 +253,11 @@ function showRange(days) {
 }
 
 function updateStats(temps) {
-
   if (!temps.length) {
-    document.getElementById("stats").innerHTML =
-      "No data available";
+    document.getElementById("stat-min").textContent = "--";
+    document.getElementById("stat-max").textContent = "--";
+    document.getElementById("stat-avg").textContent = "--";
+    document.getElementById("stat-records").textContent = "0";
     return;
   }
 
@@ -138,22 +265,14 @@ function updateStats(temps) {
   const max = Math.max(...temps);
   const avg = temps.reduce((a, b) => a + b, 0) / temps.length;
 
-  document.getElementById("stats").innerHTML =
-    `Min: ${min.toFixed(1)}°C |
-     Max: ${max.toFixed(1)}°C |
-     Avg: ${avg.toFixed(1)}°C |
-     Records: ${temps.length}`;
+  document.getElementById("stat-min").textContent = `${min.toFixed(1)}°C`;
+  document.getElementById("stat-max").textContent = `${max.toFixed(1)}°C`;
+  document.getElementById("stat-avg").textContent = `${avg.toFixed(1)}°C`;
+  document.getElementById("stat-records").textContent = temps.length;
 }
-
-/* ---------------------------
-   Calendar controls
-----------------------------*/
 
 function toggleCalendar() {
   const box = document.getElementById("calendarBox");
-
-  if (!box) return;
-
   box.style.display = (box.style.display === "none" || !box.style.display)
     ? "block"
     : "none";
@@ -161,12 +280,9 @@ function toggleCalendar() {
 
 function applyStartDate() {
   const val = document.getElementById("startDate").value;
-
   if (!val) return;
 
   startDateFilter = new Date(val);
-
-  // re-render using current view
   showRange(null);
 }
 
@@ -176,7 +292,7 @@ function clearStartDate() {
   const input = document.getElementById("startDate");
   if (input) input.value = "";
 
-  showRange(null);
+  showRange(7);
 }
 </script>
 </body>

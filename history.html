@@ -150,6 +150,7 @@ input[type="date"] {
 </section>
 <footer class="footer">
   Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations.
+  Hollow points are estimated between available daily readings.
 </footer>
 <section class="card">
   <div class="label">Summary</div>
@@ -186,6 +187,50 @@ fetch("history.json")
     showRange(7);
   });
 
+function fillMissingDays(data) {
+  const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const filled = [];
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const current = sorted[i];
+    const next = sorted[i + 1];
+
+    filled.push({
+      date: current.date,
+      sea_temp_c: current.sea_temp_c,
+      estimated: false
+    });
+
+    const currentDate = new Date(current.date);
+    const nextDate = new Date(next.date);
+    const daysBetween = Math.round((nextDate - currentDate) / (1000 * 60 * 60 * 24));
+
+    for (let d = 1; d < daysBetween; d++) {
+      const estimateDate = new Date(currentDate);
+      estimateDate.setDate(currentDate.getDate() + d);
+
+      const estimatedTemp =
+        current.sea_temp_c +
+        ((next.sea_temp_c - current.sea_temp_c) * d / daysBetween);
+
+      filled.push({
+        date: estimateDate.toISOString().slice(0, 10),
+        sea_temp_c: Number(estimatedTemp.toFixed(1)),
+        estimated: true
+      });
+    }
+  }
+
+  if (sorted.length) {
+    filled.push({
+      ...sorted[sorted.length - 1],
+      estimated: false
+    });
+  }
+
+  return filled;
+}
+
 function showRange(days) {
   let data = historyData;
 
@@ -204,16 +249,17 @@ function showRange(days) {
     );
   }
 
-  const labels = data.map(item => {
-    const date = new Date(item.date);
-    return date.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short'
-    });
+  const chartData = fillMissingDays(data);
+
+const labels = chartData.map(item => {
+  const date = new Date(item.date);
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short'
   });
+});
 
-  const temps = data.map(x => x.sea_temp_c);
-
+const temps = chartData.map(x => x.sea_temp_c);
   if (chart) chart.destroy();
 
   chart = new Chart(document.getElementById("chart"), {
@@ -221,10 +267,17 @@ function showRange(days) {
     data: {
       labels: labels,
       datasets: [{
-        label: "Sea temperature °C",
-        data: temps,
-        tension: 0.3
-      }]
+  label: "Sea temperature °C",
+  data: temps,
+  tension: 0.3,
+  pointBackgroundColor: chartData.map(item =>
+    item.estimated ? "#ffffff" : "#36A2EB"
+  ),
+  pointBorderColor: "#36A2EB",
+  pointRadius: chartData.map(item =>
+    item.estimated ? 5 : 4
+  )
+}]
     },
     options: {
       responsive: true,

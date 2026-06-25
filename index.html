@@ -350,24 +350,7 @@ if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {
 } else {
   document.getElementById('uv').textContent = "--";
 }
-  const archiveResponse = await fetch('PSC_Log_Vol06_archive.json');
-const archiveData = await archiveResponse.json();
-
-const entries = archiveData.entries;
-
-console.log(entries.length);
-const latestEntry = entries[entries.length - 1];
-
-  document.getElementById('archive-entry').innerHTML = `
-  <div class="archive-meta">
-    ${latestEntry.date_display}<br>
-    ${latestEntry.water_temp_c}°C • ${latestEntry.swimmers} swimmers
-  </div>
-  <div class="archive-notes">
-    ${latestEntry.notes}
-  </div>
-`;
-
+  
 document.getElementById('temperature').textContent =
   `${data.sea_temp_c}°C`;
 

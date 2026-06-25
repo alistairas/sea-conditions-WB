@@ -1,11 +1,11 @@
 {
   "version": 1,
   "sea_temp_c": 13.2,
-  "updated": "2026-06-24 17:29 UTC",
+  "updated": "2026-06-25 06:38 UTC",
   "source": "Copernicus Marine OSTIA NRT",
   "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
   "variable": "analysed_sst",
-  "sst_date": "2026-06-22",
+  "sst_date": "2026-06-23",
   "location": "North Tyneside coast",
   "sample_area": "North Tyneside coast",
   "sample_lat": 55.0519527,
@@ -13,30 +13,17 @@
   "actual_pixel_lat": 55.07500076293945,
   "actual_pixel_lon": -1.4249999523162842,
   "sample_method": "Nearest available OSTIA SST grid cell for the North Tyneside coast",
-  "measurement": "Sea temperature",
+  "measurement": "Sea temp",
   "units": "\u00b0C",
   "grid_resolution": "0.05 degrees",
   "analysis_error_c": 0.4,
-  "air_temp_c": 19.9,
-  "wind_speed_kmh": 9.4,
-  "wind_direction_deg": 110,
-  "uv_max": 5.05,
+  "air_temp_c": 17.3,
+  "wind_speed_kmh": 11.9,
+  "wind_direction_deg": 137,
+  "uv_max": 5.4,
   "uv_category": "Moderate",
-  "weather_code": 3,
-  "forecast": "Overcast",
-  "wind_direction": "ESE",
-  "temp_change_24h": 0.1,
-  "next_tide": {
-      "type": "High",
-      "time": "2026-06-24T18:42:00+01:00",
-      "height_m": 4.7,
-        "station": "North Shields"
-    },
-    "today_tides": [
-      {
-        "type": "Low",
-        "time": "2026-06-24T00:31:00+01:00",
-        "height_m": 1.1
-      }
-      ]
+  "weather_code": 0,
+  "forecast": "Clear",
+  "wind_direction": "SE",
+  "temp_change_24h": 0.0
 }

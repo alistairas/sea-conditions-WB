@@ -286,8 +286,9 @@ const allTideEvents = tideHistory
     ...event,
     station: day.station
   })))
-  .filter(event => new Date(event.time) > now)
-  .sort((a, b) => new Date(a.time) - new Date(b.time));
+
+.filter(event => new Date(event.time) > now || true)
+    .sort((a, b) => new Date(a.time) - new Date(b.time));
 
 const nextTide = allTideEvents[0];
 

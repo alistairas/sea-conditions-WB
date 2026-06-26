@@ -1,0 +1,37 @@
+name: Build smartwatch report
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "water_temperatures.csv"
+      - "scripts/build_smartwatch_report.py"
+      - "requirements.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  build-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build smartwatch report
+        run: python scripts/build_smartwatch_report.py water_temperatures.csv
+
+      - name: Commit generated report
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update smartwatch report"
+          file_pattern: reports/

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 PROJECT_TITLE = "Whitley Bay Multi-Source Sea Temperature Record"
-REPORT_TITLE = "Smartwatch Sensor Characterisation Report v0.1"
+REPORT_TITLE = "Smartwatch Water Temperature Observations"
 
 def load_data(csv_path: Path) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
@@ -72,37 +72,37 @@ def sampling_intervals(df: pd.DataFrame) -> pd.Series:
 
 
 def plot_hist(series, title, xlabel, output_path, bins=30):
-    plt.figure()
+    plt.figure(figsize=(8, 4.5))
     series.dropna().plot(kind="hist", bins=bins)
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel("Count")
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150)
+    plt.savefig(output_path, dpi=200)
     plt.close()
 
 
 def plot_monthly_counts(df, output_path):
     monthly = df.set_index("timestamp").resample("ME").size()
 
-    plt.figure()
+    plt.figure(figsize=(8, 4.5))
     monthly.plot(kind="bar")
     plt.title("Water temperature observations by month")
     plt.xlabel("Month")
     plt.ylabel("Observations")
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150)
+    plt.savefig(output_path, dpi=200)
     plt.close()
 
 
 def plot_temperature_range(df, output_path):
-    plt.figure()
+    plt.figure(figsize=(8, 4.5))
     df.plot(x="timestamp", y="temperature_c", kind="scatter", s=8)
     plt.title("Raw Apple Watch water temperature observations")
     plt.xlabel("Date")
     plt.ylabel("Temperature (°C)")
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150)
+    plt.savefig(output_path, dpi=200)
     plt.close()
 
 
@@ -188,10 +188,10 @@ a {{
 <p><a href="index.html">← Back to sea conditions</a></p>
 
 <div class="card">
-<h1>Smartwatch Sensor Characterisation Report</h1>
-<p><strong>Whitley Bay Multi-Source Sea Temperature Record</strong></p>
-<p><em>Bringing together swimmers, satellites and history to understand Whitley Bay's changing sea temperature.</em></p>
-<p class="small">Version 0.1 · Generated from <code>water_temperatures.csv</code></p>
+<h1>Smartwatch Water Temperature Observations</h1>
+<p><em>Automatically generated analysis of smartwatch-derived water temperature observations.</em></p>
+<p class="small">Part of the Whitley Bay Multi-Source Sea Temperature Record.</p>
+<p class="badge">Experimental · Version 0.1</p>
 </div>
 
 <div class="card">

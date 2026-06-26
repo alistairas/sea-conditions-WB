@@ -181,6 +181,10 @@ def make_report(df, sessions, intervals):
 
     median_interval = intervals.median() if len(intervals) else 0
 
+    avg_readings_per_session = raw_n / session_n if session_n else 0
+    high_pct = (high_values / raw_n * 100) if raw_n else 0
+    very_high_pct = (very_high_values / raw_n * 100) if raw_n else 0
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -258,6 +262,39 @@ a {{
 </div>
 
 <div class="card">
+<h2>Key findings</h2>
+
+<p><strong>This is a session-based dataset, not a continuous temperature record.</strong></p>
+
+<p>
+Although the dataset contains <strong>{raw_n:,}</strong> individual smartwatch observations,
+these represent <strong>{session_n:,}</strong> distinct swimming sessions rather than
+independent sea temperature measurements.
+</p>
+
+<table>
+<tr><th>Finding</th><th>Value</th></tr>
+<tr><td>Average readings per session</td><td>{avg_readings_per_session:.1f}</td></tr>
+<tr><td>Median sampling interval</td><td>{median_interval:.1f} seconds</td></tr>
+<tr><td>Readings ≥20°C</td><td>{high_values:,} ({high_pct:.1f}%)</td></tr>
+<tr><td>Readings ≥25°C</td><td>{very_high_values:,} ({very_high_pct:.1f}%)</td></tr>
+</table>
+
+<p>
+The repeated readings within sessions are valuable because they allow the sensor
+cooling and stabilisation process to be assessed. Future analysis should therefore
+derive <strong>one representative water temperature per swim session</strong>, rather than
+treating every raw smartwatch observation as an independent measurement.
+</p>
+
+<p>
+The preferred approach is to identify the stable temperature plateau after the device
+has equilibrated with the surrounding water, and to use that plateau to estimate the
+representative sea temperature for the session.
+</p>
+</div>
+
+<div class="card">
 <h2>Temperature range and high values</h2>
 <p>Some high values are unlikely to represent open seawater at Whitley Bay and may be affected by body heat, wetsuit coverage, post-swim activity or other non-sea exposure.</p>
 <table>
@@ -294,11 +331,11 @@ a {{
 <div class="card">
 <h2>Initial interpretation</h2>
 <ul>
-<li>The smartwatch provides useful in-water temperature observations.</li>
+<li>The smartwatch data are best interpreted at swim-session level, not individual-reading level.</li>
 <li>The data should not be treated as a complete diary of all swims.</li>
 <li>Recording behaviour may differ between devices or software versions.</li>
 <li>High values suggest some readings are affected by body heat or post-swim warming.</li>
-<li>The preferred approach is to derive representative seawater temperature from a stable temperature plateau.</li>
+<li>Produce a validated <code>smartwatch_sessions.csv</code> dataset containing one representative temperature per swim session.</li>
 </ul>
 </div>
 

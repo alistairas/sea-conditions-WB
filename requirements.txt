@@ -2,3 +2,8 @@ copernicusmarine
 xarray
 netcdf4
 requests
+pandas
+matplotlib
+xarray
+netCDF4
+numpy

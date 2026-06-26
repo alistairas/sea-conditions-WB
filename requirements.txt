@@ -1,7 +1,7 @@
 copernicusmarine
-xarray
-netcdf4
-requests
-pandas
 matplotlib
+netCDF4
 numpy
+pandas
+requests
+xarray

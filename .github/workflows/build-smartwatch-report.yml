@@ -34,4 +34,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update smartwatch report"
-          file_pattern: reports/
+          file_pattern: "smartwatch.html reports/"

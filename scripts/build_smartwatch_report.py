@@ -314,8 +314,8 @@ def main():
 
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 
-    report_path = make_report(df, sessions, intervals, output_dir)
-
+    report_path = make_report(df, sessions, intervals)
+    
     print(f"Report written to: {report_path}")
     print(f"Charts written to: {chart_dir}")
     print(f"Diagnostic session CSV written to: {output_dir / 'apple_watch_session_summary_diagnostic.csv'}")

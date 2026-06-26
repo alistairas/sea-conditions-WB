@@ -341,9 +341,8 @@ def main():
     plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
     plot_monthly_counts(df, chart_dir / "monthly_observations.png")
     plot_sampling_intervals(intervals, chart_dir / "sampling_intervals.png")
-
-plot_session_durations(sessions, chart_dir / "session_durations.png")
-plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
+    plot_session_durations(sessions, chart_dir / "session_durations.png")
+    plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
 
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 

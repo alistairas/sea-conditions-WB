@@ -77,7 +77,7 @@ def save_plot(output_path):
 
 def plot_sampling_intervals(intervals, output_path):
     series = intervals.dropna()
-    shown = series[series <= 60]
+    shown = series[series <= 150]
     excluded = len(series) - len(shown)
 
     plt.figure(figsize=(9, 5))
@@ -85,12 +85,12 @@ def plot_sampling_intervals(intervals, output_path):
     plt.title("Typical sampling intervals within sessions")
     plt.xlabel("Seconds between readings")
     plt.ylabel("Count")
-    plt.xlim(0, 60)
+    plt.xlim(0, 150)
 
     if excluded:
         plt.figtext(
             0.01, 0.01,
-            f"Note: {excluded:,} intervals greater than 60 seconds excluded from chart scale.",
+            f"Note: {excluded:,} intervals greater than 150 seconds excluded from chart scale.",
             fontsize=9
         )
 

@@ -70,17 +70,67 @@ def sampling_intervals(df: pd.DataFrame) -> pd.Series:
 
     return pd.Series(intervals, name="sampling_interval_seconds")
 
-
-def plot_hist(series, title, xlabel, output_path, bins=30):
-    plt.figure(figsize=(8, 4.5))
-    series.dropna().plot(kind="hist", bins=bins)
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel("Count")
+def save_plot(output_path):
     plt.tight_layout()
-    plt.savefig(output_path, dpi=200)
+    plt.savefig(output_path, dpi=200, bbox_inches="tight")
     plt.close()
 
+def plot_sampling_intervals(intervals, output_path):
+    series = intervals.dropna()
+    shown = series[series <= 60]
+    excluded = len(series) - len(shown)
+
+    plt.figure(figsize=(9, 5))
+    plt.hist(shown, bins=30)
+    plt.title("Typical sampling intervals within sessions")
+    plt.xlabel("Seconds between readings")
+    plt.ylabel("Count")
+    plt.xlim(0, 60)
+
+    if excluded:
+        plt.figtext(
+            0.01, 0.01,
+            f"Note: {excluded:,} intervals greater than 60 seconds excluded from chart scale.",
+            fontsize=9
+        )
+
+    save_plot(output_path)
+
+def plot_session_durations(sessions, output_path):
+    durations = sessions["duration_minutes"].dropna()
+    shown = durations[durations <= 90]
+    excluded = len(durations) - len(shown)
+
+    plt.figure(figsize=(9, 5))
+    plt.boxplot(shown, vert=False)
+    plt.title("Session duration distribution")
+    plt.xlabel("Duration (minutes)")
+
+    if excluded:
+        plt.figtext(
+            0.01, 0.01,
+            f"Note: {excluded:,} sessions longer than 90 minutes excluded from chart scale.",
+            fontsize=9
+        )
+
+    save_plot(output_path)
+
+
+def plot_readings_per_session(sessions, output_path):
+    counts = {
+        "Single reading": (sessions["readings"] == 1).sum(),
+        "2–4 readings": ((sessions["readings"] >= 2) & (sessions["readings"] <= 4)).sum(),
+        "5–14 readings": ((sessions["readings"] >= 5) & (sessions["readings"] <= 14)).sum(),
+        "15+ readings": (sessions["readings"] >= 15).sum(),
+    }
+
+    plt.figure(figsize=(9, 5))
+    plt.barh(list(counts.keys()), list(counts.values()))
+    plt.title("Readings per session")
+    plt.xlabel("Number of sessions")
+    plt.ylabel("Session type")
+
+    save_plot(output_path)
 
 def plot_monthly_counts(df, output_path):
     monthly = df.set_index("timestamp").resample("ME").size()
@@ -290,27 +340,10 @@ def main():
 
     plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
     plot_monthly_counts(df, chart_dir / "monthly_observations.png")
-    plot_hist(
-        intervals,
-        "Sampling intervals within sessions",
-        "Seconds",
-        chart_dir / "sampling_intervals.png",
-        bins=40,
-    )
-    plot_hist(
-        sessions["duration_minutes"],
-        "Session duration distribution",
-        "Minutes",
-        chart_dir / "session_durations.png",
-        bins=40,
-    )
-    plot_hist(
-        sessions["readings"],
-        "Readings per session",
-        "Readings",
-        chart_dir / "readings_per_session.png",
-        bins=40,
-    )
+    plot_sampling_intervals(intervals, chart_dir / "sampling_intervals.png")
+
+plot_session_durations(sessions, chart_dir / "session_durations.png")
+plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
 
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 

@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 
 
 PROJECT_TITLE = "Whitley Bay Multi-Source Sea Temperature Record"
-REPORT_TITLE = "Apple Watch Sensor Characterisation Report v0.1"
-
+REPORT_TITLE = "Smartwatch Sensor Characterisation Report v0.1"
 
 def load_data(csv_path: Path) -> pd.DataFrame:
     df = pd.read_csv(csv_path)
@@ -114,9 +113,8 @@ def format_percentiles(series):
         for q, v in p.items()
     )
 
-
-def make_report(df, sessions, intervals, output_dir):
-    report_path = output_dir / "apple_watch_sensor_characterisation_v0.1.md"
+def make_report(df, sessions, intervals):
+    report_path = Path("smartwatch.html")
 
     start_date = df["timestamp"].min().date()
     end_date = df["timestamp"].max().date()
@@ -131,136 +129,146 @@ def make_report(df, sessions, intervals, output_dir):
     high_values = (df["temperature_c"] >= 20).sum()
     very_high_values = (df["temperature_c"] >= 25).sum()
 
-    median_interval = intervals.median() if len(intervals) else None
+    median_interval = intervals.median() if len(intervals) else 0
 
-    md = f"""# {PROJECT_TITLE}
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smartwatch Report | Whitley Bay Sea Temperature</title>
+<style>
+body {{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  background: #f4f7f8;
+  color: #102027;
+}}
+.page {{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px;
+}}
+.card {{
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  margin: 18px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}}
+h1, h2 {{
+  margin-top: 0;
+}}
+table {{
+  width: 100%;
+  border-collapse: collapse;
+}}
+td, th {{
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}}
+img {{
+  max-width: 100%;
+  border-radius: 12px;
+  margin-top: 12px;
+}}
+.small {{
+  color: #607d8b;
+  font-size: 0.9rem;
+}}
+a {{
+  color: #006c80;
+}}
+</style>
+</head>
+<body>
+<div class="page">
 
-## {REPORT_TITLE}
+<p><a href="index.html">← Back to sea conditions</a></p>
 
-### Bringing together swimmers, satellites and history to understand Whitley Bay's changing sea temperature.
+<div class="card">
+<h1>Smartwatch Sensor Characterisation Report</h1>
+<p><strong>Whitley Bay Multi-Source Sea Temperature Record</strong></p>
+<p><em>Bringing together swimmers, satellites and history to understand Whitley Bay's changing sea temperature.</em></p>
+<p class="small">Version 0.1 · Generated from <code>water_temperatures.csv</code></p>
+</div>
 
----
+<div class="card">
+<h2>Dataset overview</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Raw water temperature observations</td><td>{raw_n:,}</td></tr>
+<tr><td>Observation period</td><td>{start_date} to {end_date}</td></tr>
+<tr><td>Sessions using 30-minute gap rule</td><td>{session_n:,}</td></tr>
+<tr><td>Single-observation sessions</td><td>{single_n:,}</td></tr>
+<tr><td>Short sessions, 2–4 readings</td><td>{short_n:,}</td></tr>
+<tr><td>Continuous sessions, 5+ readings</td><td>{continuous_n:,}</td></tr>
+</table>
+</div>
 
-## 1. Purpose
+<div class="card">
+<h2>Temperature range and high values</h2>
+<p>Some high values are unlikely to represent open seawater at Whitley Bay and may be affected by body heat, wetsuit coverage, post-swim activity or other non-sea exposure.</p>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Minimum recorded temperature</td><td>{df["temperature_c"].min():.2f}°C</td></tr>
+<tr><td>Maximum recorded temperature</td><td>{df["temperature_c"].max():.2f}°C</td></tr>
+<tr><td>Readings ≥20°C</td><td>{high_values:,}</td></tr>
+<tr><td>Readings ≥25°C</td><td>{very_high_values:,}</td></tr>
+</table>
+<img src="reports/charts/raw_temperature_observations.png" alt="Raw smartwatch water temperature observations">
+</div>
 
-This report characterises Apple Watch water temperature observations extracted from Apple Health.
+<div class="card">
+<h2>Sampling behaviour</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Median sampling interval</td><td>{median_interval:.1f} seconds</td></tr>
+<tr><td>Within-session intervals</td><td>{len(intervals):,}</td></tr>
+</table>
+<img src="reports/charts/sampling_intervals.png" alt="Sampling interval distribution">
+</div>
 
-The aim is to understand the behaviour of the Apple Watch as a water temperature sensor before deriving representative sea temperature estimates.
+<div class="card">
+<h2>Session duration</h2>
+<img src="reports/charts/session_durations.png" alt="Session duration distribution">
+</div>
 
----
+<div class="card">
+<h2>Readings per session</h2>
+<p>Sessions with only one or a small number of readings should be treated differently from continuous swim recordings where a stable temperature plateau can be identified.</p>
+<img src="reports/charts/readings_per_session.png" alt="Readings per session">
+</div>
 
-## 2. Dataset overview
+<div class="card">
+<h2>Initial interpretation</h2>
+<ul>
+<li>The smartwatch provides useful in-water temperature observations.</li>
+<li>The data should not be treated as a complete diary of all swims.</li>
+<li>Recording behaviour may differ between devices or software versions.</li>
+<li>High values suggest some readings are affected by body heat or post-swim warming.</li>
+<li>The preferred approach is to derive representative seawater temperature from a stable temperature plateau.</li>
+</ul>
+</div>
 
-| Metric | Value |
-|---|---:|
-| Raw water temperature observations | {raw_n:,} |
-| Observation period | {start_date} to {end_date} |
-| Sessions using 30-minute gap rule | {session_n:,} |
-| Single-observation sessions | {single_n:,} |
-| Short sessions, 2–4 readings | {short_n:,} |
-| Continuous sessions, 5+ readings | {continuous_n:,} |
+<div class="card">
+<h2>Next steps</h2>
+<ol>
+<li>Implement stable plateau detection for continuous sessions.</li>
+<li>Assign confidence categories based on readings, duration and plateau quality.</li>
+<li>Compare representative smartwatch temperatures with Copernicus SST.</li>
+<li>Compare with historical local water temperature records where dates overlap.</li>
+<li>Produce a validated <code>smartwatch_sessions.csv</code> dataset.</li>
+</ol>
+</div>
 
----
-
-## 3. Temperature range and high values
-
-Apple Health records a wide range of water temperature values. Some high values are unlikely to represent open seawater at Whitley Bay and are probably affected by body heat, wetsuit coverage, post-swim warming, showering or other non-sea exposure.
-
-| Metric | Value |
-|---|---:|
-| Minimum recorded temperature | {df["temperature_c"].min():.2f}°C |
-| Maximum recorded temperature | {df["temperature_c"].max():.2f}°C |
-| Readings >=20°C | {high_values:,} |
-| Readings >=25°C | {very_high_values:,} |
-
-![Raw temperature observations](charts/raw_temperature_observations.png)
-
----
-
-## 4. Sampling behaviour
-
-Where the watch records multiple readings within a session, the sampling interval is typically short.
-
-| Metric | Value |
-|---|---:|
-| Median sampling interval | {median_interval:.1f} seconds |
-| Number of within-session intervals | {len(intervals):,} |
-
-Sampling interval percentiles:
-
-{format_percentiles(intervals)}
-
-![Sampling interval distribution](charts/sampling_intervals.png)
-
----
-
-## 5. Session duration
-
-Session duration is calculated as the time between the first and last water temperature observation in each session.
-
-Duration percentiles:
-
-{format_percentiles(sessions["duration_minutes"])}
-
-![Session duration distribution](charts/session_durations.png)
-
----
-
-## 6. Readings per session
-
-A substantial number of sessions contain only one or a small number of readings. These should be treated differently from continuous sessions where a stable temperature plateau can be identified.
-
-Readings-per-session percentiles:
-
-{format_percentiles(sessions["readings"])}
-
-![Readings per session](charts/readings_per_session.png)
-
----
-
-## 7. Initial interpretation
-
-The Apple Watch appears to provide useful in-water temperature observations, but the data should not be treated as a complete diary of all swims.
-
-Several factors affect interpretation:
-
-- More than one Apple Watch may have contributed data over the observation period.
-- Recording behaviour may differ between devices or watchOS versions.
-- Gaps in the record may reflect sensor availability rather than absence of swimming.
-- High values suggest the sensor sometimes records body heat or post-swim warming.
-- Single-observation sessions should not be treated as equivalent to continuous swim recordings.
-
----
-
-## 8. Methodological implication
-
-The preferred approach is to derive representative seawater temperature from the stable temperature plateau within continuous swim sessions.
-
-Sessions without enough observations to identify a stable plateau should be flagged with lower confidence or held for manual review.
-
----
-
-## 9. Next steps
-
-Recommended next steps:
-
-1. Implement stable plateau detection for continuous sessions.
-2. Assign confidence categories based on readings, duration and plateau quality.
-3. Compare representative Apple Watch temperatures with Copernicus SST.
-4. Compare with historical local water temperature records where dates overlap.
-5. Produce a validated `apple_watch_sessions.csv` dataset.
-
----
-
-## Status
-
-**Version:** 0.1  
-**Generated from:** `water_temperatures.csv`
-
-This report is an initial sensor characterisation and should not yet be treated as a final validation of Apple Watch-derived sea temperature.
+</div>
+</body>
+</html>
 """
 
-    report_path.write_text(md, encoding="utf-8")
+    report_path.write_text(html, encoding="utf-8")
     return report_path
 
 

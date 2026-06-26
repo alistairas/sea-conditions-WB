@@ -1,0 +1,1 @@
+The Whitley Bay Multi-Source Sea Temperature Record is an open project bringing together swimmer observations, satellite Earth observation and historical local records to improve understanding of coastal sea temperature at Whitley Bay.

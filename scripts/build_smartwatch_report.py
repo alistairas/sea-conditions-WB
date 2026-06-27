@@ -30,6 +30,9 @@ def add_sessions(df: pd.DataFrame, gap_minutes: int = 30) -> pd.DataFrame:
     df["gap_minutes"] = df["timestamp"].diff().dt.total_seconds().div(60)
     df["new_session"] = (df["gap_minutes"].isna()) | (df["gap_minutes"] > gap_minutes)
     df["session_id"] = df["new_session"].cumsum()
+    df["elapsed_seconds"] = (df["timestamp"] - df.groupby("session_id")["timestamp"].transform("min")).dt.total_seconds()
+    df["elapsed_minutes"] = df["elapsed_seconds"] / 60
+    
     return df
 
 
@@ -155,6 +158,49 @@ def plot_temperature_range(df, output_path):
     plt.savefig(output_path, dpi=200)
     plt.close()
 
+def plot_cooling_curves(df, output_path):
+
+    plt.figure(figsize=(9,6))
+
+    long_sessions = []
+
+    for _, g in df.groupby("session_id"):
+        if len(g) >= 10:
+            long_sessions.append(g)
+
+            plt.plot(
+                g["elapsed_minutes"],
+                g["temperature_c"],
+                color="lightgrey",
+                linewidth=0.8,
+                alpha=0.5
+            )
+
+    if long_sessions:
+
+        combined = pd.concat(long_sessions)
+
+        median = (
+            combined
+            .groupby(combined["elapsed_minutes"].round(0))
+            ["temperature_c"]
+            .median()
+        )
+
+        plt.plot(
+            median.index,
+            median.values,
+            linewidth=3,
+            label="Median",
+        )
+
+        plt.legend()
+
+    plt.title("Smartwatch cooling behaviour during swim sessions")
+    plt.xlabel("Minutes since first reading")
+    plt.ylabel("Temperature (°C)")
+
+    save_plot(output_path)
 
 def format_percentiles(series):
     p = series.dropna().quantile([0.1, 0.25, 0.5, 0.75, 0.9, 0.95])
@@ -329,6 +375,12 @@ representative sea temperature for the session.
 </div>
 
 <div class="card">
+<h2>Sensor cooling behaviour</h2>
+<p>The chart below shows temperature observations from longer swim sessions aligned to the first recorded measurement. Individual sessions are shown in grey and the median behaviour across sessions is highlighted. This helps characterise how rapidly the smartwatch sensor approaches thermal equilibrium with the surrounding seawater.</p>
+<img src="reports/charts/cooling_curves.png">
+</div>
+
+<div class="card">
 <h2>Initial interpretation</h2>
 <ul>
 <li>The smartwatch data are best interpreted at swim-session level, not individual-reading level.</li>
@@ -337,6 +389,55 @@ representative sea temperature for the session.
 <li>High values suggest some readings are affected by body heat or post-swim warming.</li>
 <li>Produce a validated <code>smartwatch_sessions.csv</code> dataset containing one representative temperature per swim session.</li>
 </ul>
+</div>
+
+<div class="card">
+<h2>Methodological implications</h2>
+
+<p>
+This report demonstrates that smartwatch water temperature observations are
+best interpreted as <strong>swim sessions</strong> rather than independent
+temperature measurements.
+</p>
+
+<ul>
+<li>Repeated measurements within a swim session provide sufficient information to investigate sensor equilibration behaviour.</li>
+
+<li>Representative water temperatures should therefore be derived at the session level rather than from individual observations.</li>
+
+<li>High temperature observations are consistent with body heat or post-swim warming and should not automatically be interpreted as seawater temperature.</li>
+
+<li>The methodology will identify a stable temperature plateau following sensor equilibration and derive a representative temperature from that period.</li>
+
+<li>Thresholds used within the stable plateau algorithm will be selected using evidence from this sensor characterisation rather than predetermined values.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+<h2>Questions under investigation</h2>
+
+<p>
+The purpose of this report is to characterise smartwatch behaviour as a
+water temperature sensor and to provide evidence for a reproducible
+processing methodology.
+</p>
+
+<ol>
+
+<li>How quickly does the smartwatch sensor equilibrate with surrounding seawater?</li>
+
+<li>How stable are temperature observations once thermal equilibrium has been reached?</li>
+
+<li>How many observations are required to estimate a representative session temperature reliably?</li>
+
+<li>Which stable plateau detection method provides the most robust and reproducible representative water temperature?</li>
+
+<li>How closely do representative smartwatch-derived temperatures agree with independent coastal sea temperature observations?</li>
+
+</ol>
+
 </div>
 
 <div class="card">

@@ -1,0 +1,3858 @@
+[
+  {
+    "date": "2025-02-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 5.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 10,
+      "first_observation": "12:24",
+      "last_observation": "12:28"
+    }
+  },
+  {
+    "date": "2025-02-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.02
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:19",
+      "last_observation": "09:19"
+    }
+  },
+  {
+    "date": "2025-02-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 11,
+      "first_observation": "12:18",
+      "last_observation": "12:27"
+    }
+  },
+  {
+    "date": "2025-02-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.71
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:08",
+      "last_observation": "10:08"
+    }
+  },
+  {
+    "date": "2025-02-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:17",
+      "last_observation": "12:17"
+    }
+  },
+  {
+    "date": "2025-03-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 7,
+      "first_observation": "12:05",
+      "last_observation": "12:11"
+    }
+  },
+  {
+    "date": "2025-03-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 28.82
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "19:05",
+      "last_observation": "19:05"
+    }
+  },
+  {
+    "date": "2025-03-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.26
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:17",
+      "last_observation": "12:17"
+    }
+  },
+  {
+    "date": "2025-03-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.48
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:09",
+      "last_observation": "09:09"
+    }
+  },
+  {
+    "date": "2025-03-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.22
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:10",
+      "last_observation": "12:10"
+    }
+  },
+  {
+    "date": "2025-03-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.64
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:20",
+      "last_observation": "12:20"
+    }
+  },
+  {
+    "date": "2025-03-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.16
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:15",
+      "last_observation": "12:15"
+    }
+  },
+  {
+    "date": "2025-03-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:15",
+      "last_observation": "09:15"
+    }
+  },
+  {
+    "date": "2025-03-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.61
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:16",
+      "last_observation": "12:16"
+    }
+  },
+  {
+    "date": "2025-03-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.47
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:06",
+      "last_observation": "12:06"
+    }
+  },
+  {
+    "date": "2025-03-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.07
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:09",
+      "last_observation": "12:09"
+    }
+  },
+  {
+    "date": "2025-03-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:17",
+      "last_observation": "12:17"
+    }
+  },
+  {
+    "date": "2025-03-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.66
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:15",
+      "last_observation": "12:15"
+    }
+  },
+  {
+    "date": "2025-03-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.75
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:13",
+      "last_observation": "09:13"
+    }
+  },
+  {
+    "date": "2025-03-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.1
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:32",
+      "last_observation": "11:32"
+    }
+  },
+  {
+    "date": "2025-04-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.63
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:57",
+      "last_observation": "10:57"
+    }
+  },
+  {
+    "date": "2025-04-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.75
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:09",
+      "last_observation": "08:09"
+    }
+  },
+  {
+    "date": "2025-04-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.76
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:20",
+      "last_observation": "11:20"
+    }
+  },
+  {
+    "date": "2025-04-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.12
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:13",
+      "last_observation": "08:13"
+    }
+  },
+  {
+    "date": "2025-04-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:12",
+      "last_observation": "11:12"
+    }
+  },
+  {
+    "date": "2025-04-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.97
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:17",
+      "last_observation": "11:17"
+    }
+  },
+  {
+    "date": "2025-04-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.03
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:20",
+      "last_observation": "09:20"
+    }
+  },
+  {
+    "date": "2025-04-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.4
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:16",
+      "last_observation": "09:16"
+    }
+  },
+  {
+    "date": "2025-04-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.91
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:34",
+      "last_observation": "09:34"
+    }
+  },
+  {
+    "date": "2025-04-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.46
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:35",
+      "last_observation": "08:35"
+    }
+  },
+  {
+    "date": "2025-04-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.73
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 7,
+      "first_observation": "15:36",
+      "last_observation": "16:30"
+    }
+  },
+  {
+    "date": "2025-04-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.63
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:29",
+      "last_observation": "11:29"
+    }
+  },
+  {
+    "date": "2025-04-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.33
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "20:47",
+      "last_observation": "20:47"
+    }
+  },
+  {
+    "date": "2025-04-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:09",
+      "last_observation": "11:09"
+    }
+  },
+  {
+    "date": "2025-04-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.66
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "18:50",
+      "last_observation": "18:50"
+    }
+  },
+  {
+    "date": "2025-04-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:13",
+      "last_observation": "08:13"
+    }
+  },
+  {
+    "date": "2025-04-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:23",
+      "last_observation": "11:23"
+    }
+  },
+  {
+    "date": "2025-04-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.68
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:27",
+      "last_observation": "11:27"
+    }
+  },
+  {
+    "date": "2025-05-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.8
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:24",
+      "last_observation": "11:24"
+    }
+  },
+  {
+    "date": "2025-05-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.8
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:50",
+      "last_observation": "11:50"
+    }
+  },
+  {
+    "date": "2025-05-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.95
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:23",
+      "last_observation": "11:23"
+    }
+  },
+  {
+    "date": "2025-05-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.57
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "14:27",
+      "last_observation": "14:27"
+    }
+  },
+  {
+    "date": "2025-05-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.38
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:17",
+      "last_observation": "11:17"
+    }
+  },
+  {
+    "date": "2025-05-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.4
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:14",
+      "last_observation": "11:14"
+    }
+  },
+  {
+    "date": "2025-05-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.6
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:18",
+      "last_observation": "08:18"
+    }
+  },
+  {
+    "date": "2025-05-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.31
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:14",
+      "last_observation": "11:14"
+    }
+  },
+  {
+    "date": "2025-05-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.88
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "19:02",
+      "last_observation": "19:02"
+    }
+  },
+  {
+    "date": "2025-05-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.93
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:20",
+      "last_observation": "08:20"
+    }
+  },
+  {
+    "date": "2025-05-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.21
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:08",
+      "last_observation": "11:08"
+    }
+  },
+  {
+    "date": "2025-05-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.06
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:39",
+      "last_observation": "09:39"
+    }
+  },
+  {
+    "date": "2025-05-31",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.91
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 5,
+      "first_observation": "08:38",
+      "last_observation": "08:43"
+    }
+  },
+  {
+    "date": "2025-06-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.34
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:16",
+      "last_observation": "11:16"
+    }
+  },
+  {
+    "date": "2025-06-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.6
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:18",
+      "last_observation": "08:18"
+    }
+  },
+  {
+    "date": "2025-06-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.31
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:15",
+      "last_observation": "11:15"
+    }
+  },
+  {
+    "date": "2025-06-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.42
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:12",
+      "last_observation": "11:12"
+    }
+  },
+  {
+    "date": "2025-06-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:11",
+      "last_observation": "08:11"
+    }
+  },
+  {
+    "date": "2025-06-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.46
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:15",
+      "last_observation": "11:15"
+    }
+  },
+  {
+    "date": "2025-06-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.67
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:13",
+      "last_observation": "08:13"
+    }
+  },
+  {
+    "date": "2025-06-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.07
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:15",
+      "last_observation": "11:15"
+    }
+  },
+  {
+    "date": "2025-06-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 4,
+      "first_observation": "11:39",
+      "last_observation": "11:40"
+    }
+  },
+  {
+    "date": "2025-06-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.44
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "17:27",
+      "last_observation": "17:27"
+    }
+  },
+  {
+    "date": "2025-06-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.56
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "19:07",
+      "last_observation": "19:07"
+    }
+  },
+  {
+    "date": "2025-06-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.07
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:30",
+      "last_observation": "08:30"
+    }
+  },
+  {
+    "date": "2025-06-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.25
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 2,
+      "first_observation": "11:25",
+      "last_observation": "11:27"
+    }
+  },
+  {
+    "date": "2025-06-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.97
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:20",
+      "last_observation": "11:20"
+    }
+  },
+  {
+    "date": "2025-06-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 2,
+      "first_observation": "18:46",
+      "last_observation": "18:52"
+    }
+  },
+  {
+    "date": "2025-06-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.83
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "07:05",
+      "last_observation": "07:05"
+    }
+  },
+  {
+    "date": "2025-06-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.85
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "07:35",
+      "last_observation": "07:35"
+    }
+  },
+  {
+    "date": "2025-06-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.3
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:15",
+      "last_observation": "08:15"
+    }
+  },
+  {
+    "date": "2025-06-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.46
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:35",
+      "last_observation": "09:35"
+    }
+  },
+  {
+    "date": "2025-07-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.28
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:12",
+      "last_observation": "11:12"
+    }
+  },
+  {
+    "date": "2025-07-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.74
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:22",
+      "last_observation": "11:22"
+    }
+  },
+  {
+    "date": "2025-07-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.95
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:04",
+      "last_observation": "08:04"
+    }
+  },
+  {
+    "date": "2025-07-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.62
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:21",
+      "last_observation": "11:21"
+    }
+  },
+  {
+    "date": "2025-07-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.35
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 4,
+      "first_observation": "09:37",
+      "last_observation": "19:47"
+    }
+  },
+  {
+    "date": "2025-07-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:18",
+      "last_observation": "11:18"
+    }
+  },
+  {
+    "date": "2025-07-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.55
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:41",
+      "last_observation": "09:41"
+    }
+  },
+  {
+    "date": "2025-07-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 17.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "18:19",
+      "last_observation": "18:19"
+    }
+  },
+  {
+    "date": "2025-07-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.2
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 2,
+      "first_observation": "11:15",
+      "last_observation": "11:16"
+    }
+  },
+  {
+    "date": "2025-07-19",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.8
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:18",
+      "last_observation": "08:18"
+    }
+  },
+  {
+    "date": "2025-07-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.67
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:24",
+      "last_observation": "11:24"
+    }
+  },
+  {
+    "date": "2025-07-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.61
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "07:50",
+      "last_observation": "07:50"
+    }
+  },
+  {
+    "date": "2025-07-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.78
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 2,
+      "first_observation": "08:02",
+      "last_observation": "14:54"
+    }
+  },
+  {
+    "date": "2025-07-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.06
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:09",
+      "last_observation": "08:09"
+    }
+  },
+  {
+    "date": "2025-07-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.88
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:48",
+      "last_observation": "10:48"
+    }
+  },
+  {
+    "date": "2025-07-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.73
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "07:47",
+      "last_observation": "07:47"
+    }
+  },
+  {
+    "date": "2025-07-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.04
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:27",
+      "last_observation": "09:27"
+    }
+  },
+  {
+    "date": "2025-07-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.58
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 2,
+      "first_observation": "11:42",
+      "last_observation": "18:59"
+    }
+  },
+  {
+    "date": "2025-08-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 16.37
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:40",
+      "last_observation": "11:40"
+    }
+  },
+  {
+    "date": "2025-08-02",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 14.15
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:17",
+      "last_observation": "08:17"
+    }
+  },
+  {
+    "date": "2025-08-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:21",
+      "last_observation": "11:21"
+    }
+  },
+  {
+    "date": "2025-08-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "18:43",
+      "last_observation": "18:43"
+    }
+  },
+  {
+    "date": "2025-08-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 15.03
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:33",
+      "last_observation": "11:33"
+    }
+  },
+  {
+    "date": "2025-11-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.01
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:28",
+      "last_observation": "08:28"
+    }
+  },
+  {
+    "date": "2025-11-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.78
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:52",
+      "last_observation": "12:52"
+    }
+  },
+  {
+    "date": "2025-11-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.26
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:21",
+      "last_observation": "09:21"
+    }
+  },
+  {
+    "date": "2025-11-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.03
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:23",
+      "last_observation": "12:23"
+    }
+  },
+  {
+    "date": "2025-11-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.32
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:09",
+      "last_observation": "10:09"
+    }
+  },
+  {
+    "date": "2025-11-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.56
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:13",
+      "last_observation": "12:13"
+    }
+  },
+  {
+    "date": "2025-11-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.9
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:39",
+      "last_observation": "12:39"
+    }
+  },
+  {
+    "date": "2025-11-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.72
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "13:24",
+      "last_observation": "13:24"
+    }
+  },
+  {
+    "date": "2025-11-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.26
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:29",
+      "last_observation": "08:29"
+    }
+  },
+  {
+    "date": "2025-11-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.77
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:21",
+      "last_observation": "12:21"
+    }
+  },
+  {
+    "date": "2025-11-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.54
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:25",
+      "last_observation": "12:25"
+    }
+  },
+  {
+    "date": "2025-11-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.67
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:20",
+      "last_observation": "09:20"
+    }
+  },
+  {
+    "date": "2025-11-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:16",
+      "last_observation": "12:16"
+    }
+  },
+  {
+    "date": "2025-11-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.6
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:28",
+      "last_observation": "08:28"
+    }
+  },
+  {
+    "date": "2025-11-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.32
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "13:09",
+      "last_observation": "13:09"
+    }
+  },
+  {
+    "date": "2025-11-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.98
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:21",
+      "last_observation": "09:21"
+    }
+  },
+  {
+    "date": "2025-11-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.8
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:24",
+      "last_observation": "12:24"
+    }
+  },
+  {
+    "date": "2025-12-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:20",
+      "last_observation": "08:20"
+    }
+  },
+  {
+    "date": "2025-12-02",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.87
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:20",
+      "last_observation": "12:20"
+    }
+  },
+  {
+    "date": "2025-12-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.77
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:33",
+      "last_observation": "12:33"
+    }
+  },
+  {
+    "date": "2025-12-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.77
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:14",
+      "last_observation": "09:14"
+    }
+  },
+  {
+    "date": "2025-12-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.53
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:41",
+      "last_observation": "08:41"
+    }
+  },
+  {
+    "date": "2025-12-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.46
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:22",
+      "last_observation": "12:22"
+    }
+  },
+  {
+    "date": "2025-12-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.7
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:23",
+      "last_observation": "12:23"
+    }
+  },
+  {
+    "date": "2025-12-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.84
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:17",
+      "last_observation": "09:17"
+    }
+  },
+  {
+    "date": "2025-12-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.62
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:14",
+      "last_observation": "12:14"
+    }
+  },
+  {
+    "date": "2025-12-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.75
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "08:47",
+      "last_observation": "08:47"
+    }
+  },
+  {
+    "date": "2025-12-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.91
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:29",
+      "last_observation": "12:29"
+    }
+  },
+  {
+    "date": "2025-12-19",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.95
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:17",
+      "last_observation": "12:17"
+    }
+  },
+  {
+    "date": "2025-12-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.23
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:23",
+      "last_observation": "09:23"
+    }
+  },
+  {
+    "date": "2025-12-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.78
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:03",
+      "last_observation": "12:03"
+    }
+  },
+  {
+    "date": "2025-12-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 6,
+      "first_observation": "16:30",
+      "last_observation": "16:33"
+    }
+  },
+  {
+    "date": "2026-01-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.43
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 13,
+      "first_observation": "12:28",
+      "last_observation": "12:35"
+    }
+  },
+  {
+    "date": "2026-01-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 10,
+      "first_observation": "09:21",
+      "last_observation": "09:29"
+    }
+  },
+  {
+    "date": "2026-01-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.8
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:20",
+      "last_observation": "12:20"
+    }
+  },
+  {
+    "date": "2026-01-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 14,
+      "first_observation": "12:16",
+      "last_observation": "12:29"
+    }
+  },
+  {
+    "date": "2026-01-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 4,
+      "first_observation": "09:12",
+      "last_observation": "09:26"
+    }
+  },
+  {
+    "date": "2026-01-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 22.71
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 2,
+      "first_observation": "12:13",
+      "last_observation": "14:09"
+    }
+  },
+  {
+    "date": "2026-01-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 29.33
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "11:21",
+      "last_observation": "11:21"
+    }
+  },
+  {
+    "date": "2026-01-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:24",
+      "last_observation": "12:24"
+    }
+  },
+  {
+    "date": "2026-01-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.48
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:18",
+      "last_observation": "12:18"
+    }
+  },
+  {
+    "date": "2026-01-31",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.37
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "09:21",
+      "last_observation": "09:21"
+    }
+  },
+  {
+    "date": "2026-02-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 11,
+      "first_observation": "09:21",
+      "last_observation": "09:30"
+    }
+  },
+  {
+    "date": "2026-02-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 10,
+      "first_observation": "12:23",
+      "last_observation": "12:30"
+    }
+  },
+  {
+    "date": "2026-02-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.12
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:24",
+      "last_observation": "12:24"
+    }
+  },
+  {
+    "date": "2026-02-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 14,
+      "first_observation": "12:28",
+      "last_observation": "12:33"
+    }
+  },
+  {
+    "date": "2026-02-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 14,
+      "first_observation": "12:25",
+      "last_observation": "12:36"
+    }
+  },
+  {
+    "date": "2026-02-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.34
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:43",
+      "last_observation": "12:43"
+    }
+  },
+  {
+    "date": "2026-02-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.03
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:44",
+      "last_observation": "12:44"
+    }
+  },
+  {
+    "date": "2026-02-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.77
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:22",
+      "last_observation": "12:22"
+    }
+  },
+  {
+    "date": "2026-02-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.35
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:46",
+      "last_observation": "10:46"
+    }
+  },
+  {
+    "date": "2026-02-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 5.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 15,
+      "first_observation": "10:03",
+      "last_observation": "10:15"
+    }
+  },
+  {
+    "date": "2026-02-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 10,
+      "first_observation": "12:23",
+      "last_observation": "12:32"
+    }
+  },
+  {
+    "date": "2026-02-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.52
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:34",
+      "last_observation": "10:34"
+    }
+  },
+  {
+    "date": "2026-02-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:21",
+      "last_observation": "12:21"
+    }
+  },
+  {
+    "date": "2026-02-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.08
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "12:25",
+      "last_observation": "12:25"
+    }
+  },
+  {
+    "date": "2026-02-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.26
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 1,
+      "first_observation": "10:12",
+      "last_observation": "10:12"
+    }
+  },
+  {
+    "date": "2026-02-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 54,
+      "first_observation": "10:19",
+      "last_observation": "10:37"
+    }
+  },
+  {
+    "date": "2026-02-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 37,
+      "first_observation": "12:41",
+      "last_observation": "12:54"
+    }
+  },
+  {
+    "date": "2026-02-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.58
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 38,
+      "first_observation": "09:14",
+      "last_observation": "09:31"
+    }
+  },
+  {
+    "date": "2026-03-02",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 61,
+      "first_observation": "10:33",
+      "last_observation": "10:51"
+    }
+  },
+  {
+    "date": "2026-03-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 11,
+      "first_observation": "12:25",
+      "last_observation": "12:31"
+    }
+  },
+  {
+    "date": "2026-03-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.77
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 90,
+      "first_observation": "08:07",
+      "last_observation": "08:32"
+    }
+  },
+  {
+    "date": "2026-03-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 22.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 131,
+      "first_observation": "19:03",
+      "last_observation": "19:42"
+    }
+  },
+  {
+    "date": "2026-03-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 23,
+      "first_observation": "12:25",
+      "last_observation": "12:33"
+    }
+  },
+  {
+    "date": "2026-03-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 41,
+      "first_observation": "09:18",
+      "last_observation": "09:35"
+    }
+  },
+  {
+    "date": "2026-03-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 46,
+      "first_observation": "09:25",
+      "last_observation": "09:43"
+    }
+  },
+  {
+    "date": "2026-03-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 34,
+      "first_observation": "10:20",
+      "last_observation": "10:34"
+    }
+  },
+  {
+    "date": "2026-03-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 37,
+      "first_observation": "12:39",
+      "last_observation": "12:57"
+    }
+  },
+  {
+    "date": "2026-03-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 35,
+      "first_observation": "15:00",
+      "last_observation": "15:09"
+    }
+  },
+  {
+    "date": "2026-03-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.58
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 38,
+      "first_observation": "12:23",
+      "last_observation": "12:38"
+    }
+  },
+  {
+    "date": "2026-03-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 5.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 35,
+      "first_observation": "08:45",
+      "last_observation": "10:12"
+    }
+  },
+  {
+    "date": "2026-03-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 29.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 3,
+      "first_observation": "11:44",
+      "last_observation": "11:51"
+    }
+  },
+  {
+    "date": "2026-03-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 54,
+      "first_observation": "12:20",
+      "last_observation": "12:36"
+    }
+  },
+  {
+    "date": "2026-03-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.26
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 69,
+      "first_observation": "10:21",
+      "last_observation": "10:39"
+    }
+  },
+  {
+    "date": "2026-03-19",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 53,
+      "first_observation": "15:17",
+      "last_observation": "15:42"
+    }
+  },
+  {
+    "date": "2026-03-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 65,
+      "first_observation": "15:46",
+      "last_observation": "16:08"
+    }
+  },
+  {
+    "date": "2026-03-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 32,
+      "first_observation": "15:37",
+      "last_observation": "15:51"
+    }
+  },
+  {
+    "date": "2026-03-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 20,
+      "first_observation": "10:24",
+      "last_observation": "10:41"
+    }
+  },
+  {
+    "date": "2026-03-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 69,
+      "first_observation": "12:20",
+      "last_observation": "12:42"
+    }
+  },
+  {
+    "date": "2026-03-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 46,
+      "first_observation": "10:07",
+      "last_observation": "10:21"
+    }
+  },
+  {
+    "date": "2026-03-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.83
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 50,
+      "first_observation": "10:09",
+      "last_observation": "10:22"
+    }
+  },
+  {
+    "date": "2026-03-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 37,
+      "first_observation": "12:25",
+      "last_observation": "12:38"
+    }
+  },
+  {
+    "date": "2026-03-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 4,
+      "first_observation": "10:56",
+      "last_observation": "10:57"
+    }
+  },
+  {
+    "date": "2026-03-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 45,
+      "first_observation": "11:18",
+      "last_observation": "11:35"
+    }
+  },
+  {
+    "date": "2026-03-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 6.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 57,
+      "first_observation": "14:19",
+      "last_observation": "14:42"
+    }
+  },
+  {
+    "date": "2026-03-31",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 65,
+      "first_observation": "11:19",
+      "last_observation": "11:39"
+    }
+  },
+  {
+    "date": "2026-04-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 5.46
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 57,
+      "first_observation": "18:45",
+      "last_observation": "19:01"
+    }
+  },
+  {
+    "date": "2026-04-02",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 24,
+      "first_observation": "09:18",
+      "last_observation": "09:32"
+    }
+  },
+  {
+    "date": "2026-04-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 17,
+      "first_observation": "15:00",
+      "last_observation": "15:07"
+    }
+  },
+  {
+    "date": "2026-04-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 44,
+      "first_observation": "16:41",
+      "last_observation": "16:53"
+    }
+  },
+  {
+    "date": "2026-04-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 26.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 107,
+      "first_observation": "11:32",
+      "last_observation": "12:31"
+    }
+  },
+  {
+    "date": "2026-04-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 5,
+      "first_observation": "18:47",
+      "last_observation": "18:49"
+    }
+  },
+  {
+    "date": "2026-04-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.98
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 23,
+      "first_observation": "08:23",
+      "last_observation": "09:57"
+    }
+  },
+  {
+    "date": "2026-04-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 21,
+      "first_observation": "11:17",
+      "last_observation": "11:43"
+    }
+  },
+  {
+    "date": "2026-04-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 27,
+      "first_observation": "07:51",
+      "last_observation": "08:04"
+    }
+  },
+  {
+    "date": "2026-04-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.08
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 7,
+      "first_observation": "15:40",
+      "last_observation": "16:31"
+    }
+  },
+  {
+    "date": "2026-04-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 9,
+      "first_observation": "18:41",
+      "last_observation": "18:53"
+    }
+  },
+  {
+    "date": "2026-04-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 32,
+      "first_observation": "13:37",
+      "last_observation": "13:55"
+    }
+  },
+  {
+    "date": "2026-04-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 43,
+      "first_observation": "18:29",
+      "last_observation": "18:49"
+    }
+  },
+  {
+    "date": "2026-04-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 45,
+      "first_observation": "08:20",
+      "last_observation": "08:33"
+    }
+  },
+  {
+    "date": "2026-04-19",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 18,
+      "first_observation": "08:33",
+      "last_observation": "08:53"
+    }
+  },
+  {
+    "date": "2026-04-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 24,
+      "first_observation": "09:35",
+      "last_observation": "09:52"
+    }
+  },
+  {
+    "date": "2026-04-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 40,
+      "first_observation": "11:21",
+      "last_observation": "19:17"
+    }
+  },
+  {
+    "date": "2026-04-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 47,
+      "first_observation": "08:15",
+      "last_observation": "08:30"
+    }
+  },
+  {
+    "date": "2026-04-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 40,
+      "first_observation": "08:27",
+      "last_observation": "08:45"
+    }
+  },
+  {
+    "date": "2026-04-27",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.88
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 28,
+      "first_observation": "14:21",
+      "last_observation": "14:36"
+    }
+  },
+  {
+    "date": "2026-04-28",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 41,
+      "first_observation": "11:19",
+      "last_observation": "11:44"
+    }
+  },
+  {
+    "date": "2026-04-29",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 58,
+      "first_observation": "18:47",
+      "last_observation": "19:11"
+    }
+  },
+  {
+    "date": "2026-05-01",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.28
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 72,
+      "first_observation": "09:44",
+      "last_observation": "19:13"
+    }
+  },
+  {
+    "date": "2026-05-02",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.57
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 42,
+      "first_observation": "08:20",
+      "last_observation": "08:45"
+    }
+  },
+  {
+    "date": "2026-05-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 38,
+      "first_observation": "08:26",
+      "last_observation": "08:43"
+    }
+  },
+  {
+    "date": "2026-05-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 31,
+      "first_observation": "11:24",
+      "last_observation": "11:41"
+    }
+  },
+  {
+    "date": "2026-05-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 37,
+      "first_observation": "09:26",
+      "last_observation": "09:46"
+    }
+  },
+  {
+    "date": "2026-05-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 85,
+      "first_observation": "11:20",
+      "last_observation": "11:46"
+    }
+  },
+  {
+    "date": "2026-05-09",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 6,
+      "first_observation": "08:26",
+      "last_observation": "08:37"
+    }
+  },
+  {
+    "date": "2026-05-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 49,
+      "first_observation": "09:16",
+      "last_observation": "09:38"
+    }
+  },
+  {
+    "date": "2026-05-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 25,
+      "first_observation": "09:28",
+      "last_observation": "09:48"
+    }
+  },
+  {
+    "date": "2026-05-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 36,
+      "first_observation": "19:14",
+      "last_observation": "19:31"
+    }
+  },
+  {
+    "date": "2026-05-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 15,
+      "first_observation": "11:42",
+      "last_observation": "12:06"
+    }
+  },
+  {
+    "date": "2026-05-16",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.38
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 52,
+      "first_observation": "12:08",
+      "last_observation": "12:34"
+    }
+  },
+  {
+    "date": "2026-05-17",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.72
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 14,
+      "first_observation": "18:24",
+      "last_observation": "18:40"
+    }
+  },
+  {
+    "date": "2026-05-18",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 7.69
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 72,
+      "first_observation": "09:20",
+      "last_observation": "09:45"
+    }
+  },
+  {
+    "date": "2026-05-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 72,
+      "first_observation": "09:25",
+      "last_observation": "09:46"
+    }
+  },
+  {
+    "date": "2026-05-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 45,
+      "first_observation": "11:19",
+      "last_observation": "11:40"
+    }
+  },
+  {
+    "date": "2026-05-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.43
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 85,
+      "first_observation": "08:20",
+      "last_observation": "08:51"
+    }
+  },
+  {
+    "date": "2026-05-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.88
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 67,
+      "first_observation": "11:23",
+      "last_observation": "11:46"
+    }
+  },
+  {
+    "date": "2026-05-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 180,
+      "first_observation": "08:29",
+      "last_observation": "17:31"
+    }
+  },
+  {
+    "date": "2026-05-26",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 65,
+      "first_observation": "11:37",
+      "last_observation": "11:55"
+    }
+  },
+  {
+    "date": "2026-05-30",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 92,
+      "first_observation": "08:29",
+      "last_observation": "08:52"
+    }
+  },
+  {
+    "date": "2026-05-31",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 12,
+      "first_observation": "11:49",
+      "last_observation": "11:52"
+    }
+  },
+  {
+    "date": "2026-06-05",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 58,
+      "first_observation": "11:22",
+      "last_observation": "11:38"
+    }
+  },
+  {
+    "date": "2026-06-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.01
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 62,
+      "first_observation": "08:18",
+      "last_observation": "08:34"
+    }
+  },
+  {
+    "date": "2026-06-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 89,
+      "first_observation": "11:22",
+      "last_observation": "11:47"
+    }
+  },
+  {
+    "date": "2026-06-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 90,
+      "first_observation": "09:20",
+      "last_observation": "09:46"
+    }
+  },
+  {
+    "date": "2026-06-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 52,
+      "first_observation": "07:13",
+      "last_observation": "07:29"
+    }
+  },
+  {
+    "date": "2026-06-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.99
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 115,
+      "first_observation": "09:34",
+      "last_observation": "10:08"
+    }
+  },
+  {
+    "date": "2026-06-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 91,
+      "first_observation": "11:24",
+      "last_observation": "11:55"
+    }
+  },
+  {
+    "date": "2026-06-13",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 75,
+      "first_observation": "08:18",
+      "last_observation": "08:39"
+    }
+  },
+  {
+    "date": "2026-06-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 106,
+      "first_observation": "11:20",
+      "last_observation": "11:52"
+    }
+  },
+  {
+    "date": "2026-06-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.4
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 65,
+      "first_observation": "10:02",
+      "last_observation": "10:24"
+    }
+  },
+  {
+    "date": "2026-06-19",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.79
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 74,
+      "first_observation": "20:09",
+      "last_observation": "20:35"
+    }
+  },
+  {
+    "date": "2026-06-20",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.72
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 118,
+      "first_observation": "08:30",
+      "last_observation": "20:13"
+    }
+  },
+  {
+    "date": "2026-06-21",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.44
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 157,
+      "first_observation": "08:22",
+      "last_observation": "19:49"
+    }
+  },
+  {
+    "date": "2026-06-22",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.07
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 79,
+      "first_observation": "09:33",
+      "last_observation": "10:00"
+    }
+  },
+  {
+    "date": "2026-06-23",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 2,
+      "observations": 71,
+      "first_observation": "12:11",
+      "last_observation": "19:56"
+    }
+  },
+  {
+    "date": "2026-06-24",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.02
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 144,
+      "first_observation": "09:10",
+      "last_observation": "09:49"
+    }
+  },
+  {
+    "date": "2026-06-25",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.91
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 47,
+      "first_observation": "05:19",
+      "last_observation": "05:49"
+    }
+  }
+]

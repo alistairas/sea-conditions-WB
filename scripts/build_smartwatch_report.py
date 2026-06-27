@@ -207,46 +207,91 @@ def plot_temperature_range(df, output_path):
     plt.close()
 
 def plot_cooling_curves(df, output_path):
-
-    plt.figure(figsize=(9,6))
+    plt.figure(figsize=(9, 6))
 
     long_sessions = []
 
     for _, g in df.groupby("session_id"):
         if len(g) >= 10:
+            g = g.sort_values("elapsed_minutes").copy()
+
+            # Normalise each session so first reading = 0°C.
+            # This shows sensor cooling behaviour rather than seasonal temperature.
+            g["temperature_change_c"] = (
+                g["temperature_c"] - g["temperature_c"].iloc[0]
+            )
+
             long_sessions.append(g)
 
             plt.plot(
                 g["elapsed_minutes"],
-                g["temperature_c"],
-                color="lightgrey",
+                g["temperature_change_c"],
                 linewidth=0.8,
-                alpha=0.5
+                alpha=0.25
             )
 
     if long_sessions:
-
         combined = pd.concat(long_sessions)
 
-        median = (
+        median_curve = (
             combined
-            .groupby(combined["elapsed_minutes"].round(0))
-            ["temperature_c"]
+            .assign(elapsed_minute_bin=combined["elapsed_minutes"].round(0))
+            .groupby("elapsed_minute_bin")["temperature_change_c"]
             .median()
         )
 
         plt.plot(
-            median.index,
-            median.values,
+            median_curve.index,
+            median_curve.values,
             linewidth=3,
-            label="Median",
+            label="Median change"
         )
 
         plt.legend()
 
+    plt.axhline(0, linewidth=1)
     plt.title("Smartwatch cooling behaviour during swim sessions")
     plt.xlabel("Minutes since first reading")
-    plt.ylabel("Temperature (°C)")
+    plt.ylabel("Temperature change from first reading (°C)")
+    plt.xlim(left=0)
+
+    save_plot(output_path)
+    
+def plot_temperature_by_reading_number(df, output_path):
+    rows = []
+
+    for _, g in df.groupby("session_id"):
+        if len(g) >= 10:
+            g = g.sort_values("timestamp").copy()
+            g["reading_number"] = range(1, len(g) + 1)
+            g["temperature_change_c"] = (
+                g["temperature_c"] - g["temperature_c"].iloc[0]
+            )
+            rows.append(g[["reading_number", "temperature_change_c"]])
+
+    plt.figure(figsize=(9, 5))
+
+    if rows:
+        combined = pd.concat(rows)
+
+        median_by_reading = (
+            combined
+            .groupby("reading_number")["temperature_change_c"]
+            .median()
+            .head(40)
+        )
+
+        plt.plot(
+            median_by_reading.index,
+            median_by_reading.values,
+            linewidth=3,
+            marker="o"
+        )
+
+    plt.axhline(0, linewidth=1)
+    plt.title("Median temperature change by reading number")
+    plt.xlabel("Reading number within session")
+    plt.ylabel("Median change from first reading (°C)")
 
     save_plot(output_path)
 
@@ -370,7 +415,7 @@ a {{
 <ul>
 <li><strong>{raw_n:,}</strong> smartwatch water temperature observations were analysed.</li>
 <li>These observations formed <strong>{session_n:,}</strong> swim sessions using a 30-minute gap rule.</li>
-<li><strong>{continuous_n:,} sessions ({continuous_pct:.1f}%)</strong> contained five or more readings and are suitable candidates for stable plateau analysis.</li>
+<li><strong>{continuous_n:,} sessions ({continuous_pct:.1f}%)</strong> contained five or more readings and provide sufficient observations to investigate stable temperature plateau detection. </li>
 <li>The median sampling interval was <strong>{median_interval:.1f} seconds</strong>, providing high temporal resolution within sessions.</li>
 <li>The data support deriving <strong>one representative temperature per swim session</strong>, rather than treating observations as independent temperature measurements.</li>
 </ul>
@@ -430,17 +475,21 @@ a {{
 <h2>Sensor cooling behaviour</h2>
 
 <p>
-The chart below shows longer swim sessions aligned to the first recorded temperature
-measurement. Individual sessions are shown as separate traces, while the median
-behaviour across sessions is highlighted.
-</p>
-
-<p>
-This helps characterise how quickly the smartwatch sensor approaches thermal
-equilibrium with the surrounding seawater.
+The chart below shows longer swim sessions aligned to the first recorded
+temperature measurement. Each session is normalised so that its first reading
+starts at 0°C. This shows how the smartwatch sensor changes after entering
+the water, rather than showing seasonal differences in sea temperature.
 </p>
 
 <img src="reports/charts/cooling_curves.png" alt="Smartwatch cooling behaviour during swim sessions">
+
+<p>
+The second chart summarises the median temperature change by reading number.
+This helps assess how many readings are typically needed before the sensor
+approaches a stable value.
+</p>
+
+<img src="reports/charts/temperature_by_reading_number.png" alt="Median temperature change by reading number">
 </div>
 
 <div class="card">
@@ -540,6 +589,10 @@ def main():
     plot_session_durations(sessions, chart_dir / "session_durations.png")
     plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
     plot_cooling_curves(df, chart_dir / "cooling_curves.png")
+    plot_temperature_by_reading_number(
+        df,
+        chart_dir / "temperature_by_reading_number.png"
+    )
     
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 

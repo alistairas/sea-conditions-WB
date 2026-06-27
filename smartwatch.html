@@ -142,6 +142,12 @@ representative sea temperature for the session.
 </div>
 
 <div class="card">
+<h2>Sensor cooling behaviour</h2>
+<p>The chart below shows temperature observations from longer swim sessions aligned to the first recorded measurement. Individual sessions are shown in grey and the median behaviour across sessions is highlighted. This helps characterise how rapidly the smartwatch sensor approaches thermal equilibrium with the surrounding seawater.</p>
+<img src="reports/charts/cooling_curves.png">
+</div>
+
+<div class="card">
 <h2>Initial interpretation</h2>
 <ul>
 <li>The smartwatch data are best interpreted at swim-session level, not individual-reading level.</li>
@@ -150,6 +156,55 @@ representative sea temperature for the session.
 <li>High values suggest some readings are affected by body heat or post-swim warming.</li>
 <li>Produce a validated <code>smartwatch_sessions.csv</code> dataset containing one representative temperature per swim session.</li>
 </ul>
+</div>
+
+<div class="card">
+<h2>Methodological implications</h2>
+
+<p>
+This report demonstrates that smartwatch water temperature observations are
+best interpreted as <strong>swim sessions</strong> rather than independent
+temperature measurements.
+</p>
+
+<ul>
+<li>Repeated measurements within a swim session provide sufficient information to investigate sensor equilibration behaviour.</li>
+
+<li>Representative water temperatures should therefore be derived at the session level rather than from individual observations.</li>
+
+<li>High temperature observations are consistent with body heat or post-swim warming and should not automatically be interpreted as seawater temperature.</li>
+
+<li>The methodology will identify a stable temperature plateau following sensor equilibration and derive a representative temperature from that period.</li>
+
+<li>Thresholds used within the stable plateau algorithm will be selected using evidence from this sensor characterisation rather than predetermined values.</li>
+
+</ul>
+
+</div>
+
+<div class="card">
+<h2>Questions under investigation</h2>
+
+<p>
+The purpose of this report is to characterise smartwatch behaviour as a
+water temperature sensor and to provide evidence for a reproducible
+processing methodology.
+</p>
+
+<ol>
+
+<li>How quickly does the smartwatch sensor equilibrate with surrounding seawater?</li>
+
+<li>How stable are temperature observations once thermal equilibrium has been reached?</li>
+
+<li>How many observations are required to estimate a representative session temperature reliably?</li>
+
+<li>Which stable plateau detection method provides the most robust and reproducible representative water temperature?</li>
+
+<li>How closely do representative smartwatch-derived temperatures agree with independent coastal sea temperature observations?</li>
+
+</ol>
+
 </div>
 
 <div class="card">

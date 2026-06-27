@@ -7,6 +7,7 @@ on:
       - "water_temperatures.csv"
       - "scripts/build_smartwatch_report.py"
       - "requirements.txt"
+      - ".github/workflows/build-smartwatch-report.yml"
 
 permissions:
   contents: write
@@ -36,5 +37,5 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update smartwatch report"
-          file_pattern: "smartwatch.html reports/"
+          file_pattern: "smartwatch.html smartwatch_daily_minimums.json reports/"
           push_options: "--force-with-lease"

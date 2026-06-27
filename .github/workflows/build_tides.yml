@@ -1,0 +1,29 @@
+name: Build tide data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 4 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-tides:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build tide JSON
+        run: python scripts/build_tides.py
+
+      - name: Commit tide data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update tide data"
+          file_pattern: "data/tides.json"

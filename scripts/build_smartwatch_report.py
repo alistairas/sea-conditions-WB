@@ -30,11 +30,15 @@ def add_sessions(df: pd.DataFrame, gap_minutes: int = 30) -> pd.DataFrame:
     df["gap_minutes"] = df["timestamp"].diff().dt.total_seconds().div(60)
     df["new_session"] = (df["gap_minutes"].isna()) | (df["gap_minutes"] > gap_minutes)
     df["session_id"] = df["new_session"].cumsum()
-    df["elapsed_seconds"] = (df["timestamp"] - df.groupby("session_id")["timestamp"].transform("min")).dt.total_seconds()
-    df["elapsed_minutes"] = df["elapsed_seconds"] / 60
-    
-    return df
 
+    df["elapsed_seconds"] = (
+        df["timestamp"]
+        - df.groupby("session_id")["timestamp"].transform("min")
+    ).dt.total_seconds()
+
+    df["elapsed_minutes"] = df["elapsed_seconds"] / 60
+
+    return df
 
 def session_summary(df: pd.DataFrame) -> pd.DataFrame:
     grouped = df.groupby("session_id")
@@ -135,6 +139,50 @@ def plot_readings_per_session(sessions, output_path):
 
     save_plot(output_path)
 
+def plot_cooling_curves(df, output_path):
+    plt.figure(figsize=(9, 6))
+
+    long_sessions = []
+
+    for _, g in df.groupby("session_id"):
+        if len(g) >= 10:
+            g = g.sort_values("elapsed_minutes")
+            long_sessions.append(g)
+
+            plt.plot(
+                g["elapsed_minutes"],
+                g["temperature_c"],
+                linewidth=0.8,
+                alpha=0.25
+            )
+
+    if long_sessions:
+        combined = pd.concat(long_sessions)
+
+        # Round elapsed time to the nearest minute so sessions can be compared.
+        median_curve = (
+            combined
+            .assign(elapsed_minute_bin=combined["elapsed_minutes"].round(0))
+            .groupby("elapsed_minute_bin")["temperature_c"]
+            .median()
+        )
+
+        plt.plot(
+            median_curve.index,
+            median_curve.values,
+            linewidth=3,
+            label="Median curve"
+        )
+
+        plt.legend()
+
+    plt.title("Smartwatch cooling behaviour during swim sessions")
+    plt.xlabel("Minutes since first reading")
+    plt.ylabel("Temperature (°C)")
+    plt.xlim(left=0)
+
+    save_plot(output_path)
+
 def plot_monthly_counts(df, output_path):
     monthly = df.set_index("timestamp").resample("ME").size()
 
@@ -227,6 +275,15 @@ def make_report(df, sessions, intervals):
 
     median_interval = intervals.median() if len(intervals) else 0
 
+    continuous_pct = (continuous_n / session_n * 100) if session_n else 0
+    avg_readings_per_session = raw_n / session_n if session_n else 0
+    high_pct = (high_values / raw_n * 100) if raw_n else 0
+    very_high_pct = (very_high_values / raw_n * 100) if raw_n else 0
+    
+    duration_median = sessions["duration_minutes"].median()
+    duration_p75 = sessions["duration_minutes"].quantile(0.75)
+    duration_p95 = sessions["duration_minutes"].quantile(0.95)
+
     avg_readings_per_session = raw_n / session_n if session_n else 0
     high_pct = (high_values / raw_n * 100) if raw_n else 0
     very_high_pct = (very_high_values / raw_n * 100) if raw_n else 0
@@ -310,34 +367,21 @@ a {{
 <div class="card">
 <h2>Key findings</h2>
 
-<p><strong>This is a session-based dataset, not a continuous temperature record.</strong></p>
-
-<p>
-Although the dataset contains <strong>{raw_n:,}</strong> individual smartwatch observations,
-these represent <strong>{session_n:,}</strong> distinct swimming sessions rather than
-independent sea temperature measurements.
-</p>
+<ul>
+<li><strong>{raw_n:,}</strong> smartwatch water temperature observations were analysed.</li>
+<li>These observations formed <strong>{session_n:,}</strong> swim sessions using a 30-minute gap rule.</li>
+<li><strong>{continuous_n:,} sessions ({continuous_pct:.1f}%)</strong> contained five or more readings and are suitable candidates for stable plateau analysis.</li>
+<li>The median sampling interval was <strong>{median_interval:.1f} seconds</strong>, providing high temporal resolution within sessions.</li>
+<li>The data support deriving <strong>one representative temperature per swim session</strong>, rather than treating observations as independent temperature measurements.</li>
+</ul>
 
 <table>
 <tr><th>Finding</th><th>Value</th></tr>
 <tr><td>Average readings per session</td><td>{avg_readings_per_session:.1f}</td></tr>
-<tr><td>Median sampling interval</td><td>{median_interval:.1f} seconds</td></tr>
 <tr><td>Readings ≥20°C</td><td>{high_values:,} ({high_pct:.1f}%)</td></tr>
 <tr><td>Readings ≥25°C</td><td>{very_high_values:,} ({very_high_pct:.1f}%)</td></tr>
 </table>
 
-<p>
-The repeated readings within sessions are valuable because they allow the sensor
-cooling and stabilisation process to be assessed. Future analysis should therefore
-derive <strong>one representative water temperature per swim session</strong>, rather than
-treating every raw smartwatch observation as an independent measurement.
-</p>
-
-<p>
-The preferred approach is to identify the stable temperature plateau after the device
-has equilibrated with the surrounding water, and to use that plateau to estimate the
-representative sea temperature for the session.
-</p>
 </div>
 
 <div class="card">
@@ -365,6 +409,14 @@ representative sea temperature for the session.
 
 <div class="card">
 <h2>Session duration</h2>
+
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Median duration</td><td>{duration_median:.1f} minutes</td></tr>
+<tr><td>75th percentile</td><td>{duration_p75:.1f} minutes</td></tr>
+<tr><td>95th percentile</td><td>{duration_p95:.1f} minutes</td></tr>
+</table>
+
 <img src="reports/charts/session_durations.png" alt="Session duration distribution">
 </div>
 
@@ -376,8 +428,19 @@ representative sea temperature for the session.
 
 <div class="card">
 <h2>Sensor cooling behaviour</h2>
-<p>The chart below shows temperature observations from longer swim sessions aligned to the first recorded measurement. Individual sessions are shown in grey and the median behaviour across sessions is highlighted. This helps characterise how rapidly the smartwatch sensor approaches thermal equilibrium with the surrounding seawater.</p>
-<img src="reports/charts/cooling_curves.png">
+
+<p>
+The chart below shows longer swim sessions aligned to the first recorded temperature
+measurement. Individual sessions are shown as separate traces, while the median
+behaviour across sessions is highlighted.
+</p>
+
+<p>
+This helps characterise how quickly the smartwatch sensor approaches thermal
+equilibrium with the surrounding seawater.
+</p>
+
+<img src="reports/charts/cooling_curves.png" alt="Smartwatch cooling behaviour during swim sessions">
 </div>
 
 <div class="card">
@@ -391,26 +454,21 @@ representative sea temperature for the session.
 </ul>
 </div>
 
+
 <div class="card">
 <h2>Methodological implications</h2>
 
 <p>
-This report demonstrates that smartwatch water temperature observations are
-best interpreted as <strong>swim sessions</strong> rather than independent
-temperature measurements.
+This report demonstrates that smartwatch water temperature observations are best
+interpreted as <strong>swim sessions</strong> rather than independent temperature measurements.
 </p>
 
 <ul>
-<li>Repeated measurements within a swim session provide sufficient information to investigate sensor equilibration behaviour.</li>
-
+<li>Repeated measurements within a swim session provide information about sensor equilibration behaviour.</li>
 <li>Representative water temperatures should therefore be derived at the session level rather than from individual observations.</li>
-
 <li>High temperature observations are consistent with body heat or post-swim warming and should not automatically be interpreted as seawater temperature.</li>
-
-<li>The methodology will identify a stable temperature plateau following sensor equilibration and derive a representative temperature from that period.</li>
-
+<li>The representative water temperature for each swim session will be derived from a stable temperature plateau following sensor equilibration.</li>
 <li>Thresholds used within the stable plateau algorithm will be selected using evidence from this sensor characterisation rather than predetermined values.</li>
-
 </ul>
 
 </div>
@@ -443,11 +501,11 @@ processing methodology.
 <div class="card">
 <h2>Next steps</h2>
 <ol>
-<li>Implement stable plateau detection for continuous sessions.</li>
-<li>Assign confidence categories based on readings, duration and plateau quality.</li>
-<li>Compare representative smartwatch temperatures with Copernicus SST.</li>
-<li>Compare with historical local water temperature records where dates overlap.</li>
-<li>Produce a validated <code>smartwatch_sessions.csv</code> dataset.</li>
+<li>Characterise smartwatch cooling behaviour.</li>
+<li>Quantify time to thermal equilibrium.</li>
+<li>Define an evidence-based stable plateau algorithm.</li>
+<li>Validate representative temperatures against independent observations.</li>
+<li>Publish a reproducible session-level dataset.</li>
 </ol>
 </div>
 
@@ -476,11 +534,12 @@ def main():
     sessions = session_summary(df)
     intervals = sampling_intervals(df)
 
-    plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
-    plot_monthly_counts(df, chart_dir / "monthly_observations.png")
-    plot_sampling_intervals(intervals, chart_dir / "sampling_intervals.png")
-    plot_session_durations(sessions, chart_dir / "session_durations.png")
-    plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
+plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
+plot_monthly_counts(df, chart_dir / "monthly_observations.png")
+plot_sampling_intervals(intervals, chart_dir / "sampling_intervals.png")
+plot_session_durations(sessions, chart_dir / "session_durations.png")
+plot_readings_per_session(sessions, chart_dir / "readings_per_session.png")
+plot_cooling_curves(df, chart_dir / "cooling_curves.png")
 
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 

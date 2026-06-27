@@ -136,6 +136,8 @@ input[type="date"] {
   <button onclick="showRange(31)">Month</button>
   <button onclick="showRange(null)">All</button>
   <button onclick="toggleCalendar()">Start date</button>
+  <button id="toggle-satellite" onclick="toggleSeries('satellite')">✓ Satellite</button>
+  <button id="toggle-smartwatch" onclick="toggleSeries('smartwatch')">✓ Smartwatch</button>
 </div>
 
 <div id="calendarBox" style="display:none; margin-bottom:16px;">
@@ -179,13 +181,33 @@ input[type="date"] {
 let historyData = [];
 let chart;
 let startDateFilter = null;
+let smartwatchData = [];
+let showSatellite = true;
+let showSmartwatch = true;
+let currentRange = 7;
 
-fetch("history.json")
-  .then(r => r.json())
-  .then(data => {
-    historyData = data;
-    showRange(7);
-  });
+Promise.all([
+  fetch("history.json").then(r => r.json()),
+  fetch("smartwatch_daily_minimums.json").then(r => r.json())
+])
+.then(([history, smartwatch]) => {
+  historyData = history;
+  smartwatchData = smartwatch;
+  showRange(7);
+});
+
+function toggleSeries(series) {
+  if (series === "satellite") showSatellite = !showSatellite;
+  if (series === "smartwatch") showSmartwatch = !showSmartwatch;
+
+  document.getElementById("toggle-satellite").textContent =
+    showSatellite ? "✓ Satellite" : "Satellite";
+
+  document.getElementById("toggle-smartwatch").textContent =
+    showSmartwatch ? "✓ Smartwatch" : "Smartwatch";
+
+  showRange(currentRange);
+}
 
 function fillMissingDays(data) {
   const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -233,6 +255,7 @@ function fillMissingDays(data) {
 
 function showRange(days) {
   let data = historyData;
+  currentRange = days;
 
   if (days) {
     const cutoff = new Date();
@@ -266,25 +289,48 @@ const temps = chartData.map(x => x.sea_temp_c);
     type: "line",
     data: {
       labels: labels,
-      datasets: [{
-  label: "Sea temperature °C",
-  data: temps,
-  tension: 0.3,
-
-  pointRadius: chartData.map(item =>
-    item.estimated ? 0 : 4
-  ),
-
-  pointHoverRadius: chartData.map(item =>
-    item.estimated ? 0 : 5
-  )
-}]
+      datasets: [
+        {
+          label: "Satellite OSTIA °C",
+          data: showSatellite ? temps : [],
+          tension: 0.3,
+          borderWidth: 3,
+          pointRadius: data.map(item => item.estimated ? 0 : 4),
+          pointHoverRadius: data.map(item => item.estimated ? 0 : 5)
+        },
+        {
+          label: "Smartwatch daily minimum °C",
+          data: showSmartwatch
+            ? labels.map(label => {
+                const matchingDate = data.find(item => {
+                  const d = new Date(item.date).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'short'
+                  });
+                  return d === label;
+                });
+      
+                if (!matchingDate) return null;
+      
+                const watchEntry = smartwatchData.find(w =>
+                  w.date === matchingDate.date
+                );
+      
+                return watchEntry?.temperature?.minimum_c ?? null;
+              })
+            : [],
+          tension: 0.3,
+          borderDash: [3, 5],
+          pointRadius: 3,
+          spanGaps: true
+        }
+      ]
     },
     options: {
       responsive: true,
       plugins: {
         legend: {
-          display: false
+          display: true
         }
       },
       scales: {

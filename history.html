@@ -155,7 +155,7 @@ input[type="date"] {
   The line includes estimated values between available daily readings. Dots show actual readings.
 </footer>
 <section class="card">
-  <div class="label">Summary</div>
+  <div class="label">Satellite summary</div>
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-label">Min</div>
@@ -253,36 +253,71 @@ function fillMissingDays(data) {
   return filled;
 }
 
-function showRange(days) {
-  let data = historyData;
-  currentRange = days;
+function getDateRange(days) {
+  const allDates = [
+    ...historyData.map(x => x.date),
+    ...smartwatchData.map(x => x.date)
+  ].sort();
+
+  if (!allDates.length) return [];
+
+  let start = new Date(allDates[0]);
+  const end = new Date(allDates[allDates.length - 1]);
 
   if (days) {
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - days);
-
-    data = data.filter(item =>
-      new Date(item.date) >= cutoff
-    );
+    start = new Date(end);
+    start.setDate(start.getDate() - days + 1);
   }
 
   if (startDateFilter) {
-    data = data.filter(item =>
-      new Date(item.date) >= startDateFilter
-    );
+    start = startDateFilter;
   }
 
-  const chartData = fillMissingDays(data);
+  const dates = [];
+  const d = new Date(start);
 
-const labels = chartData.map(item => {
-  const date = new Date(item.date);
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short'
+  while (d <= end) {
+    dates.push(d.toISOString().slice(0, 10));
+    d.setDate(d.getDate() + 1);
+  }
+
+  return dates;
+}
+
+function showRange(days) {
+  currentRange = days;
+
+  const dateRange = getDateRange(days);
+  const satelliteFilled = fillMissingDays(historyData);
+
+  const labels = dateRange.map(date => {
+    const d = new Date(date);
+    return d.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short'
+    });
   });
-});
 
-const temps = chartData.map(x => x.sea_temp_c);
+  const satelliteTemps = dateRange.map(date => {
+    const item = satelliteFilled.find(x => x.date === date);
+    return item ? item.sea_temp_c : null;
+  });
+
+  const satellitePoints = dateRange.map(date => {
+    const item = satelliteFilled.find(x => x.date === date);
+    return item && !item.estimated ? 4 : 0;
+  });
+
+  const smartwatchTemps = dateRange.map(date => {
+    const item = smartwatchData.find(x => x.date === date);
+    return item?.temperature?.minimum_c ?? null;
+  });
+
+  const allVisibleTemps = [
+    ...(showSatellite ? satelliteTemps : []),
+    ...(showSmartwatch ? smartwatchTemps : [])
+  ].filter(x => x !== null && x !== undefined);
+
   if (chart) chart.destroy();
 
   chart = new Chart(document.getElementById("chart"), {
@@ -292,33 +327,16 @@ const temps = chartData.map(x => x.sea_temp_c);
       datasets: [
         {
           label: "Satellite OSTIA °C",
-          data: showSatellite ? temps : [],
+          data: showSatellite ? satelliteTemps : [],
           tension: 0.3,
           borderWidth: 3,
-          pointRadius: data.map(item => item.estimated ? 0 : 4),
-          pointHoverRadius: data.map(item => item.estimated ? 0 : 5)
+          pointRadius: satellitePoints,
+          pointHoverRadius: satellitePoints.map(r => r ? 5 : 0),
+          spanGaps: true
         },
         {
           label: "Smartwatch daily minimum °C",
-          data: showSmartwatch
-            ? labels.map(label => {
-                const matchingDate = data.find(item => {
-                  const d = new Date(item.date).toLocaleDateString('en-GB', {
-                    day: 'numeric',
-                    month: 'short'
-                  });
-                  return d === label;
-                });
-      
-                if (!matchingDate) return null;
-      
-                const watchEntry = smartwatchData.find(w =>
-                  w.date === matchingDate.date
-                );
-      
-                return watchEntry?.temperature?.minimum_c ?? null;
-              })
-            : [],
+          data: showSmartwatch ? smartwatchTemps : [],
           tension: 0.3,
           borderDash: [3, 5],
           pointRadius: 3,
@@ -335,8 +353,8 @@ const temps = chartData.map(x => x.sea_temp_c);
       },
       scales: {
         y: {
-          suggestedMin: temps.length ? Math.min(...temps) - 0.5 : undefined,
-          suggestedMax: temps.length ? Math.max(...temps) + 0.5 : undefined,
+          suggestedMin: allVisibleTemps.length ? Math.min(...allVisibleTemps) - 0.5 : undefined,
+          suggestedMax: allVisibleTemps.length ? Math.max(...allVisibleTemps) + 0.5 : undefined,
           title: {
             display: true,
             text: "°C"
@@ -346,7 +364,11 @@ const temps = chartData.map(x => x.sea_temp_c);
     }
   });
 
-  updateStats(temps);
+  const actualSatelliteTemps = dateRange
+    .map(date => historyData.find(x => x.date === date)?.sea_temp_c)
+    .filter(x => x !== null && x !== undefined);
+
+  updateStats(actualSatelliteTemps);
 }
 
 function updateStats(temps) {

@@ -296,7 +296,7 @@ def plot_temperature_by_reading_number(df, output_path):
     save_plot(output_path)
 
 def plot_first_stable_minute (stability, output_path):
-    shown = stabilityl"first_stable_minute"].dropna()
+    shown = stability["first_stable_minute"].dropna()
     
     plt.figure(figsize=(9, 5) )
     plt.hist(shown, bins=20)

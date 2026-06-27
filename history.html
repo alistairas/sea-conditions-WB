@@ -151,8 +151,7 @@ input[type="date"] {
   <canvas id="chart" height="220"></canvas>
 </section>
 <footer class="footer">
-  Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations.
-  The line includes estimated values between available daily readings. Dots show actual readings.
+  Satellite SST is derived from Copernicus Marine OSTIA analysis. The smartwatch series uses daily minimum readings and may reflect swim timing, depth, sensor behaviour and local nearshore conditions. Interpolated satellite values shape the line; dots show actual satellite readings.
 </footer>
 <section class="card">
   <div class="label">Satellite summary</div>
@@ -335,11 +334,13 @@ function showRange(days) {
           spanGaps: true
         },
         {
-          label: "Smartwatch daily minimum °C",
+          label: "Smartwatch estimate (daily minimum) °C",
           data: showSmartwatch ? smartwatchTemps : [],
           tension: 0.3,
-          borderDash: [3, 5],
-          pointRadius: 3,
+          borderDash: [4, 5],
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 4,
           spanGaps: true
         }
       ]

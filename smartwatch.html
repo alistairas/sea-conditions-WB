@@ -80,7 +80,7 @@ a {
 <ul>
 <li><strong>5,129</strong> smartwatch water temperature observations were analysed.</li>
 <li>These observations formed <strong>255</strong> swim sessions using a 30-minute gap rule.</li>
-<li><strong>109 sessions (42.7%)</strong> contained five or more readings and are suitable candidates for stable plateau analysis.</li>
+<li><strong>109 sessions (42.7%)</strong> contained five or more readings and provide sufficient observations to investigate stable temperature plateau detection. </li>
 <li>The median sampling interval was <strong>17.0 seconds</strong>, providing high temporal resolution within sessions.</li>
 <li>The data support deriving <strong>one representative temperature per swim session</strong>, rather than treating observations as independent temperature measurements.</li>
 </ul>
@@ -140,17 +140,21 @@ a {
 <h2>Sensor cooling behaviour</h2>
 
 <p>
-The chart below shows longer swim sessions aligned to the first recorded temperature
-measurement. Individual sessions are shown as separate traces, while the median
-behaviour across sessions is highlighted.
-</p>
-
-<p>
-This helps characterise how quickly the smartwatch sensor approaches thermal
-equilibrium with the surrounding seawater.
+The chart below shows longer swim sessions aligned to the first recorded
+temperature measurement. Each session is normalised so that its first reading
+starts at 0°C. This shows how the smartwatch sensor changes after entering
+the water, rather than showing seasonal differences in sea temperature.
 </p>
 
 <img src="reports/charts/cooling_curves.png" alt="Smartwatch cooling behaviour during swim sessions">
+
+<p>
+The second chart summarises the median temperature change by reading number.
+This helps assess how many readings are typically needed before the sensor
+approaches a stable value.
+</p>
+
+<img src="reports/charts/temperature_by_reading_number.png" alt="Median temperature change by reading number">
 </div>
 
 <div class="card">

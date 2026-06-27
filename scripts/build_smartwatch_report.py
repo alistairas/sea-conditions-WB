@@ -4,6 +4,7 @@ from datetime import timedelta
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import json
 
 
 PROJECT_TITLE = "Whitley Bay Multi-Source Sea Temperature Record"
@@ -77,6 +78,33 @@ def sampling_intervals(df: pd.DataFrame) -> pd.Series:
 
     return pd.Series(intervals, name="sampling_interval_seconds")
 
+def smartwatch_daily_minimums_json(df):
+    records = []
+
+    for date, g in df.groupby(df["timestamp"].dt.date):
+        g = g.sort_values("timestamp")
+
+        record = {
+            "date": str(date),
+            "temperature": {
+                "representative_c": None,
+                "minimum_c": round(float(g["temperature_c"].min()), 2)
+            },
+            "method": "daily_minimum",
+            "confidence": "low",
+            "source": {
+                "device": "smartwatch",
+                "sessions": int(g["session_id"].nunique()),
+                "observations": int(len(g)),
+                "first_observation": g["timestamp"].min().strftime("%H:%M"),
+                "last_observation": g["timestamp"].max().strftime("%H:%M")
+            }
+        }
+
+        records.append(record)
+
+    return records
+
 def save_plot(output_path):
     plt.tight_layout()
     plt.savefig(output_path, dpi=200, bbox_inches="tight")
@@ -136,50 +164,6 @@ def plot_readings_per_session(sessions, output_path):
     plt.title("Readings per session")
     plt.xlabel("Number of sessions")
     plt.ylabel("Session type")
-
-    save_plot(output_path)
-
-def plot_cooling_curves(df, output_path):
-    plt.figure(figsize=(9, 6))
-
-    long_sessions = []
-
-    for _, g in df.groupby("session_id"):
-        if len(g) >= 10:
-            g = g.sort_values("elapsed_minutes")
-            long_sessions.append(g)
-
-            plt.plot(
-                g["elapsed_minutes"],
-                g["temperature_c"],
-                linewidth=0.8,
-                alpha=0.25
-            )
-
-    if long_sessions:
-        combined = pd.concat(long_sessions)
-
-        # Round elapsed time to the nearest minute so sessions can be compared.
-        median_curve = (
-            combined
-            .assign(elapsed_minute_bin=combined["elapsed_minutes"].round(0))
-            .groupby("elapsed_minute_bin")["temperature_c"]
-            .median()
-        )
-
-        plt.plot(
-            median_curve.index,
-            median_curve.values,
-            linewidth=3,
-            label="Median curve"
-        )
-
-        plt.legend()
-
-    plt.title("Smartwatch cooling behaviour during swim sessions")
-    plt.xlabel("Minutes since first reading")
-    plt.ylabel("Temperature (°C)")
-    plt.xlim(left=0)
 
     save_plot(output_path)
 
@@ -307,11 +291,13 @@ def plot_first_stable_minute (stability, output_path):
 
 def plot_plateau_variability(stability, output_path):
     shown = stability["median_rolling_range_c"].dropna()
-    
-    plt.figure(figsize=(9, 5) )
-    plt.hist(shown,
-    bins=20)
-    plt.title("Within-session temperature stability") plt.xlabel("Median rolling 5-reading range (°C)") plt.ylabel("Sessions")
+
+    plt.figure(figsize=(9, 5))
+    plt.hist(shown, bins=20)
+    plt.title("Within-session temperature stability")
+    plt.xlabel("Median rolling 5-reading range (°C)")
+    plt.ylabel("Sessions")
+
     save_plot(output_path)
 
 def calculate_stability_metrics(df, window=5):
@@ -697,6 +683,7 @@ def main():
     df = add_sessions(df, gap_minutes=30)
     sessions = session_summary(df)
     intervals = sampling_intervals(df)
+    daily_minimums = smartwatch_daily_minimums_json(df)
     stability = calculate_stability_metrics(df, window=5)
 
     plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
@@ -719,15 +706,15 @@ def main():
         chart_dir / "plateau_variability.png"
     )
     
-    
-    sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
-
     report_path = make_report(df, sessions, intervals, stability)
     
     print(f"Report written to: {report_path}")
     print(f"Charts written to: {chart_dir}")
     print(f"Diagnostic session CSV written to: {output_dir / 'apple_watch_session_summary_diagnostic.csv'}")
 
+    with open("smartwatch_daily_minimums.json", "w", encoding="utf-8") as f:
+        json.dump(daily_minimums, f, indent=2)
+    print("Daily smartwatch minimums written to: smartwatch_daily_minimums.json")
 
 if __name__ == "__main__":
     main()

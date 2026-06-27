@@ -295,6 +295,79 @@ def plot_temperature_by_reading_number(df, output_path):
 
     save_plot(output_path)
 
+def plot_first_stable_minute (stability, output_path):
+    shown = stabilityl"first_stable_minute"].dropna()
+    
+    plt.figure(figsize=(9, 5) )
+    plt.hist(shown, bins=20)
+    plt.title("Time to first stable temperature window")
+    plt.xlabel("Minutes since first reading")
+    plt.ylabel("Sessions")
+    save_plot(output_path)
+
+def plot_plateau_variability(stability, output_path):
+    shown = stability["median_rolling_range_c"].dropna()
+    
+    plt.figure(figsize=(9, 5) )
+    plt.hist(shown,
+    bins=20)
+    plt.title("Within-session temperature stability") plt.xlabel("Median rolling 5-reading range (°C)") plt.ylabel("Sessions")
+    save_plot(output_path)
+
+def calculate_stability_metrics(df, window=5):
+    rows = []
+
+    for session_id, g in df.groupby("session_id"):
+        if len(g) < window:
+            continue
+
+        g = g.sort_values("timestamp").copy()
+        g = g[g["temperature_c"] < 20]
+
+        if len(g) < window:
+            continue
+
+        g["rolling_range_c"] = (
+            g["temperature_c"]
+            .rolling(window=window)
+            .max()
+            - g["temperature_c"].rolling(window=window).min()
+        )
+
+        g["rolling_sd_c"] = (
+            g["temperature_c"]
+            .rolling(window=window)
+            .std()
+        )
+
+        g["temp_change_c"] = g["temperature_c"].diff()
+        g["time_change_min"] = g["timestamp"].diff().dt.total_seconds() / 60
+        g["cooling_rate_c_per_min"] = g["temp_change_c"] / g["time_change_min"]
+
+        stable = g[
+            (g["rolling_range_c"] <= 0.3) &
+            (g["rolling_sd_c"] <= 0.15)
+        ]
+
+        if len(stable):
+            first_stable_time = stable["elapsed_minutes"].iloc[0]
+            plateau_length = g["elapsed_minutes"].max() - first_stable_time
+        else:
+            first_stable_time = None
+            plateau_length = None
+
+        rows.append({
+            "session_id": session_id,
+            "readings": len(g),
+            "duration_minutes": g["elapsed_minutes"].max(),
+            "first_stable_minute": first_stable_time,
+            "plateau_length_minutes": plateau_length,
+            "median_rolling_range_c": g["rolling_range_c"].median(),
+            "median_rolling_sd_c": g["rolling_sd_c"].median(),
+        })
+
+    return pd.DataFrame(rows)
+
 def format_percentiles(series):
     p = series.dropna().quantile([0.1, 0.25, 0.5, 0.75, 0.9, 0.95])
     return "\n".join(
@@ -302,7 +375,7 @@ def format_percentiles(series):
         for q, v in p.items()
     )
 
-def make_report(df, sessions, intervals):
+def make_report(df, sessions, intervals, stability):
     report_path = Path("smartwatch.html")
 
     start_date = df["timestamp"].min().date()
@@ -332,6 +405,17 @@ def make_report(df, sessions, intervals):
     avg_readings_per_session = raw_n / session_n if session_n else 0
     high_pct = (high_values / raw_n * 100) if raw_n else 0
     very_high_pct = (very_high_values / raw_n * 100) if raw_n else 0
+
+    stable_sessions = stability["first_stable_minute"].notna().sum()
+    stable_pct = (stable_sessions / len(stability) * 100) if len(stability) else 0
+    
+    first_stable_median = stability["first_stable_minute"].median()
+    first_stable_p75 = stability["first_stable_minute"].quantile(0.75)
+    first_stable_p90 = stability["first_stable_minute"].quantile(0.90)
+    
+    plateau_range_median = stability["median_rolling_range_c"].median()
+    plateau_range_p75 = stability["median_rolling_range_c"].quantile(0.75)
+    plateau_range_p90 = stability["median_rolling_range_c"].quantile(0.90)
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -493,6 +577,37 @@ approaches a stable value.
 </div>
 
 <div class="card">
+<h2>Stability and plateau behaviour</h2>
+
+<p>
+This section uses a provisional rolling 5-reading window to investigate when
+temperature readings become stable within a swim session. Readings of 20°C or
+above are excluded before this analysis.
+</p>
+
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Sessions analysed for stability</td><td>{len(stability):,}</td></tr>
+<tr><td>Sessions with provisional stable window</td><td>{stable_sessions:,} ({stable_pct:.1f}%)</td></tr>
+<tr><td>Median time to first stable window</td><td>{first_stable_median:.1f} minutes</td></tr>
+<tr><td>75th percentile time to stability</td><td>{first_stable_p75:.1f} minutes</td></tr>
+<tr><td>90th percentile time to stability</td><td>{first_stable_p90:.1f} minutes</td></tr>
+<tr><td>Median rolling 5-reading range</td><td>{plateau_range_median:.2f}°C</td></tr>
+<tr><td>75th percentile rolling range</td><td>{plateau_range_p75:.2f}°C</td></tr>
+<tr><td>90th percentile rolling range</td><td>{plateau_range_p90:.2f}°C</td></tr>
+</table>
+
+<img src="reports/charts/first_stable_minute.png" alt="Time to first stable temperature window">
+
+<img src="reports/charts/plateau_variability.png" alt="Plateau variability distribution">
+
+<p>
+These values are diagnostic rather than final. Their purpose is to help select
+evidence-based thresholds for the stable plateau algorithm.
+</p>
+</div>
+
+<div class="card">
 <h2>Initial interpretation</h2>
 <ul>
 <li>The smartwatch data are best interpreted at swim-session level, not individual-reading level.</li>
@@ -582,6 +697,7 @@ def main():
     df = add_sessions(df, gap_minutes=30)
     sessions = session_summary(df)
     intervals = sampling_intervals(df)
+    stability = calculate_stability_metrics(df, window=5)
 
     plot_temperature_range(df, chart_dir / "raw_temperature_observations.png")
     plot_monthly_counts(df, chart_dir / "monthly_observations.png")
@@ -593,10 +709,20 @@ def main():
         df,
         chart_dir / "temperature_by_reading_number.png"
     )
+    plot_first_stable_minute(
+        stability,
+        chart_dir / "first_stable_minute.png"
+    )
+    
+    plot_plateau_variability(
+        stability,
+        chart_dir / "plateau_variability.png"
+    )
+    
     
     sessions.to_csv(output_dir / "apple_watch_session_summary_diagnostic.csv", index=False)
 
-    report_path = make_report(df, sessions, intervals)
+    report_path = make_report(df, sessions, intervals, stability)
     
     print(f"Report written to: {report_path}")
     print(f"Charts written to: {chart_dir}")

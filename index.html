@@ -259,6 +259,15 @@
   <div class="value">From the archives</div>
   <p><a href="archive.html" style="text-decoration:none; color:inherit;">Browse logbook archive →</a></p>
 </section>
+<section class="card">
+  <div class="label">Water temperature research</div>
+  <div class="value">Smartwatch observations</div>
+  <p>
+    <a href="smartwatch.html" style="text-decoration:none; color:inherit;">
+      View smartwatch report →
+    </a>
+  </p>
+</section>
 
     <p class="note">
       Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations. 
@@ -442,16 +451,6 @@ function fillMissingDays(data) {
 }
 const recentHistory = history.slice(-14);
 const lastSeven = fillMissingDays(recentHistory).slice(-7);
-const chartData = lastSeven;
-const labels = lastSeven.map(item => {
-  const date = new Date(item.date);
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short'
-  });
-});
-
-const temps = lastSeven.map(item => item.sea_temp_c);
 
 function addForecastDays(data, daysAhead = 2) {
   const output = [...data];
@@ -497,18 +496,25 @@ new Chart(document.getElementById('temp-chart'), {
     labels: chartLabels,
     datasets: [{
   label: 'Sea temperature °C',
-  data: temps,
+  data: chartTemps,
   tension: 0.3,
 
-  pointRadius: chartData.map(item =>
-    item.estimated ? 0 : 4
+  pointRadius: chartPoints.map(item =>
+    item.estimated || item.forecast ? 0 : 4
   ),
-
-  pointHoverRadius: chartData.map(item =>
-    item.estimated ? 0 : 5
+  
+  pointHoverRadius: chartPoints.map(item =>
+    item.estimated || item.forecast ? 0 : 5
   ),
-
-  borderWidth: 3
+  
+  borderWidth: 3,
+  
+  segment: {
+    borderDash: ctx =>
+      chartPoints[ctx.p0DataIndex]?.forecast || chartPoints[ctx.p1DataIndex]?.forecast
+        ? [6, 6]
+        : undefined
+  }
 }]
   },
   options: {

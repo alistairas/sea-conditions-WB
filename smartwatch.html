@@ -158,6 +158,37 @@ approaches a stable value.
 </div>
 
 <div class="card">
+<h2>Stability and plateau behaviour</h2>
+
+<p>
+This section uses a provisional rolling 5-reading window to investigate when
+temperature readings become stable within a swim session. Readings of 20°C or
+above are excluded before this analysis.
+</p>
+
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Sessions analysed for stability</td><td>106</td></tr>
+<tr><td>Sessions with provisional stable window</td><td>81 (76.4%)</td></tr>
+<tr><td>Median time to first stable window</td><td>4.5 minutes</td></tr>
+<tr><td>75th percentile time to stability</td><td>7.2 minutes</td></tr>
+<tr><td>90th percentile time to stability</td><td>10.4 minutes</td></tr>
+<tr><td>Median rolling 5-reading range</td><td>0.40°C</td></tr>
+<tr><td>75th percentile rolling range</td><td>0.98°C</td></tr>
+<tr><td>90th percentile rolling range</td><td>2.24°C</td></tr>
+</table>
+
+<img src="reports/charts/first_stable_minute.png" alt="Time to first stable temperature window">
+
+<img src="reports/charts/plateau_variability.png" alt="Plateau variability distribution">
+
+<p>
+These values are diagnostic rather than final. Their purpose is to help select
+evidence-based thresholds for the stable plateau algorithm.
+</p>
+</div>
+
+<div class="card">
 <h2>Initial interpretation</h2>
 <ul>
 <li>The smartwatch data are best interpreted at swim-session level, not individual-reading level.</li>

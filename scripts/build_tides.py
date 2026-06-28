@@ -5,7 +5,9 @@ from pathlib import Path
 
 LAT = 55.034
 LON = -1.432
-OUT = Path("data/tides.json")
+TIDES_OUT = Path("data/tides.json")
+CURVE_OUT = Path("data/tide_curve.json")
+TIDES_OUT.parent.mkdir(exist_ok=True)
 
 start = datetime.now(timezone.utc)
 end = start + timedelta(days=7)
@@ -20,6 +22,36 @@ url = (
 
 with urllib.request.urlopen(url, timeout=30) as response:
     raw = json.loads(response.read().decode("utf-8"))
+
+curve_url = (
+    "https://api.openwaters.io/tides/timeline"
+    f"?latitude={LAT}"
+    f"&longitude={LON}"
+    f"&start={start.isoformat().replace('+00:00', 'Z')}"
+    f"&end={end.isoformat().replace('+00:00', 'Z')}"
+    "&interval=30"
+)
+
+with urllib.request.urlopen(curve_url, timeout=30) as response:
+    curve_raw = json.loads(response.read().decode("utf-8"))
+
+CURVE_OUT.write_text(
+    json.dumps({
+        "location": "Whitley Bay / Cullercoats",
+        "station": curve_raw["station"]["name"],
+        "datum": curve_raw["datum"],
+        "units": curve_raw["units"],
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "points": [
+            {
+                "time": item["time"],
+                "height_m": round(item["level"], 2)
+            }
+            for item in curve_raw["timeline"]
+        ]
+    }, indent=2),
+    encoding="utf-8"
+)
 
 payload = {
     "location": "Whitley Bay / Cullercoats",
@@ -50,7 +82,6 @@ payload = {
     ],
 }
 
-OUT.parent.mkdir(exist_ok=True)
-OUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+TIDES_OUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
-print(f"Wrote {OUT}")
+print("Wrote data/tides.json and data/tide_curve.json")

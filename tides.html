@@ -8,220 +8,322 @@
 
 <style>
 body{
-    margin:0;
-    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:#f4f7f8;
-    color:#102027;
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f4f7f8;
+  color:#102027;
 }
 
 .page{
-    max-width:520px;
-    margin:auto;
-    padding:24px 18px;
+  max-width:520px;
+  margin:auto;
+  padding:24px 18px;
 }
 
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    margin-bottom:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:20px;
 }
 
 .eyebrow{
-    font-size:14px;
-    color:#607d8b;
+  font-size:14px;
+  color:#607d8b;
 }
 
 h1{
-    margin:0;
-    font-size:30px;
+  margin:0;
+  font-size:30px;
 }
 
 .refresh-btn{
-    border:none;
-    background:white;
-    border-radius:999px;
-    padding:8px 14px;
-    cursor:pointer;
-    box-shadow:0 4px 12px rgba(0,0,0,.05);
+  border:none;
+  background:white;
+  border-radius:999px;
+  padding:8px 14px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
 .card{
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:16px;
-    box-shadow:0 6px 18px rgba(0,0,0,.05);
+  background:white;
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,.05);
 }
 
-.day-title{
-    font-weight:700;
-    font-size:18px;
-    margin-bottom:10px;
+.summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:16px;
 }
 
-.tide{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    padding:10px 0;
-    border-bottom:1px solid #eceff1;
+.summary-box{
+  background:white;
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.05);
 }
 
-.tide:last-child{
-    border-bottom:none;
+.summary-label{
+  font-size:13px;
+  color:#607d8b;
+  margin-bottom:4px;
 }
 
-.left{
-    display:flex;
-    flex-direction:column;
+.summary-value{
+  font-size:24px;
+  font-weight:750;
 }
 
-.type{
-    font-weight:600;
+.summary-sub{
+  font-size:13px;
+  color:#607d8b;
+}
+
+.tide-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+.tide-table th{
+  text-align:left;
+  color:#607d8b;
+  font-weight:650;
+  padding:8px 4px;
+  border-bottom:1px solid #dde6ea;
+}
+
+.tide-table td{
+  padding:10px 4px;
+  border-bottom:1px solid #eef2f4;
+  vertical-align:top;
+}
+
+.tide-table tr:last-child td{
+  border-bottom:none;
+}
+
+.day{
+  font-weight:750;
+  width:26%;
+}
+
+.tide-cell{
+  white-space:nowrap;
+  line-height:1.25;
 }
 
 .time{
-    color:#607d8b;
-    font-size:14px;
+  font-weight:650;
 }
 
 .height{
-    font-size:18px;
-    font-weight:700;
+  color:#607d8b;
+  font-size:13px;
 }
 
-.flag{
-    margin-top:4px;
-    font-size:13px;
-    color:#1565c0;
+.marker{
+  display:block;
+  font-size:14px;
+  margin-top:2px;
+}
+
+.legend{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  font-size:13px;
+  color:#607d8b;
+  margin-top:12px;
 }
 
 .footer{
-    font-size:12px;
-    color:#78909c;
-    margin-top:24px;
-    line-height:1.5;
+  font-size:12px;
+  color:#78909c;
+  margin-top:24px;
+  line-height:1.5;
+}
+
+.back-link{
+  display:inline-block;
+  margin-bottom:18px;
+  text-decoration:none;
+  color:#607d8b;
+  font-size:14px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="page">
 
-<div class="header">
-<div>
-<div class="eyebrow">Whitley Bay</div>
-<h1>Tides</h1>
-</div>
+  <div class="header">
+    <div>
+      <div class="eyebrow">Whitley Bay</div>
+      <h1>Tides</h1>
+    </div>
 
-<button onclick="location.reload()" class="refresh-btn">
-↻
-</button>
-</div>
+    <button onclick="location.reload()" class="refresh-btn">↻</button>
+  </div>
 
-<div id="tides"></div>
+  <a class="back-link" href="index.html">← Beach conditions</a>
 
-<div class="footer">
-Predictions generated from Open Waters using the North Shields harmonic reference station.<br><br>
-For recreational guidance only. Not for navigation.
-</div>
+  <section class="summary">
+    <div class="summary-box">
+      <div class="summary-label">Next high</div>
+      <div class="summary-value" id="next-high">--</div>
+      <div class="summary-sub" id="next-high-sub"></div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-label">Next low</div>
+      <div class="summary-value" id="next-low">--</div>
+      <div class="summary-sub" id="next-low-sub"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <table class="tide-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>High</th>
+          <th>Low</th>
+        </tr>
+      </thead>
+      <tbody id="tide-body">
+        <tr><td colspan="5">Loading tides…</td></tr>
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <span>🌊 High tide ≥ 4.7m</span>
+      <span>🪨 Low tide ≤ 0.8m</span>
+    </div>
+  </section>
+
+  <div class="footer">
+    Predictions generated from Open Waters using the North Shields harmonic reference station.<br><br>
+    For recreational guidance only. Not for navigation.
+  </div>
 
 </div>
 
 <script>
+const HIGH_MARK = 4.7;
+const LOW_MARK = 0.8;
 
 function formatTime(iso){
-    return new Date(iso).toLocaleTimeString("en-GB",{
-        timeZone:"Europe/London",
-        hour:"2-digit",
-        minute:"2-digit"
-    });
+  return new Date(iso).toLocaleTimeString("en-GB",{
+    timeZone:"Europe/London",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
 }
 
-function formatDate(iso){
-
-    return new Date(iso).toLocaleDateString("en-GB",{
-        weekday:"long",
-        day:"numeric",
-        month:"long"
-    });
-
+function formatDay(iso){
+  return new Date(iso).toLocaleDateString("en-GB",{
+    timeZone:"Europe/London",
+    weekday:"short",
+    day:"numeric",
+    month:"short"
+  });
 }
 
-function tideFlag(t){
-
-    if(t.type==="High" && t.height_m>=4.75)
-        return "🌊 Very high tide – beach greatly reduced.";
-
-    if(t.type==="High" && t.height_m>=4.50)
-        return "🌊 High tide – less beach available.";
-
-    if(t.type==="Low" && t.height_m<=1.05)
-        return "🪨 Very low tide – rocks exposed and a long walk to the sea.";
-
-    if(t.type==="Low" && t.height_m<=1.30)
-        return "🪨 Low tide – longer walk to the sea.";
-
-    return "";
+function dayKey(iso){
+  return new Date(iso).toLocaleDateString("en-CA",{
+    timeZone:"Europe/London"
+  });
 }
 
-async function loadTides() {
-  const container = document.getElementById("tides");
+function tideMarker(event){
+  if(event.type === "High" && event.height_m >= HIGH_MARK) return "🌊";
+  if(event.type === "Low" && event.height_m <= LOW_MARK) return "🪨";
+  return "";
+}
 
-  try {
+function tideCell(event){
+  if(!event) return `<td class="tide-cell">–</td>`;
+
+  return `
+    <td class="tide-cell">
+      <div class="time">${formatTime(event.time)}</div>
+      <div class="height">${event.height_m.toFixed(1)} m</div>
+      ${tideMarker(event) ? `<span class="marker">${tideMarker(event)}</span>` : ""}
+    </td>
+  `;
+}
+
+async function loadTides(){
+  const body = document.getElementById("tide-body");
+
+  try{
     const response = await fetch("data/tides.json");
     const data = await response.json();
 
-    container.innerHTML = "";
+    const now = new Date();
 
-    const groups = {};
+    const future = data.events
+      .filter(e => new Date(e.time) > now)
+      .sort((a,b) => new Date(a.time) - new Date(b.time));
+
+    const nextHigh = future.find(e => e.type === "High");
+    const nextLow = future.find(e => e.type === "Low");
+
+    if(nextHigh){
+      document.getElementById("next-high").textContent = formatTime(nextHigh.time);
+      document.getElementById("next-high-sub").textContent =
+        `${nextHigh.height_m.toFixed(1)} m`;
+    }
+
+    if(nextLow){
+      document.getElementById("next-low").textContent = formatTime(nextLow.time);
+      document.getElementById("next-low-sub").textContent =
+        `${nextLow.height_m.toFixed(1)} m`;
+    }
+
+    const grouped = {};
 
     data.events.forEach(event => {
-      const day = formatDate(event.time);
-      if (!groups[day]) groups[day] = [];
-      groups[day].push(event);
+      const key = dayKey(event.time);
+      if(!grouped[key]) grouped[key] = [];
+      grouped[key].push(event);
     });
 
-    Object.entries(groups).forEach(([day, events]) => {
-      const rows = events.map(event => {
-        const flag = tideFlag(event);
+    body.innerHTML = "";
 
-        return `
-          <div class="tide">
-            <div class="left">
-              <div class="type">${event.type}</div>
-              <div class="time">${formatTime(event.time)}</div>
-              ${flag ? `<div class="flag">${flag}</div>` : ""}
-            </div>
-            <div class="height">${event.height_m.toFixed(2)} m</div>
-          </div>
-        `;
-      }).join("");
+    Object.values(grouped).forEach(events => {
+      events.sort((a,b) => new Date(a.time) - new Date(b.time));
 
-      container.innerHTML += `
-        <div class="card">
-          <div class="day-title">${day}</div>
-          ${rows}
-        </div>
+      const highs = events.filter(e => e.type === "High");
+      const lows = events.filter(e => e.type === "Low");
+
+      body.innerHTML += `
+        <tr>
+          <td class="day">${formatDay(events[0].time)}</td>
+          ${tideCell(highs[0])}
+          ${tideCell(lows[0])}
+          ${tideCell(highs[1])}
+          ${tideCell(lows[1])}
+        </tr>
       `;
     });
 
-  } catch (error) {
-    container.innerHTML = `
-      <div class="card">
-        <div class="day-title">Tide data unavailable</div>
-        <p class="footer">Could not load data/tides.json</p>
-      </div>
-    `;
+  }catch(error){
+    body.innerHTML = `<tr><td colspan="5">Could not load tide data.</td></tr>`;
     console.error(error);
   }
 }
 
 loadTides();
-
 </script>
 
 </body>

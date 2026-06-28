@@ -21,19 +21,36 @@ url = (
 with urllib.request.urlopen(url, timeout=30) as response:
     raw = json.loads(response.read().decode("utf-8"))
 
-OUT.parent.mkdir(exist_ok=True)
-
 payload = {
     "location": "Whitley Bay / Cullercoats",
-    "station_note": "Nearest Open Waters tide station to Cullercoats coordinates",
     "latitude": LAT,
     "longitude": LON,
-    "source": "Open Waters / Neaps tide predictions",
+    "station": {
+        "name": raw["station"]["name"],
+        "id": raw["station"]["id"],
+        "distance_km": round(raw["distance"], 2),
+        "timezone": raw["station"]["timezone"],
+        "datum": raw["datum"],
+        "units": raw["units"],
+        "license": raw["station"]["license"],
+        "source": raw["station"]["source"],
+    },
+    "source": "Open Waters / Neaps tide predictions using TICON-4 harmonics",
     "source_url": "https://openwaters.io/api",
     "not_for_navigation": True,
     "generated_at": datetime.now(timezone.utc).isoformat(),
-    "raw": raw,
+    "events": [
+        {
+            "time": item["time"],
+            "label": item["label"],
+            "type": "High" if item["high"] else "Low",
+            "height_m": round(item["level"], 2),
+        }
+        for item in raw["extremes"]
+    ],
 }
 
+OUT.parent.mkdir(exist_ok=True)
 OUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-print("Wrote data/tides.json")
+
+print(f"Wrote {OUT}")

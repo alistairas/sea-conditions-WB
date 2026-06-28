@@ -26,4 +26,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update tide data"
-          file_pattern: "data/tides.json"
+          file_pattern: "data/tides.json data/tide_curve.json"

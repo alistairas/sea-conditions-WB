@@ -24,12 +24,11 @@ with urllib.request.urlopen(url, timeout=30) as response:
     raw = json.loads(response.read().decode("utf-8"))
 
 curve_url = (
-    "https://api.openwaters.io/tides"
+    "https://api.openwaters.io/tides/timeline"
     f"?latitude={LAT}"
     f"&longitude={LON}"
     f"&start={start.isoformat().replace('+00:00', 'Z')}"
     f"&end={end.isoformat().replace('+00:00', 'Z')}"
-    "&interval=30"
 )
 
 with urllib.request.urlopen(curve_url, timeout=30) as response:
@@ -47,7 +46,7 @@ CURVE_OUT.write_text(
                 "time": item["time"],
                 "height_m": round(item["level"], 2)
             }
-            for item in curve_raw["predictions"]
+            for item in curve_raw["timeline"]
         ]
     }, indent=2),
     encoding="utf-8"

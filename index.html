@@ -195,6 +195,24 @@
 .refresh-btn:hover {
   background: #eef4f6;
 }
+
+.tide-list {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.tide-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.tide-height {
+  color: #607d8b;
+  font-weight: 500;
+}
   </style>
 </head>
 
@@ -218,10 +236,10 @@
     <div class="value" id="temperature">--°C</div>
     <div class="status" id="trend"></div>
   </div>
-  <div class="small-card">
-    <div class="label">Next tide</div>
-    <div class="value" id="next-tide">--</div>
-  </div>
+<div class="small-card tide-card">
+  <div class="label">Next tides</div>
+  <div id="next-tide" class="tide-list">--</div>
+</div>
   <div class="small-card">
     <div class="label">Air temp</div>
     <div class="value" id="air-temp">--</div>
@@ -285,31 +303,31 @@ async function loadData() {
   const response = await fetch('data.json');
   const data = await response.json();
   
-  const tideResponse = await fetch('tide_history.json');
-const tideHistory = await tideResponse.json();
+  const tideResponse = await fetch('data/tides.json');
+const tideData = await tideResponse.json();
 
 const now = new Date();
 
-const allTideEvents = tideHistory
-  .flatMap(day => day.events.map(event => ({
-    ...event,
-    station: day.station
-  })))
+const nextTides = tideData.events
   .filter(event => new Date(event.time) > now)
-    .sort((a, b) => new Date(a.time) - new Date(b.time));
+  .sort((a, b) => new Date(a.time) - new Date(b.time))
+  .slice(0, 3);
 
-const nextTide = allTideEvents[0];
-
-if (nextTide) {
-  const tideTime = new Date(nextTide.time).toLocaleTimeString('en-GB', {
+function formatTideTime(iso) {
+  return new Date(iso).toLocaleTimeString('en-GB', {
+    timeZone: 'Europe/London',
     hour: '2-digit',
     minute: '2-digit'
   });
+}
 
-  document.getElementById('next-tide').textContent =
-  nextTide.height_m !== undefined
-    ? `${nextTide.type} ${tideTime} · ${nextTide.height_m}m`
-    : `${nextTide.type} ${tideTime}`;
+if (nextTides.length) {
+  document.getElementById('next-tide').innerHTML = nextTides.map(tide => `
+    <div class="tide-row">
+      <span>${tide.type} ${formatTideTime(tide.time)}</span>
+      <span class="tide-height">${tide.height_m}m</span>
+    </div>
+  `).join('');
 } else {
   document.getElementById('next-tide').textContent = "--";
 }

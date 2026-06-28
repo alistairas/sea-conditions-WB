@@ -156,6 +156,31 @@ h1{
   color:#607d8b;
   font-size:14px;
 }
+
+.tides-cell{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.tide-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:#eef4f6;
+  border-radius:999px;
+  padding:5px 8px;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.pill-type{
+  font-weight:750;
+}
+
+.pill-height{
+  color:#607d8b;
+}
 </style>
 </head>
 
@@ -192,13 +217,10 @@ h1{
   <section class="card">
     <table class="tide-table">
       <thead>
-        <tr>
-          <th>Date</th>
-          <th>High</th>
-          <th>Low</th>
-          <th>High</th>
-          <th>Low</th>
-        </tr>
+      <tr>
+        <th>Date</th>
+        <th>Tides</th>
+      </tr>
       </thead>
       <tbody id="tide-body">
         <tr><td colspan="5">Loading tides…</td></tr>
@@ -251,15 +273,16 @@ function tideMarker(event){
   return "";
 }
 
-function tideCell(event){
-  if(!event) return `<td class="tide-cell">–</td>`;
+function tidePill(event){
+  const marker = tideMarker(event);
 
   return `
-    <td class="tide-cell">
-      <div class="time">${formatTime(event.time)}</div>
-      <div class="height">${event.height_m.toFixed(1)} m</div>
-      ${tideMarker(event) ? `<span class="marker">${tideMarker(event)}</span>` : ""}
-    </td>
+    <span class="tide-pill">
+      ${marker ? `<span>${marker}</span>` : ""}
+      <span class="pill-type">${event.type === "High" ? "H" : "L"}</span>
+      <span>${formatTime(event.time)}</span>
+      <span class="pill-height">${event.height_m.toFixed(1)}m</span>
+    </span>
   `;
 }
 
@@ -302,21 +325,17 @@ async function loadTides(){
     body.innerHTML = "";
 
     Object.values(grouped).forEach(events => {
-      events.sort((a,b) => new Date(a.time) - new Date(b.time));
+  events.sort((a,b) => new Date(a.time) - new Date(b.time));
 
-      const highs = events.filter(e => e.type === "High");
-      const lows = events.filter(e => e.type === "Low");
-
-      body.innerHTML += `
-        <tr>
-          <td class="day">${formatDay(events[0].time)}</td>
-          ${tideCell(highs[0])}
-          ${tideCell(lows[0])}
-          ${tideCell(highs[1])}
-          ${tideCell(lows[1])}
-        </tr>
-      `;
-    });
+  body.innerHTML += `
+    <tr>
+      <td class="day">${formatDay(events[0].time)}</td>
+      <td class="tides-cell">
+        ${events.map(tidePill).join("")}
+      </td>
+    </tr>
+  `;
+});
 
   }catch(error){
     body.innerHTML = `<tr><td colspan="5">Could not load tide data.</td></tr>`;

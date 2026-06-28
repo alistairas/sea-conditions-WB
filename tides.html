@@ -189,12 +189,12 @@ h1{
 }
 
 .chart-wrap{
-  width:2200px;
+  width:1400px;
   height:300px;
 }
 
 #tide-chart{
-  width:2200px;
+  width:1400px;
   height:300px;
 }
 
@@ -570,7 +570,7 @@ async function loadTideCurve(){
   if(!scroller || !chart) return;
 
   const nowX = chart.scales.x.getPixelForValue(now);
-  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.35);
+  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.75);
 }, 100);
 }
 

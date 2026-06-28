@@ -181,6 +181,16 @@ h1{
 .pill-height{
   color:#607d8b;
 }
+
+.chart-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+
+#tide-chart{
+  min-width:900px;
+}
+
 </style>
 </head>
 
@@ -215,8 +225,10 @@ h1{
   </section>
 
 <section class="card">
-  <div class="summary-label">Today’s tide curve</div>
-  <canvas id="tide-chart" height="160"></canvas>
+  <div class="summary-label">Tide curve</div>
+  <div class="chart-scroll">
+    <canvas id="tide-chart" height="180"></canvas>
+  </div>
 </section>
 
   <section class="card">
@@ -295,56 +307,93 @@ async function loadTideCurve(){
   const response = await fetch("data/tide_curve.json");
   const curve = await response.json();
 
-  const today = new Date().toLocaleDateString("en-CA", {
-    timeZone: "Europe/London"
-  });
+  const points = curve.points;
 
-  const points = curve.points.filter(p =>
-    new Date(p.time).toLocaleDateString("en-CA", {
-      timeZone: "Europe/London"
-    }) === today
-  );
+  const canvas = document.getElementById("tide-chart");
 
-  const labels = points.map(p =>
-    new Date(p.time).toLocaleTimeString("en-GB", {
+  // Make chart wider when more days are available
+  canvas.width = Math.max(900, points.length * 18);
+
+  function localDate(iso){
+    return new Date(iso).toLocaleDateString("en-GB", {
       timeZone: "Europe/London",
-      hour: "2-digit",
+      weekday: "short",
+      day: "numeric"
+    });
+  }
+
+  function hourLabel(iso){
+    const d = new Date(iso);
+
+    const hour = Number(d.toLocaleTimeString("en-GB", {
+      timeZone: "Europe/London",
+      hour: "numeric",
+      hour12: false
+    }));
+
+    const minute = d.toLocaleTimeString("en-GB", {
+      timeZone: "Europe/London",
       minute: "2-digit"
-    })
-  );
+    });
 
-  const heights = points.map(p => p.height_m);
+    if(minute !== "00") return "";
 
-  new Chart(document.getElementById("tide-chart"), {
+    if(hour === 0) return localDate(iso);
+
+    if(hour === 12) return "12pm";
+
+    if(hour < 12) return `${hour}am`;
+
+    return `${hour - 12}pm`;
+  }
+
+  new Chart(canvas, {
     type: "line",
     data: {
-      labels,
+      labels: points.map(p => hourLabel(p.time)),
       datasets: [{
-        data: heights,
+        data: points.map(p => p.height_m),
         tension: 0.35,
         borderWidth: 3,
         pointRadius: 0
       }]
     },
     options: {
+      responsive: false,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => `${ctx.parsed.y.toFixed(1)} m`
+            title: items => {
+              const point = points[items[0].dataIndex];
+              return new Date(point.time).toLocaleString("en-GB", {
+                timeZone: "Europe/London",
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                hour: "2-digit",
+                minute: "2-digit"
+              });
+            },
+            label: ctx => `Height ${ctx.parsed.y.toFixed(1)} m`
           }
         }
       },
       scales: {
         x: {
-          ticks: { maxTicksLimit: 6 }
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0
+          }
         },
         y: {
           suggestedMin: 0,
           suggestedMax: 5,
           title: {
             display: true,
-            text: "m LAT"
+            text: "Height (m)"
           }
         }
       }

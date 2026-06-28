@@ -183,17 +183,15 @@ h1{
 }
 
 .chart-scroll{
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
+  overflow:visible;
 }
 
 .chart-wrap{
-  width:900px;
   height:260px;
 }
 
 #tide-chart{
-  width:900px;
+  width:100%;
   height:260px;
 }
 
@@ -329,20 +327,8 @@ async function loadTideCurve(){
   const futureEvents = allEvents
     .filter(e => new Date(e.time) > now);
 
-  const anchorStart = previousEvent
-    ? new Date(new Date(previousEvent.time).getTime() - 60 * 60 * 1000)
-    : new Date(now.getTime() - 3 * 60 * 60 * 1000);
-
-  const thirdFuture = futureEvents[2] || futureEvents[futureEvents.length - 1];
-
-  const anchorEnd = thirdFuture
-    ? new Date(new Date(thirdFuture.time).getTime() + 60 * 60 * 1000)
-    : new Date(anchorStart.getTime() + 18 * 60 * 60 * 1000);
-
-  // Guarantee at least 12 hours visible
-  const minEnd = new Date(anchorStart.getTime() + 12 * 60 * 60 * 1000);
-  const endTime = anchorEnd > minEnd ? anchorEnd : minEnd;
-  const startTime = anchorStart;
+  const startTime = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+  const endTime = new Date(now.getTime() + 15 * 60 * 60 * 1000);
 
   const points = curve.points
     .filter(p => {
@@ -438,6 +424,14 @@ async function loadTideCurve(){
       responsive: false,
       maintainAspectRatio: false,
       parsing: false,
+      layout: {
+        padding: {
+          top: 18,
+          left: 4,
+          right: 8,
+          bottom: 0
+        }
+      },
       plugins: {
         legend: { display: false },
         tooltip: {
@@ -464,7 +458,7 @@ async function loadTideCurve(){
             unit: "hour"
           },
           ticks: {
-            stepSize: 1,
+            stepSize: 3,
             maxRotation: 0,
             callback: function(value){
               return new Date(value).toLocaleTimeString("en-GB", {

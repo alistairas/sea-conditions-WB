@@ -214,6 +214,11 @@ h1{
     </div>
   </section>
 
+<section class="card">
+  <div class="summary-label">Today’s tide curve</div>
+  <canvas id="tide-chart" height="160"></canvas>
+</section>
+
   <section class="card">
     <table class="tide-table">
       <thead>
@@ -239,7 +244,7 @@ h1{
   </div>
 
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const HIGH_MARK = 4.7;
 const LOW_MARK = 0.8;
@@ -284,6 +289,67 @@ function tidePill(event){
       <span class="pill-height">${event.height_m.toFixed(1)}m</span>
     </span>
   `;
+}
+
+async function loadTideCurve(){
+  const response = await fetch("data/tide_curve.json");
+  const curve = await response.json();
+
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Europe/London"
+  });
+
+  const points = curve.points.filter(p =>
+    new Date(p.time).toLocaleDateString("en-CA", {
+      timeZone: "Europe/London"
+    }) === today
+  );
+
+  const labels = points.map(p =>
+    new Date(p.time).toLocaleTimeString("en-GB", {
+      timeZone: "Europe/London",
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  );
+
+  const heights = points.map(p => p.height_m);
+
+  new Chart(document.getElementById("tide-chart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{
+        data: heights,
+        tension: 0.35,
+        borderWidth: 3,
+        pointRadius: 0
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.parsed.y.toFixed(1)} m`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 6 }
+        },
+        y: {
+          suggestedMin: 0,
+          suggestedMax: 5,
+          title: {
+            display: true,
+            text: "m LAT"
+          }
+        }
+      }
+    }
+  });
 }
 
 async function loadTides(){
@@ -344,6 +410,7 @@ async function loadTides(){
 }
 
 loadTides();
+loadTideCurve();
 </script>
 
 </body>

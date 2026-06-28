@@ -189,13 +189,13 @@ h1{
 }
 
 .chart-wrap{
-  width:1500px;
-  height:240px;
+  width:2200px;
+  height:300px;
 }
 
 #tide-chart{
-  width:1500px;
-  height:240px;
+  width:2200px;
+  height:300px;
 }
 
 </style>
@@ -334,11 +334,11 @@ async function loadTideCurve(){
   const futureEvents = allEvents
     .filter(e => new Date(e.time) > now);
 
-  const startTime = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+  const startTime = new Date(now.getTime() - 12 * 60 * 60 * 1000);
   startTime.setMinutes(0, 0, 0);
   
   const endTime = new Date(startTime.getTime() + 72 * 60 * 60 * 1000);
-  
+
   const points = curve.points
     .filter(p => {
       const t = new Date(p.time);
@@ -420,44 +420,40 @@ async function loadTideCurve(){
   };
   
   const dayLabelsPlugin = {
-  id: "dayLabels",
-  afterDraw(chart){
-    const {ctx, chartArea, scales} = chart;
-
-    ctx.save();
-    ctx.font = "12px system-ui";
-    ctx.fillStyle = "#102027";
-    ctx.textAlign = "center";
-
-    const dayStarts = [];
-
-    let cursor = new Date(startTime);
-    cursor.setHours(0,0,0,0);
-
-    while(cursor <= endTime){
-      if(cursor >= startTime){
-        dayStarts.push(new Date(cursor));
+    id: "dayLabels",
+    afterDraw(chart){
+      const {ctx, chartArea, scales} = chart;
+  
+      ctx.save();
+      ctx.font = "12px system-ui";
+      ctx.fillStyle = "#102027";
+      ctx.textAlign = "center";
+  
+      let cursor = new Date(startTime);
+      cursor.setHours(0,0,0,0);
+  
+      while(cursor <= endTime){
+        if(cursor >= startTime){
+          const x = scales.x.getPixelForValue(cursor);
+  
+          if(x >= chartArea.left && x <= chartArea.right){
+            const label = cursor.toLocaleDateString("en-GB", {
+              timeZone: "Europe/London",
+              weekday: "short",
+              day: "numeric",
+              month: "short"
+            });
+  
+            ctx.fillText(label, x + 42, chartArea.bottom + 34);
+          }
+        }
+  
+        cursor.setDate(cursor.getDate() + 1);
       }
-      cursor.setDate(cursor.getDate() + 1);
+  
+      ctx.restore();
     }
-
-    dayStarts.forEach(day => {
-      const x = scales.x.getPixelForValue(day);
-      if(x < chartArea.left || x > chartArea.right) return;
-
-      const label = day.toLocaleDateString("en-GB", {
-        timeZone: "Europe/London",
-        weekday: "short",
-        day: "numeric",
-        month: "short"
-      });
-
-      ctx.fillText(label, x + 42, chartArea.bottom + 34);
-    });
-
-    ctx.restore();
-  }
-};
+  };
   
   new Chart(document.getElementById("tide-chart"), {
     type: "line",
@@ -481,6 +477,7 @@ async function loadTideCurve(){
         }
       ]
     },
+    
     plugins: [tideBandsPlugin, nowPlugin, dayLabelsPlugin],
     options: {
       responsive: false,
@@ -523,7 +520,24 @@ async function loadTideCurve(){
             stepSize: 3,
             maxRotation: 0,
             callback: function(value){
-              return new Date(value).toLocaleTimeString("en-GB", {
+              const d = new Date(value);
+          
+              const hour = Number(d.toLocaleTimeString("en-GB", {
+                timeZone: "Europe/London",
+                hour: "numeric",
+                hour12: false
+              }));
+          
+              if(hour === 0){
+                return d.toLocaleDateString("en-GB", {
+                  timeZone: "Europe/London",
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short"
+                });
+              }
+          
+              return d.toLocaleTimeString("en-GB", {
                 timeZone: "Europe/London",
                 hour: "numeric",
                 hour12: true
@@ -538,6 +552,9 @@ async function loadTideCurve(){
         y: {
           min: 0,
           max: 5,
+          ticks: {
+            stepSize: 1
+          },
           title: {
             display: true,
             text: "Height (m)"
@@ -546,6 +563,15 @@ async function loadTideCurve(){
       }
     }
   });
+  setTimeout(() => {
+  const scroller = document.querySelector(".chart-scroll");
+  const chart = Chart.getChart("tide-chart");
+
+  if(!scroller || !chart) return;
+
+  const nowX = chart.scales.x.getPixelForValue(now);
+  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.35);
+}, 100);
 }
 
 async function loadTides(){

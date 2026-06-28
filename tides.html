@@ -168,54 +168,56 @@ function tideFlag(t){
     return "";
 }
 
-async function loadTides(){
+async function loadTides() {
+  const container = document.getElementById("tides");
 
-    const response=await fetch("tides.json");
-    const data=await response.json();
+  try {
+    const response = await fetch("data/tides.json");
+    const data = await response.json();
 
-    const container=document.getElementById("tides");
+    container.innerHTML = "";
 
-    let currentDay="";
+    const groups = {};
 
-    data.events.forEach(event=>{
-
-        const day=formatDate(event.time);
-
-        if(day!==currentDay){
-
-            currentDay=day;
-
-            container.innerHTML+=`
-            <div class="card">
-                <div class="day-title">${day}</div>
-                <div id="day-${day.replace(/\s/g,'')}"></div>
-            </div>
-            `;
-
-        }
-
-        document.querySelector(`#day-${day.replace(/\s/g,'')}`).innerHTML+=`
-
-        <div class="tide">
-
-            <div class="left">
-
-                <div class="type">${event.type}</div>
-
-                <div class="time">${formatTime(event.time)}</div>
-
-                ${tideFlag(event)?`<div class="flag">${tideFlag(event)}</div>`:""}
-
-            </div>
-
-            <div class="height">${event.height_m.toFixed(2)} m</div>
-
-        </div>
-
-        `;
-
+    data.events.forEach(event => {
+      const day = formatDate(event.time);
+      if (!groups[day]) groups[day] = [];
+      groups[day].push(event);
     });
 
+    Object.entries(groups).forEach(([day, events]) => {
+      const rows = events.map(event => {
+        const flag = tideFlag(event);
+
+        return `
+          <div class="tide">
+            <div class="left">
+              <div class="type">${event.type}</div>
+              <div class="time">${formatTime(event.time)}</div>
+              ${flag ? `<div class="flag">${flag}</div>` : ""}
+            </div>
+            <div class="height">${event.height_m.toFixed(2)} m</div>
+          </div>
+        `;
+      }).join("");
+
+      container.innerHTML += `
+        <div class="card">
+          <div class="day-title">${day}</div>
+          ${rows}
+        </div>
+      `;
+    });
+
+  } catch (error) {
+    container.innerHTML = `
+      <div class="card">
+        <div class="day-title">Tide data unavailable</div>
+        <p class="footer">Could not load data/tides.json</p>
+      </div>
+    `;
+    console.error(error);
+  }
 }
 
 loadTides();

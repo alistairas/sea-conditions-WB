@@ -188,12 +188,13 @@ h1{
 }
 
 .chart-wrap{
+  width:900px;
   height:260px;
 }
 
 #tide-chart{
-  width:100%;
-  height:100%;
+  width:900px;
+  height:260px;
 }
 
 </style>
@@ -202,8 +203,6 @@ h1{
 <body>
 
 <div class="page">
-<p><a href="index.html">← Back to sea conditions</a></p>
-
   <div class="header">
     <div>
       <div class="eyebrow">Whitley Bay</div>
@@ -230,9 +229,11 @@ h1{
   </section>
 
 <section class="card">
-  <div class="summary-label">Tide curve</div>
-  <div class="chart-wrap">
-    <canvas id="tide-chart"></canvas>
+  <div class="summary-label">Tide curve local time</div>
+  <div class="chart-scroll">
+    <div class="chart-wrap">
+      <canvas id="tide-chart"></canvas>
+    </div>
   </div>
 </section>
 
@@ -310,25 +311,38 @@ function tidePill(event){
 }
 
 async function loadTideCurve(){
-  const response = await fetch("data/tide_curve.json");
-  const curve = await response.json();
+  const curveResponse = await fetch("data/tide_curve.json");
+  const curve = await curveResponse.json();
 
   const tidesResponse = await fetch("data/tides.json");
   const tides = await tidesResponse.json();
 
   const now = new Date();
 
-  const futureEvents = tides.events
-    .filter(e => new Date(e.time) > now)
+  const allEvents = tides.events
     .sort((a,b) => new Date(a.time) - new Date(b.time));
 
-  // Show enough curve to include the next 3 tide events
-  const thirdEvent = futureEvents[2] || futureEvents[futureEvents.length - 1];
-  const endTime = thirdEvent
-    ? new Date(new Date(thirdEvent.time).getTime() + 90 * 60 * 1000)
-    : new Date(now.getTime() + 18 * 60 * 60 * 1000);
+  const previousEvent = [...allEvents]
+    .reverse()
+    .find(e => new Date(e.time) <= now);
 
-  const startTime = new Date(now.getTime() - 90 * 60 * 1000);
+  const futureEvents = allEvents
+    .filter(e => new Date(e.time) > now);
+
+  const anchorStart = previousEvent
+    ? new Date(new Date(previousEvent.time).getTime() - 60 * 60 * 1000)
+    : new Date(now.getTime() - 3 * 60 * 60 * 1000);
+
+  const thirdFuture = futureEvents[2] || futureEvents[futureEvents.length - 1];
+
+  const anchorEnd = thirdFuture
+    ? new Date(new Date(thirdFuture.time).getTime() + 60 * 60 * 1000)
+    : new Date(anchorStart.getTime() + 18 * 60 * 60 * 1000);
+
+  // Guarantee at least 12 hours visible
+  const minEnd = new Date(anchorStart.getTime() + 12 * 60 * 60 * 1000);
+  const endTime = anchorEnd > minEnd ? anchorEnd : minEnd;
+  const startTime = anchorStart;
 
   const points = curve.points
     .filter(p => {
@@ -340,11 +354,17 @@ async function loadTideCurve(){
       y: p.height_m
     }));
 
-  const visibleEvents = tides.events
-    .filter(e => {
-      const t = new Date(e.time);
-      return t >= startTime && t <= endTime;
-    });
+  const visibleEvents = allEvents.filter(e => {
+    const t = new Date(e.time);
+    return t >= startTime && t <= endTime;
+  });
+
+  const eventPoints = visibleEvents.map(e => ({
+    x: new Date(e.time),
+    y: e.height_m,
+    type: e.type,
+    time: e.time
+  }));
 
   const nowPlugin = {
     id: "nowLine",
@@ -376,57 +396,101 @@ async function loadTideCurve(){
     id: "tideBands",
     beforeDatasetsDraw(chart){
       const {ctx, chartArea, scales} = chart;
-      const highY = scales.y.getPixelForValue(4.7);
-      const lowY = scales.y.getPixelForValue(0.8);
+      const highY = scales.y.getPixelForValue(HIGH_MARK);
+      const lowY = scales.y.getPixelForValue(LOW_MARK);
 
       ctx.save();
 
-      ctx.fillStyle = "rgba(33, 150, 243, 0.08)";
-      ctx.fillRect(
-        chartArea.left,
-        chartArea.top,
-        chartArea.right - chartArea.left,
-        Math.max(0, highY - chartArea.top)
-      );
+      ctx.fillStyle = "rgba(33,150,243,0.08)";
+      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right-chartArea.left, highY-chartArea.top);
 
-      ctx.fillStyle = "rgba(180, 120, 40, 0.10)";
-      ctx.fillRect(
-        chartArea.left,
-        lowY,
-        chartArea.right - chartArea.left,
-        Math.max(0, chartArea.bottom - lowY)
-      );
+      ctx.fillStyle = "rgba(180,120,40,0.10)";
+      ctx.fillRect(chartArea.left, lowY, chartArea.right-chartArea.left, chartArea.bottom-lowY);
 
       ctx.restore();
     }
   };
 
-  const eventLabelsPlugin = {
-    id: "eventLabels",
-    afterDatasetsDraw(chart){
-      const {ctx, scales, chartArea} = chart;
-
-      ctx.save();
-      ctx.font = "11px system-ui";
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#102027";
-
-      visibleEvents.forEach(e => {
-        const x = scales.x.getPixelForValue(new Date(e.time));
-        const y = scales.y.getPixelForValue(e.height_m);
-
-        if(x < chartArea.left || x > chartArea.right) return;
-
-        const icon = e.type === "High" ? "🌊" : "🪨";
-        const time = formatTime(e.time);
-
-        ctx.fillText(icon, x, y - 20);
-        ctx.fillText(`${time}`, x, y - 7);
-      });
-
-      ctx.restore();
+  new Chart(document.getElementById("tide-chart"), {
+    type: "line",
+    data: {
+      datasets: [
+        {
+          label: "Tide height",
+          data: points,
+          tension: 0.35,
+          borderWidth: 3,
+          pointRadius: 0,
+          borderColor: "#2196f3"
+        },
+        {
+          label: "Highs and lows",
+          data: eventPoints,
+          showLine: false,
+          pointRadius: 5,
+          pointHoverRadius: 6,
+          backgroundColor: "#2196f3"
+        }
+      ]
+    },
+    plugins: [tideBandsPlugin, nowPlugin],
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      parsing: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: items => {
+              const d = new Date(items[0].parsed.x);
+              return d.toLocaleString("en-GB", {
+                timeZone: "Europe/London",
+                weekday: "short",
+                hour: "2-digit",
+                minute: "2-digit"
+              });
+            },
+            label: ctx => `Height ${ctx.parsed.y.toFixed(1)} m`
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: "time",
+          min: startTime,
+          max: endTime,
+          time: {
+            unit: "hour"
+          },
+          ticks: {
+            stepSize: 1,
+            maxRotation: 0,
+            callback: function(value){
+              return new Date(value).toLocaleTimeString("en-GB", {
+                timeZone: "Europe/London",
+                hour: "numeric",
+                hour12: true
+              }).replace(":00", "").toLowerCase();
+            }
+          },
+          title: {
+            display: true,
+            text: "Time"
+          }
+        },
+        y: {
+          min: 0,
+          max: 5,
+          title: {
+            display: true,
+            text: "Height (m)"
+          }
+        }
+      }
     }
-  };
+  });
+}
 
   new Chart(document.getElementById("tide-chart"), {
     type: "line",

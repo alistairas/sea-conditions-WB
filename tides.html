@@ -182,24 +182,6 @@ h1{
   color:#607d8b;
 }
 
-.chart-shell{
-  display:grid;
-  grid-template-columns:28px 1fr;
-  gap:6px;
-  height:300px;
-}
-
-.fixed-y-axis{
-  height:248px;
-  margin-top:18px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  align-items:flex-end;
-  font-size:12px;
-  color:#607d8b;
-}
-
 .chart-scroll{
   overflow-x:auto;
   overflow-y:hidden;
@@ -207,8 +189,8 @@ h1{
 }
 
 .chart-wrap{
-  width:2200px;
-  height:300px;
+  width:2100px;
+  height:260px;
   position:relative;
 }
 
@@ -250,20 +232,9 @@ h1{
   <section class="card">
     <div class="summary-label">Tide curve local time</div>
   
-    <div class="chart-shell">
-      <div class="fixed-y-axis">
-        <span>5</span>
-        <span>4</span>
-        <span>3</span>
-        <span>2</span>
-        <span>1</span>
-        <span>0</span>
-      </div>
-  
-      <div class="chart-scroll">
-        <div class="chart-wrap">
-          <canvas id="tide-chart"></canvas>
-        </div>
+    <div class="chart-scroll">
+      <div class="chart-wrap">
+        <canvas id="tide-chart"></canvas>
       </div>
     </div>
   </section>
@@ -487,10 +458,10 @@ async function loadTideCurve(){
   };
   
   const canvas = document.getElementById("tide-chart");
-  canvas.style.width = "2200px";
-  canvas.style.height = "300px";
-  canvas.width = 2200;
-  canvas.height = 300;
+  canvas.style.width = "2100px";
+  canvas.style.height = "260px";
+  canvas.width = 2100;
+  canvas.height = 260;
   
   const touchLinePlugin = {
     id: "touchLine",
@@ -544,10 +515,10 @@ async function loadTideCurve(){
         devicePixelRatio: 1,
         layout: {
           padding: {
-            top: 18,
-            left: 4,
+            top: 24,
+            left: 0,
             right: 8,
-            bottom: 34
+            bottom: 30
           }
         },
         interaction: {
@@ -622,14 +593,14 @@ async function loadTideCurve(){
       }
     });
     setTimeout(() => {
-    const scroller = document.querySelector(".chart-scroll");
-    const chart = Chart.getChart("tide-chart");
-  
-    if(!scroller || !chart) return;
-  
-    const nowX = chart.scales.x.getPixelForValue(now);
-    scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.2);
-  }, 100);
+      const scroller = document.querySelector(".chart-scroll");
+      const chart = Chart.getChart("tide-chart");
+    
+      if(!scroller || !chart) return;
+    
+      const midnightX = chart.scales.x.getPixelForValue(startTime);
+      scroller.scrollLeft = Math.max(0, midnightX);
+    }, 100);
 }
 
 async function loadTides(){

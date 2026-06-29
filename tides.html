@@ -182,14 +182,34 @@ h1{
   color:#607d8b;
 }
 
-.chart-scroll{
-  overflow-x:auto;
-  overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
+.chart-day-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0 6px;
+}
+
+.day-btn{
+  border:none;
+  background:#eef4f6;
+  color:#607d8b;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:14px;
+}
+
+.day-btn:disabled{
+  opacity:0.35;
+}
+
+.chart-day-label{
+  font-size:14px;
+  font-weight:650;
+  color:#607d8b;
 }
 
 .chart-wrap{
-  width:1050px;
+  width:100%;
   height:260px;
   position:relative;
 }
@@ -232,10 +252,14 @@ h1{
   <section class="card">
     <div class="summary-label">Tide curve local time</div>
   
-    <div class="chart-scroll">
-      <div class="chart-wrap">
-        <canvas id="tide-chart"></canvas>
-      </div>
+    <div class="chart-day-nav">
+      <button id="prev-day" class="day-btn">‹</button>
+      <div id="chart-day-label" class="chart-day-label">Today</div>
+      <button id="next-day" class="day-btn">Tue ›</button>
+    </div>
+  
+    <div class="chart-wrap">
+      <canvas id="tide-chart"></canvas>
     </div>
   </section>
 
@@ -270,9 +294,7 @@ h1{
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <script>
 const HIGH_MARK = 4.5;
-const HIGH_LIGHT = 4.0;
 const LOW_MARK = 0.5;
-const LOW_LIGHT = 1.0;
 
 function formatTime(iso){
   return new Date(iso).toLocaleTimeString("en-GB",{
@@ -328,168 +350,167 @@ async function loadTideCurve(){
   const allEvents = tides.events
     .sort((a,b) => new Date(a.time) - new Date(b.time));
 
-  const previousEvent = [...allEvents]
-    .reverse()
-    .find(e => new Date(e.time) <= now);
+  const days = [...new Set(curve.points.map(p => dayKey(p.time)))];
+  let currentDayIndex = days.indexOf(dayKey(now));
+  if(currentDayIndex < 0) currentDayIndex = 0;
 
-  const futureEvents = allEvents
-    .filter(e => new Date(e.time) > now);
+  let chart;
 
-  const startTime = new Date(now);
-  startTime.setHours(0, 0, 0, 0);
-  
-  const endTime = new Date(startTime);
-  endTime.setDate(endTime.getDate() + 3);
-    
-  const points = curve.points
-    .filter(p => {
-      const t = new Date(p.time);
+  function dayStartEnd(dayKeyValue){
+    const start = new Date(dayKeyValue + "T00:00:00");
+    const end = new Date(start);
+    end.setDate(end.getDate() + 1);
+    return {start, end};
+  }
+
+  function updateButtons(){
+    const currentKey = days[currentDayIndex];
+    const {start} = dayStartEnd(currentKey);
+
+    document.getElementById("chart-day-label").textContent =
+      start.toLocaleDateString("en-GB", {
+        weekday:"short",
+        day:"numeric",
+        month:"short"
+      });
+
+    const prevBtn = document.getElementById("prev-day");
+    const nextBtn = document.getElementById("next-day");
+
+    prevBtn.disabled = currentDayIndex === 0;
+    nextBtn.disabled = currentDayIndex === days.length - 1;
+
+    if(currentDayIndex > 0){
+      const prevDate = dayStartEnd(days[currentDayIndex - 1]).start;
+      prevBtn.textContent = "‹ " + prevDate.toLocaleDateString("en-GB", {weekday:"short"});
+    } else {
+      prevBtn.textContent = "‹";
+    }
+
+    if(currentDayIndex < days.length - 1){
+      const nextDate = dayStartEnd(days[currentDayIndex + 1]).start;
+      nextBtn.textContent = nextDate.toLocaleDateString("en-GB", {weekday:"short"}) + " ›";
+    } else {
+      nextBtn.textContent = "›";
+    }
+  }
+
+  function renderDay(){
+    const currentKey = days[currentDayIndex];
+    const {start:startTime, end:endTime} = dayStartEnd(currentKey);
+
+    const points = curve.points
+      .filter(p => {
+        const t = new Date(p.time);
+        return t >= startTime && t <= endTime;
+      })
+      .map(p => ({
+        x: new Date(p.time),
+        y: p.height_m
+      }));
+
+    const visibleEvents = allEvents.filter(e => {
+      const t = new Date(e.time);
       return t >= startTime && t <= endTime;
-    })
-    .map(p => ({
-      x: new Date(p.time),
-      y: p.height_m
+    });
+
+    const eventPoints = visibleEvents.map(e => ({
+      x: new Date(e.time),
+      y: e.height_m,
+      type: e.type,
+      time: e.time
     }));
 
-  const visibleEvents = allEvents.filter(e => {
-    const t = new Date(e.time);
-    return t >= startTime && t <= endTime;
-  });
+    const canvas = document.getElementById("tide-chart");
+    const wrap = document.querySelector(".chart-wrap");
 
-  const eventPoints = visibleEvents.map(e => ({
-    x: new Date(e.time),
-    y: e.height_m,
-    type: e.type,
-    time: e.time
-  }));
+    const chartWidth = Math.round(wrap.clientWidth);
+    const chartHeight = 260;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
-  const nowPlugin = {
-    id: "nowLine",
-    afterDatasetsDraw(chart){
-      const {ctx, chartArea, scales} = chart;
-      const x = scales.x.getPixelForValue(now);
+    canvas.style.width = chartWidth + "px";
+    canvas.style.height = chartHeight + "px";
+    canvas.width = chartWidth * pixelRatio;
+    canvas.height = chartHeight * pixelRatio;
 
-      if(x < chartArea.left || x > chartArea.right) return;
+    if(chart) chart.destroy();
 
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(x, chartArea.top);
-      ctx.lineTo(x, chartArea.bottom);
-      ctx.setLineDash([4,4]);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "#607d8b";
-      ctx.stroke();
+    const nowPlugin = {
+      id: "nowLine",
+      afterDatasetsDraw(chart){
+        if(dayKey(now) !== currentKey) return;
 
-      ctx.setLineDash([]);
-      ctx.fillStyle = "#102027";
-      ctx.font = "12px system-ui";
-      ctx.textAlign = "center";
-      ctx.fillText("Now", x, chartArea.top - 6);
-      ctx.restore();
-    }
-  };
+        const {ctx, chartArea, scales} = chart;
+        const x = scales.x.getPixelForValue(now);
 
-  const tideBandsPlugin = {
-    id: "tideBands",
-    beforeDatasetsDraw(chart){
-      const {ctx, chartArea, scales} = chart;
-  
-      const y45 = scales.y.getPixelForValue(4.5);
-      const y40 = scales.y.getPixelForValue(4.0);
-      const y10 = scales.y.getPixelForValue(1.0);
-      const y05 = scales.y.getPixelForValue(0.5);
-  
-      ctx.save();
-  
-      // High 4.0–4.5m
-      ctx.fillStyle = "rgba(33,150,243,0.08)";
-      ctx.fillRect(chartArea.left, y45, chartArea.right-chartArea.left, y40-y45);
-  
-      // Very high ≥4.5m
-      ctx.fillStyle = "rgba(33,150,243,0.18)";
-      ctx.fillRect(chartArea.left, chartArea.top, chartArea.right-chartArea.left, y45-chartArea.top);
-  
-      // Low 0.5–1.0m
-      ctx.fillStyle = "rgba(255,193,7,0.16)";
-      ctx.fillRect(chartArea.left, y10, chartArea.right-chartArea.left, y05-y10);
-  
-      // Very low ≤0.5m
-      ctx.fillStyle = "rgba(255,152,0,0.28)";
-      ctx.fillRect(chartArea.left, y05, chartArea.right-chartArea.left, chartArea.bottom-y05);
-  
-      ctx.restore();
-    }
-  };
-  
-  const dayLabelsPlugin = {
-    id: "dayLabels",
-    afterDraw(chart){
-      const {ctx, chartArea, scales} = chart;
-  
-      ctx.save();
-      ctx.font = "12px system-ui";
-      ctx.fillStyle = "#102027";
-      ctx.textAlign = "center";
-  
-      let cursor = new Date(startTime);
-      cursor.setHours(0,0,0,0);
-  
-      while(cursor <= endTime){
-        if(cursor >= startTime){
-          const x = scales.x.getPixelForValue(cursor);
-  
-          if(x >= chartArea.left && x <= chartArea.right){
-            const label = cursor.toLocaleDateString("en-GB", {
-              timeZone: "Europe/London",
-              weekday: "short",
-              day: "numeric",
-              month: "short"
-            });
-  
-            ctx.fillText(label, x + 42, chartArea.bottom + 34);
-          }
-        }
-  
-        cursor.setDate(cursor.getDate() + 1);
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, chartArea.top);
+        ctx.lineTo(x, chartArea.bottom);
+        ctx.setLineDash([4,4]);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#607d8b";
+        ctx.stroke();
+
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#102027";
+        ctx.font = "12px system-ui";
+        ctx.textAlign = "center";
+        ctx.fillText("Now", x, chartArea.top - 6);
+        ctx.restore();
       }
-  
-      ctx.restore();
-    }
-  };
-  
-  const canvas = document.getElementById("tide-chart");
-  
-  const chartWidth = 1050;
-  const chartHeight = 260;
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-  
-  canvas.style.width = chartWidth + "px";
-  canvas.style.height = chartHeight + "px";
-  canvas.width = chartWidth;
-  canvas.height = chartHeight;
-  
-  const touchLinePlugin = {
-    id: "touchLine",
-    afterDraw(chart){
-      const active = chart.tooltip?.getActiveElements?.();
-      if(!active || !active.length) return;
-  
-      const {ctx, chartArea} = chart;
-      const x = active[0].element.x;
-  
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(x, chartArea.top);
-      ctx.lineTo(x, chartArea.bottom);
-      ctx.setLineDash([4,4]);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "#102027";
-      ctx.stroke();
-      ctx.restore();
-    }
-  };
-  
-  new Chart(canvas, {
+    };
+
+    const tideBandsPlugin = {
+      id: "tideBands",
+      beforeDatasetsDraw(chart){
+        const {ctx, chartArea, scales} = chart;
+
+        const y45 = scales.y.getPixelForValue(4.5);
+        const y40 = scales.y.getPixelForValue(4.0);
+        const y10 = scales.y.getPixelForValue(1.0);
+        const y05 = scales.y.getPixelForValue(0.5);
+
+        ctx.save();
+
+        ctx.fillStyle = "rgba(33,150,243,0.08)";
+        ctx.fillRect(chartArea.left, y45, chartArea.right-chartArea.left, y40-y45);
+
+        ctx.fillStyle = "rgba(33,150,243,0.18)";
+        ctx.fillRect(chartArea.left, chartArea.top, chartArea.right-chartArea.left, y45-chartArea.top);
+
+        ctx.fillStyle = "rgba(255,193,7,0.16)";
+        ctx.fillRect(chartArea.left, y10, chartArea.right-chartArea.left, y05-y10);
+
+        ctx.fillStyle = "rgba(255,152,0,0.28)";
+        ctx.fillRect(chartArea.left, y05, chartArea.right-chartArea.left, chartArea.bottom-y05);
+
+        ctx.restore();
+      }
+    };
+
+    const touchLinePlugin = {
+      id: "touchLine",
+      afterDraw(chart){
+        const active = chart.tooltip?.getActiveElements?.();
+        if(!active || !active.length) return;
+
+        const {ctx, chartArea} = chart;
+        const x = active[0].element.x;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, chartArea.top);
+        ctx.lineTo(x, chartArea.bottom);
+        ctx.setLineDash([4,4]);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#102027";
+        ctx.stroke();
+        ctx.restore();
+      }
+    };
+
+    chart = new Chart(canvas, {
       type: "line",
       data: {
         datasets: [
@@ -511,8 +532,7 @@ async function loadTideCurve(){
           }
         ]
       },
-      
-      plugins: [tideBandsPlugin, nowPlugin, dayLabelsPlugin, touchLinePlugin],
+      plugins: [tideBandsPlugin, nowPlugin, touchLinePlugin],
       options: {
         responsive: false,
         maintainAspectRatio: false,
@@ -538,10 +558,10 @@ async function loadTideCurve(){
               title: items => {
                 const d = new Date(items[0].parsed.x);
                 return d.toLocaleString("en-GB", {
-                  timeZone: "Europe/London",
-                  weekday: "short",
-                  hour: "2-digit",
-                  minute: "2-digit"
+                  timeZone:"Europe/London",
+                  weekday:"short",
+                  hour:"2-digit",
+                  minute:"2-digit"
                 });
               },
               label: ctx => `Height ${ctx.parsed.y.toFixed(1)} m`
@@ -553,40 +573,17 @@ async function loadTideCurve(){
             type: "time",
             min: startTime,
             max: endTime,
-            time: {
-              unit: "hour"
-            },
+            time: { unit: "hour" },
             ticks: {
               stepSize: 3,
               maxRotation: 0,
               callback: function(value){
-                const d = new Date(value);
-            
-                const hour = Number(d.toLocaleTimeString("en-GB", {
-                  timeZone: "Europe/London",
-                  hour: "numeric",
-                  hour12: false
-                }));
-            
-                if(hour === 0){
-                  return d.toLocaleDateString("en-GB", {
-                    timeZone: "Europe/London",
-                    weekday: "short",
-                    day: "numeric",
-                    month: "short"
-                  });
-                }
-            
-                return d.toLocaleTimeString("en-GB", {
-                  timeZone: "Europe/London",
-                  hour: "numeric",
-                  hour12: true
+                return new Date(value).toLocaleTimeString("en-GB", {
+                  timeZone:"Europe/London",
+                  hour:"numeric",
+                  hour12:true
                 }).replace(":00", "").toLowerCase();
               }
-            },
-            title: {
-              display: true,
-              text: "Time"
             }
           },
           y: {
@@ -597,17 +594,26 @@ async function loadTideCurve(){
         }
       }
     });
-    setTimeout(() => {
-      const scroller = document.querySelector(".chart-scroll");
-      const chart = Chart.getChart("tide-chart");
-    
-      if(!scroller || !chart || !points.length) return;
-    
-      const firstPointX = chart.scales.x.getPixelForValue(points[0].x);
-    
-      scroller.scrollLeft = Math.max(0, firstPointX - 12);
-    }, 100);
+
+    updateButtons();
   }
+
+  document.getElementById("prev-day").addEventListener("click", () => {
+    if(currentDayIndex > 0){
+      currentDayIndex--;
+      renderDay();
+    }
+  });
+
+  document.getElementById("next-day").addEventListener("click", () => {
+    if(currentDayIndex < days.length - 1){
+      currentDayIndex++;
+      renderDay();
+    }
+  });
+
+  renderDay();
+}
 
 async function loadTides(){
   const body = document.getElementById("tide-body");

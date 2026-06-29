@@ -458,10 +458,15 @@ async function loadTideCurve(){
   };
   
   const canvas = document.getElementById("tide-chart");
-  canvas.style.width = "1050px";
-  canvas.style.height = "260px";
-  canvas.width = 1050;
-  canvas.height = 260;
+  
+  const chartWidth = 1050;
+  const chartHeight = 260;
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  
+  canvas.style.width = chartWidth + "px";
+  canvas.style.height = chartHeight + "px";
+  canvas.width = chartWidth;
+  canvas.height = chartHeight;
   
   const touchLinePlugin = {
     id: "touchLine",
@@ -512,7 +517,7 @@ async function loadTideCurve(){
         responsive: false,
         maintainAspectRatio: false,
         parsing: false,
-        devicePixelRatio: 1,
+        devicePixelRatio: pixelRatio,
         layout: {
           padding: {
             top: 24,

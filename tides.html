@@ -189,12 +189,12 @@ h1{
 }
 
 .chart-wrap{
-  width:1400px;
+  width:2200px;
   height:300px;
 }
 
 #tide-chart{
-  width:1400px;
+  width:2200px;
   height:300px;
 }
 
@@ -334,11 +334,12 @@ async function loadTideCurve(){
   const futureEvents = allEvents
     .filter(e => new Date(e.time) > now);
 
-  const startTime = new Date(now.getTime() - 12 * 60 * 60 * 1000);
-  startTime.setMinutes(0, 0, 0);
+  const startTime = new Date(now);
+  startTime.setHours(0, 0, 0, 0);
   
-  const endTime = new Date(startTime.getTime() + 72 * 60 * 60 * 1000);
-
+  const endTime = new Date(startTime);
+  endTime.setDate(endTime.getDate() + 3);
+    
   const points = curve.points
     .filter(p => {
       const t = new Date(p.time);
@@ -570,7 +571,7 @@ async function loadTideCurve(){
   if(!scroller || !chart) return;
 
   const nowX = chart.scales.x.getPixelForValue(now);
-  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.75);
+  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.2);
 }, 100);
 }
 

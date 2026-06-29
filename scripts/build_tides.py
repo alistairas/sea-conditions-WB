@@ -9,7 +9,18 @@ TIDES_OUT = Path("data/tides.json")
 CURVE_OUT = Path("data/tide_curve.json")
 TIDES_OUT.parent.mkdir(exist_ok=True)
 
-start = datetime.now(timezone.utc)
+from zoneinfo import ZoneInfo
+
+LOCAL_TZ = ZoneInfo("Europe/London")
+
+today_local = datetime.now(LOCAL_TZ).replace(
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0
+)
+
+start = today_local.astimezone(timezone.utc)
 end = start + timedelta(days=7)
 
 url = (
@@ -33,6 +44,14 @@ curve_url = (
 
 with urllib.request.urlopen(curve_url, timeout=30) as response:
     curve_raw = json.loads(response.read().decode("utf-8"))
+
+print("Curve request start:", start.isoformat())
+print("Curve request end:", end.isoformat())
+print("Timeline points:", len(curve_raw.get("timeline", [])))
+
+if curve_raw.get("timeline"):
+    print("First curve point:", curve_raw["timeline"][0]["time"])
+    print("Last curve point:", curve_raw["timeline"][-1]["time"])
 
 CURVE_OUT.write_text(
     json.dumps({

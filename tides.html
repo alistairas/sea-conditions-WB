@@ -430,8 +430,8 @@ async function loadTideCurve(){
 
     canvas.style.width = chartWidth + "px";
     canvas.style.height = chartHeight + "px";
-    canvas.width = chartWidth * pixelRatio;
-    canvas.height = chartHeight * pixelRatio;
+    canvas.width = chartWidth;
+    canvas.height = chartHeight;
 
     if(chart) chart.destroy();
 

@@ -182,6 +182,24 @@ h1{
   color:#607d8b;
 }
 
+.chart-shell{
+  display:grid;
+  grid-template-columns:28px 1fr;
+  gap:6px;
+  height:300px;
+}
+
+.fixed-y-axis{
+  height:248px;
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:flex-end;
+  font-size:12px;
+  color:#607d8b;
+}
+
 .chart-scroll{
   overflow-x:auto;
   overflow-y:hidden;
@@ -230,10 +248,21 @@ h1{
   </section>
 
 <section class="card">
-  <div class="summary-label">Tide curve local time</div>
-  <div class="chart-scroll">
-    <div class="chart-wrap">
-      <canvas id="tide-chart"></canvas>
+  <div class="summary-label">Tide curve local time</>
+    <div class="chart-shell">
+    <div class="fixed-y-axis">
+      <span>5</span>
+      <span>4</span>
+      <span>3</span>
+      <span>2</span>
+      <span>1</span>
+      <span>0</span>
+    </div>
+  
+    <div class="chart-scroll">
+      <div class="chart-wrap">
+        <canvas id="tide-chart"></canvas>
+      </div>
     </div>
   </div>
 </section>
@@ -457,129 +486,149 @@ async function loadTideCurve(){
   };
   
   const canvas = document.getElementById("tide-chart");
-canvas.style.width = "2200px";
-canvas.style.height = "300px";
-canvas.width = 2200;
-canvas.height = 300;
-
-new Chart(canvas, {
-    type: "line",
-    data: {
-      datasets: [
-        {
-          label: "Tide height",
-          data: points,
-          tension: 0.35,
-          borderWidth: 3,
-          pointRadius: 0,
-          borderColor: "#2196f3"
-        },
-        {
-          label: "Highs and lows",
-          data: eventPoints,
-          showLine: false,
-          pointRadius: 5,
-          pointHoverRadius: 6,
-          backgroundColor: "#2196f3"
-        }
-      ]
-    },
-    
-    plugins: [tideBandsPlugin, nowPlugin, dayLabelsPlugin],
-    options: {
-      responsive: false,
-      maintainAspectRatio: false,
-      parsing: false,
-      devicePixelRatio: 1,
-      layout: {
-        padding: {
-          top: 18,
-          left: 4,
-          right: 8,
-          bottom: 34
-        }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            title: items => {
-              const d = new Date(items[0].parsed.x);
-              return d.toLocaleString("en-GB", {
-                timeZone: "Europe/London",
-                weekday: "short",
-                hour: "2-digit",
-                minute: "2-digit"
-              });
-            },
-            label: ctx => `Height ${ctx.parsed.y.toFixed(1)} m`
-          }
-        }
-      },
-      scales: {
-        x: {
-          type: "time",
-          min: startTime,
-          max: endTime,
-          time: {
-            unit: "hour"
+  canvas.style.width = "2200px";
+  canvas.style.height = "300px";
+  canvas.width = 2200;
+  canvas.height = 300;
+  
+  const touchLinePlugin = {
+    id: "touchLine",
+    afterDraw(chart){
+      const active = chart.tooltip?.getActiveElements?.();
+      if(!active || !active.length) return;
+  
+      const {ctx, chartArea} = chart;
+      const x = active[0].element.x;
+  
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
+      ctx.setLineDash([4,4]);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#102027";
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+  
+  new Chart(canvas, {
+      type: "line",
+      data: {
+        datasets: [
+          {
+            label: "Tide height",
+            data: points,
+            tension: 0.35,
+            borderWidth: 3,
+            pointRadius: 0,
+            borderColor: "#2196f3"
           },
-          ticks: {
-            stepSize: 3,
-            maxRotation: 0,
-            callback: function(value){
-              const d = new Date(value);
-          
-              const hour = Number(d.toLocaleTimeString("en-GB", {
-                timeZone: "Europe/London",
-                hour: "numeric",
-                hour12: false
-              }));
-          
-              if(hour === 0){
-                return d.toLocaleDateString("en-GB", {
+          {
+            label: "Highs and lows",
+            data: eventPoints,
+            showLine: false,
+            pointRadius: 5,
+            pointHoverRadius: 6,
+            backgroundColor: "#2196f3"
+          }
+        ]
+      },
+      
+      plugins: [tideBandsPlugin, nowPlugin, dayLabelsPlugin, touchLinePlugin],
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        parsing: false,
+        devicePixelRatio: 1,
+        layout: {
+          padding: {
+            top: 18,
+            left: 4,
+            right: 8,
+            bottom: 34
+          }
+        },
+        interaction: {
+          mode: "nearest",
+          intersect: false,
+          axis: "x"
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: items => {
+                const d = new Date(items[0].parsed.x);
+                return d.toLocaleString("en-GB", {
                   timeZone: "Europe/London",
                   weekday: "short",
-                  day: "numeric",
-                  month: "short"
+                  hour: "2-digit",
+                  minute: "2-digit"
                 });
-              }
-          
-              return d.toLocaleTimeString("en-GB", {
-                timeZone: "Europe/London",
-                hour: "numeric",
-                hour12: true
-              }).replace(":00", "").toLowerCase();
+              },
+              label: ctx => `Height ${ctx.parsed.y.toFixed(1)} m`
             }
-          },
-          title: {
-            display: true,
-            text: "Time"
           }
         },
-        y: {
-          min: 0,
-          max: 5,
-          ticks: {
-            stepSize: 1
+        scales: {
+          x: {
+            type: "time",
+            min: startTime,
+            max: endTime,
+            time: {
+              unit: "hour"
+            },
+            ticks: {
+              stepSize: 3,
+              maxRotation: 0,
+              callback: function(value){
+                const d = new Date(value);
+            
+                const hour = Number(d.toLocaleTimeString("en-GB", {
+                  timeZone: "Europe/London",
+                  hour: "numeric",
+                  hour12: false
+                }));
+            
+                if(hour === 0){
+                  return d.toLocaleDateString("en-GB", {
+                    timeZone: "Europe/London",
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short"
+                  });
+                }
+            
+                return d.toLocaleTimeString("en-GB", {
+                  timeZone: "Europe/London",
+                  hour: "numeric",
+                  hour12: true
+                }).replace(":00", "").toLowerCase();
+              }
+            },
+            title: {
+              display: true,
+              text: "Time"
+            }
           },
-          title: {
-            display: true,
-            text: "Height (m)"
+          y: {
+            min: 0,
+            max: 5,
+            display: false
           }
         }
       }
-    }
-  });
-  setTimeout(() => {
-  const scroller = document.querySelector(".chart-scroll");
-  const chart = Chart.getChart("tide-chart");
-
-  if(!scroller || !chart) return;
-
-  const nowX = chart.scales.x.getPixelForValue(now);
-  scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.2);
-}, 100);
+    });
+    setTimeout(() => {
+    const scroller = document.querySelector(".chart-scroll");
+    const chart = Chart.getChart("tide-chart");
+  
+    if(!scroller || !chart) return;
+  
+    const nowX = chart.scales.x.getPixelForValue(now);
+    scroller.scrollLeft = Math.max(0, nowX - scroller.clientWidth * 0.2);
+  }, 100);
 }
 
 async function loadTides(){

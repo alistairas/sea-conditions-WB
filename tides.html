@@ -191,11 +191,11 @@ h1{
 .chart-wrap{
   width:2200px;
   height:300px;
+  position:relative;
 }
 
 #tide-chart{
-  width:2200px;
-  height:300px;
+  display:block;
 }
 
 </style>
@@ -456,7 +456,13 @@ async function loadTideCurve(){
     }
   };
   
-  new Chart(document.getElementById("tide-chart"), {
+  const canvas = document.getElementById("tide-chart");
+canvas.style.width = "2200px";
+canvas.style.height = "300px";
+canvas.width = 2200;
+canvas.height = 300;
+
+new Chart(canvas, {
     type: "line",
     data: {
       datasets: [
@@ -484,6 +490,7 @@ async function loadTideCurve(){
       responsive: false,
       maintainAspectRatio: false,
       parsing: false,
+      devicePixelRatio: 1,
       layout: {
         padding: {
           top: 18,

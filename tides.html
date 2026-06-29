@@ -364,37 +364,43 @@ async function loadTideCurve(){
   }
 
   function updateButtons(){
+    const todayKey = dayKey(new Date());
     const currentKey = days[currentDayIndex];
     const {start} = dayStartEnd(currentKey);
-
-    document.getElementById("chart-day-label").textContent =
-      start.toLocaleDateString("en-GB", {
-        weekday:"short",
-        day:"numeric",
-        month:"short"
+  
+    const dayLabel = key => {
+      if(key === todayKey) return "Today";
+  
+      return dayStartEnd(key).start.toLocaleDateString("en-GB", {
+        weekday: "short"
       });
-
+    };
+  
+    document.getElementById("chart-day-label").textContent =
+      currentKey === todayKey
+        ? "Today"
+        : start.toLocaleDateString("en-GB", {
+            weekday: "short",
+            day: "numeric",
+            month: "short"
+          });
+  
     const prevBtn = document.getElementById("prev-day");
     const nextBtn = document.getElementById("next-day");
-
+  
     prevBtn.disabled = currentDayIndex === 0;
     nextBtn.disabled = currentDayIndex === days.length - 1;
-
-    if(currentDayIndex > 0){
-      const prevDate = dayStartEnd(days[currentDayIndex - 1]).start;
-      prevBtn.textContent = "‹ " + prevDate.toLocaleDateString("en-GB", {weekday:"short"});
-    } else {
-      prevBtn.textContent = "‹";
-    }
-
-    if(currentDayIndex < days.length - 1){
-      const nextDate = dayStartEnd(days[currentDayIndex + 1]).start;
-      nextBtn.textContent = nextDate.toLocaleDateString("en-GB", {weekday:"short"}) + " ›";
-    } else {
-      nextBtn.textContent = "›";
-    }
+  
+    prevBtn.textContent =
+      currentDayIndex > 0
+        ? "‹ " + dayLabel(days[currentDayIndex - 1])
+        : "‹";
+  
+    nextBtn.textContent =
+      currentDayIndex < days.length - 1
+        ? dayLabel(days[currentDayIndex + 1]) + " ›"
+        : "›";
   }
-
   function renderDay(){
     const currentKey = days[currentDayIndex];
     const {start:startTime, end:endTime} = dayStartEnd(currentKey);

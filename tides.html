@@ -601,10 +601,11 @@ async function loadTideCurve(){
       const scroller = document.querySelector(".chart-scroll");
       const chart = Chart.getChart("tide-chart");
     
-      if(!scroller || !chart) return;
+      if(!scroller || !chart || !points.length) return;
     
-      const midnightX = chart.scales.x.getPixelForValue(startTime);
-      scroller.scrollLeft = Math.max(0, midnightX);
+      const firstPointX = chart.scales.x.getPixelForValue(points[0].x);
+    
+      scroller.scrollLeft = Math.max(0, firstPointX - 12);
     }, 100);
 }
 

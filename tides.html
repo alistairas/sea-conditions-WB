@@ -200,24 +200,6 @@ h1{
   color:#607d8b;
 }
 
-.chart-shell{
-  display:grid;
-  grid-template-columns:28px 1fr;
-  gap:6px;
-  height:300px;
-}
-
-.fixed-y-axis{
-  height:248px;
-  margin-top:18px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  align-items:flex-end;
-  font-size:12px;
-  color:#607d8b;
-}
-
 .chart-scroll{
   overflow-x:auto;
   overflow-y:hidden;
@@ -265,17 +247,8 @@ h1{
     </div>
   </section>
 
-<section class="card">
-  <div class="summary-label">Tide curve local time</>
-    <div class="chart-shell">
-    <div class="fixed-y-axis">
-      <span>5</span>
-      <span>4</span>
-      <span>3</span>
-      <span>2</span>
-      <span>1</span>
-      <span>0</span>
-    </div>
+  <section class="card">
+    <div class="summary-label">Tide curve local time</div>
   
     <div class="chart-shell">
       <div class="fixed-y-axis">
@@ -286,15 +259,14 @@ h1{
         <span>1</span>
         <span>0</span>
       </div>
-    
+  
       <div class="chart-scroll">
         <div class="chart-wrap">
           <canvas id="tide-chart"></canvas>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <section class="card">
     <table class="tide-table">

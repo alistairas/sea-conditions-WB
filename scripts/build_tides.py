@@ -21,7 +21,7 @@ today_local = datetime.now(LOCAL_TZ).replace(
 )
 
 start = today_local.astimezone(timezone.utc)
-end = start + timedelta(days=7)
+end = start + timedelta(days=8)
 
 url = (
     "https://api.openwaters.io/tides/extremes"

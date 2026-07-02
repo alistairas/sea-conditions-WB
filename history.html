@@ -134,7 +134,10 @@ input[type="date"] {
   <button onclick="showRange(7)">Week</button>
   <button onclick="showRange(14)">Fortnight</button>
   <button onclick="showRange(31)">Month</button>
+  <button onclick="showRange(365)">Year</button>
   <button onclick="showRange(null)">All</button>
+  <button onclick="shiftWindow(-1)">‹</button>
+  <button onclick="shiftWindow(1)">›</button>
   <button onclick="toggleCalendar()">Start date</button>
   <button id="toggle-satellite" onclick="toggleSeries('satellite')">✓ Satellite</button>
   <button id="toggle-smartwatch" onclick="toggleSeries('smartwatch')">✓ Smartwatch</button>
@@ -187,6 +190,7 @@ let showSatellite = true;
 let showSmartwatch = true;
 let showObservation = true;
 let currentRange = 7;
+let windowOffset = 0;
 
 Promise.all([
   fetch("history.json").then(r => r.json()),
@@ -214,7 +218,7 @@ function toggleSeries(series) {
   document.getElementById("toggle-observation").textContent =
     showObservation ? "✓ Manual observation" : "Manual observation";
 
-  showRange(currentRange);
+  showRange(currentRange, false);
 }
 
 function fillMissingDays(data) {
@@ -270,12 +274,21 @@ function getDateRange(days) {
 
   if (!allDates.length) return [];
 
-  let start = new Date(allDates[0]);
-  const end = new Date(allDates[allDates.length - 1]);
+  const firstDataDate = new Date(allDates[0]);
+  const lastDataDate = new Date(allDates[allDates.length - 1]);
+
+  let start;
+  let end;
 
   if (days) {
+    end = new Date(lastDataDate);
+    end.setDate(end.getDate() + (windowOffset * days));
+
     start = new Date(end);
     start.setDate(start.getDate() - days + 1);
+  } else {
+    start = new Date(firstDataDate);
+    end = new Date(lastDataDate);
   }
 
   if (startDateFilter) {
@@ -293,8 +306,9 @@ function getDateRange(days) {
   return dates;
 }
 
-function showRange(days) {
+function showRange(days, resetOffset = true) {
   currentRange = days;
+  if (resetOffset) windowOffset = 0;
 
   const dateRange = getDateRange(days);
   const satelliteFilled = fillMissingDays(historyData);
@@ -415,6 +429,13 @@ function updateStats(temps) {
   document.getElementById("stat-max").textContent = `${max.toFixed(1)}°C`;
   document.getElementById("stat-avg").textContent = `${avg.toFixed(1)}°C`;
   document.getElementById("stat-records").textContent = temps.length;
+}
+
+function shiftWindow(direction) {
+  if (!currentRange) return;
+
+  windowOffset += direction;
+  showRange(currentRange, false);
 }
 
 function toggleCalendar() {

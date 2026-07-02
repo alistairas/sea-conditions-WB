@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Merge Apple Health water temperature data
+        run: python scripts/merge_apple_health_water_temps.py
+
       - name: Build smartwatch report
         run: python scripts/build_smartwatch_report.py water_temperatures.csv
 

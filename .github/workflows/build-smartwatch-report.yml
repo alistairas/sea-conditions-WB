@@ -41,6 +41,6 @@ jobs:
       - name: Commit generated report
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Update smartwatch report"
+          commit_message: "Add Apple Health merge step for smartwatch data and ipdate smartwatch report"
           file_pattern: "data/apple_health_water_temperature_raw.csv smartwatch.html smartwatch_daily_minimums.json reports/"
           push_options: "--force-with-lease"

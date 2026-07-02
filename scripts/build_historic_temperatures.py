@@ -62,6 +62,11 @@ def build_historic_temperatures():
                 "notes": entry.get("notes", "")
             })
 
+    if not records:
+        raise RuntimeError(
+            f"No historic temperature records found. Check INPUT_GLOB: {INPUT_GLOB}"
+        )
+
     records = sorted(records, key=lambda x: x["date"])
 
     with OUTPUT_FILE.open("w", encoding="utf-8") as f:

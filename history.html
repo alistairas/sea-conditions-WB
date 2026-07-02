@@ -138,6 +138,7 @@ input[type="date"] {
   <button onclick="toggleCalendar()">Start date</button>
   <button id="toggle-satellite" onclick="toggleSeries('satellite')">✓ Satellite</button>
   <button id="toggle-smartwatch" onclick="toggleSeries('smartwatch')">✓ Smartwatch</button>
+  <button id="toggle-observation" onclick="toggleSeries('observation')">✓ Manual observation</button>
 </div>
 
 <div id="calendarBox" style="display:none; margin-bottom:16px;">
@@ -151,8 +152,7 @@ input[type="date"] {
   <canvas id="chart" height="220"></canvas>
 </section>
 <footer class="footer">
-  Satellite SST is derived from Copernicus Marine OSTIA analysis. The smartwatch series uses daily minimum readings and may reflect swim timing, depth, sensor behaviour and local nearshore conditions. Interpolated satellite values shape the line; dots show actual satellite readings.
-</footer>
+  Satellite SST is derived from Copernicus Marine OSTIA analysis. The smartwatch series uses daily minimum readings and may reflect swim timing, depth, sensor behaviour and local nearshore conditions. Manual observations are transcribed from swim club logbooks and represent thermometer readings taken in the water. Original scans remain the source of truth. Interpolated satellite values shape the line; dots show actual satellite readings.</footer>
 <section class="card">
   <div class="label">Satellite summary</div>
   <div class="stats-grid">
@@ -181,29 +181,38 @@ let historyData = [];
 let chart;
 let startDateFilter = null;
 let smartwatchData = [];
+let observationData = [];
+
 let showSatellite = true;
 let showSmartwatch = true;
+let showObservation = true;
 let currentRange = 7;
 
 Promise.all([
   fetch("history.json").then(r => r.json()),
-  fetch("smartwatch_daily_minimums.json").then(r => r.json())
+  fetch("smartwatch_daily_minimums.json").then(r => r.json()),
+  fetch("historic_temperatures.json").then(r => r.json())
 ])
-.then(([history, smartwatch]) => {
+.then(([history, smartwatch, observations]) => {
   historyData = history;
   smartwatchData = smartwatch;
+  observationData = observations;
   showRange(7);
 });
 
 function toggleSeries(series) {
   if (series === "satellite") showSatellite = !showSatellite;
   if (series === "smartwatch") showSmartwatch = !showSmartwatch;
+  if (series === "observation") showObservation = !showObservation;
 
   document.getElementById("toggle-satellite").textContent =
     showSatellite ? "✓ Satellite" : "Satellite";
 
   document.getElementById("toggle-smartwatch").textContent =
     showSmartwatch ? "✓ Smartwatch" : "Smartwatch";
+
+  document.getElementById("toggle-observation").textContent =
+    showObservation ? "✓ Manual observation" : "Manual observation";
 
   showRange(currentRange);
 }
@@ -255,7 +264,8 @@ function fillMissingDays(data) {
 function getDateRange(days) {
   const allDates = [
     ...historyData.map(x => x.date),
-    ...smartwatchData.map(x => x.date)
+    ...smartwatchData.map(x => x.date),
+    ...observationData.map(x => x.date)
   ].sort();
 
   if (!allDates.length) return [];
@@ -312,9 +322,15 @@ function showRange(days) {
     return item?.temperature?.minimum_c ?? null;
   });
 
+  const observationTemps = dateRange.map(date => {
+    const item = observationData.find(x => x.date === date);
+    return item ? item.water_temp_c : null;
+  });
+
   const allVisibleTemps = [
     ...(showSatellite ? satelliteTemps : []),
-    ...(showSmartwatch ? smartwatchTemps : [])
+    ...(showSmartwatch ? smartwatchTemps : []),
+    ...(showObservation ? observationTemps : [])
   ].filter(x => x !== null && x !== undefined);
 
   if (chart) chart.destroy();
@@ -341,6 +357,16 @@ function showRange(days) {
           borderWidth: 2,
           pointRadius: 2,
           pointHoverRadius: 4,
+          spanGaps: true
+        },
+        {
+          label: "Manual observation °C",
+          data: showObservation ? observationTemps : [],
+          tension: 0.2,
+          borderDash: [2, 4],
+          borderWidth: 2,
+          pointRadius: 3,
+          pointHoverRadius: 5,
           spanGaps: true
         }
       ]

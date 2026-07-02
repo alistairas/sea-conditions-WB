@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-INPUT_GLOB = "PSC_Log_Vol*_archive.json"
+INPUT_GLOB = "archives/PSC_Log_Vol*_archive.json"
 OUTPUT_FILE = Path("historic_temperatures.json")
 
 

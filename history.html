@@ -192,6 +192,8 @@ let showObservation = true;
 let currentRange = 7;
 let windowOffset = 0;
 
+const SMARTWATCH_OUTLIER_TEMP = 20;
+
 Promise.all([
   fetch("history.json").then(r => r.json()),
   fetch("smartwatch_daily_minimums.json").then(r => r.json()),
@@ -333,8 +335,17 @@ function showRange(days, resetOffset = true) {
 
   const smartwatchTemps = dateRange.map(date => {
     const item = smartwatchData.find(x => x.date === date);
-    return item?.temperature?.minimum_c ?? null;
+  
+    if (!item) return null;
+  
+    const temp = item.temperature.minimum_c;
+  
+    return temp > SMARTWATCH_OUTLIER_TEMP ? null : temp;
   });
+  
+  const smartwatchOutliers = smartwatchData.filter(
+    d => d.temperature.minimum_c > SMARTWATCH_OUTLIER_TEMP
+  ).length;
 
   const observationTemps = dateRange.map(date => {
     const item = observationData.find(x => x.date === date);

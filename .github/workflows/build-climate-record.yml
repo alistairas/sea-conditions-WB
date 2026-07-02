@@ -1,0 +1,41 @@
+name: Build climate record
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-climate-record:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Configure CDS API
+        run: |
+          cat > ~/.cdsapirc << EOF
+          url: https://cds.climate.copernicus.eu/api
+          key: ${{ secrets.CDSAPI_KEY }}
+          EOF
+
+      - name: Build climate record
+        run: CLIMATE_START_YEAR=2023 CLIMATE_END_YEAR=2026 python scripts/build_climate_record.py
+
+      - name: Commit updated climate data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/nt_era5_sst_climate.json data/nt_era5_sst_climate_daily.csv
+          git commit -m "Update climate record" || echo "No changes to commit"
+          git push

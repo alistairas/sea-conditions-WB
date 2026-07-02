@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - "water_temperatures.csv"
+      - "data/apple_health_water_temperature_recent.csv"
+      - "scripts/merge_apple_health_water_temps.py"
       - "scripts/build_smartwatch_report.py"
       - "requirements.txt"
       - ".github/workflows/build-smartwatch-report.yml"

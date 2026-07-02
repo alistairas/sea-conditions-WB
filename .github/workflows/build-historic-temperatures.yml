@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "archives/PSC_Log_Vol*_archive.json"
+      - "archives/**"
       - "scripts/build_historic_temperatures.py"
       - "requirements.txt"
+      - ".github/workflows/build-historic-temperatures.yml"
 
 permissions:
   contents: write

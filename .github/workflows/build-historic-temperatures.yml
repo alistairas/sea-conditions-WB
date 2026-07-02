@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "PSC_Log_Vol*_archive.json"
+      - "archives/PSC_Log_Vol*_archive.json"
       - "scripts/build_historic_temperatures.py"
       - "requirements.txt"
 

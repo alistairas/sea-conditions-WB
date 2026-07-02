@@ -36,11 +36,11 @@ jobs:
         run: python scripts/merge_apple_health_water_temps.py
 
       - name: Build smartwatch report
-        run: python scripts/build_smartwatch_report.py water_temperatures.csv
+        run: python scripts/build_smartwatch_report.py data/apple_health_water_temperature_raw.csv
 
       - name: Commit generated report
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update smartwatch report"
-          file_pattern: "smartwatch.html smartwatch_daily_minimums.json reports/"
+          file_pattern: "data/apple_health_water_temperature_raw.csv smartwatch.html smartwatch_daily_minimums.json reports/"
           push_options: "--force-with-lease"

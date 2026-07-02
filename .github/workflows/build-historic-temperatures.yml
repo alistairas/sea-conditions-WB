@@ -1,0 +1,39 @@
+name: Build historic temperatures
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "PSC_Log_Vol*_archive.json"
+      - "scripts/build_historic_temperatures.py"
+      - "requirements.txt"
+
+permissions:
+  contents: write
+
+jobs:
+  build-historic-temperatures:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build historic temperature dataset
+        run: python scripts/build_historic_temperatures.py
+
+      - name: Commit generated dataset
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update historic temperature dataset"
+          file_pattern: "historic_temperatures.json"

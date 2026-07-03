@@ -119,9 +119,11 @@ h1 {
     <div class="eyebrow">North Tyneside coast</div>
     <h1>Sea temperature climate record</h1>
     <p class="intro">
-      Daily 11:00 UTC sea surface temperature sample since 1991, compared with the 1991–2020 average.
-Built as a long-term climate view alongside the local sea-temperature history.    </p>
-  </div>
+      <p class="intro">
+        Daily 11:00 UTC sea surface temperature sample since 1940, compared with the 1991–2020 average.
+        Built as a long-term climate view alongside the local sea-temperature history.
+      </p>
+ </div>
 
   <div class="card">
     <div id="status" class="status">Loading climate record…</div>
@@ -132,8 +134,8 @@ Built as a long-term climate view alongside the local sea-temperature history.  
   </div>
 
   <div class="note">
-    This chart uses ERA5 reanalysis data averaged across a North Tyneside coastal grid box.
-    It is useful for comparing years and long-term patterns, but it is not a beach-step thermometer.
+    This chart shows a long-term ERA5 reanalysis view of sea temperature for the North Tyneside coast.
+    It is useful for comparing years and seasonal patterns, but it is not a beach-step thermometer.
     Nearshore water can feel different depending on tide, wind, depth, freshwater runoff and local conditions.
   </div>
 
@@ -284,9 +286,19 @@ function buildChart(payload) {
         tooltip: {
           callbacks: {
             title: items => {
-              const item = items[0];
-              const raw = item.raw;
-              return raw.date || "Day " + raw.x;
+              const raw = items[0].raw;
+            
+              if (!raw.date) {
+                return "Day " + raw.x;
+              }
+            
+              const d = new Date(raw.date + "T00:00:00Z");
+            
+              return d.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+              });
             },
             label: item => {
               return `${item.dataset.label}: ${item.parsed.y.toFixed(2)}°C`;
@@ -304,16 +316,18 @@ function buildChart(payload) {
             text: "Month"
           },
           ticks: {
+            stepSize: 30,
             callback: value => {
               const labels = {
                 1: "Jan",
-                91: "Apr",
+                60: "Mar",
+                121: "May",
                 182: "Jul",
-                274: "Oct"
+                244: "Sep",
+                305: "Nov"
               };
-              return labels[value] || "";
-            },
-            stepSize: 91
+              return labels[Math.round(value)] || "";
+            }
           },
           grid: {
             color: "rgba(96, 125, 139, 0.12)"
@@ -374,12 +388,9 @@ async function init() {
     chartWrap.style.display = "block";
 
     meta.innerHTML = `
-      Source: ${payload.source}. 
-      Dataset: ${payload.dataset}. 
-      Sample area: ${payload.sample_area.description}. 
-      Baseline: ${payload.baseline}. 
-      Updated: ${payload.created}. 
-      Latest value: ${payload.latest.date}, ${payload.latest.sst_c.toFixed(2)}°C.
+      Source: ERA5 hourly sea surface temperature data from the Copernicus Climate Data Store.
+      Method: one 11:00 UTC sample per day, averaged across a North Tyneside coastal grid box.
+      Baseline: ${payload.baseline}. Updated: ${payload.created}.
     `;
   } catch (error) {
     console.error(error);

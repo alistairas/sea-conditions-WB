@@ -86,8 +86,7 @@ print(f"Output JSON: {OUT_JSON}", flush=True)
 
 def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Path | None:
     """
-    Download ERA5 hourly SST for a multi-year period.
-    This avoids one slow CDS queue per year.
+    Download ERA5 SST at 11:00 UTC for a multi-year period.    This avoids one slow CDS queue per year.
     """
     period_start = date(start_year, 1, 1)
     period_end = min(date(end_year, 12, 31), END_DATE)
@@ -249,8 +248,7 @@ def normalise_time_dimension(ds: xr.Dataset) -> xr.Dataset:
 
 def download_year(year: int, client: cdsapi.Client) -> Path | None:
     """
-    Download ERA5 hourly SST for one year, clipped for the current year.
-    Returns the NetCDF path, or None if there are no days to request.
+    Download ERA5 SST at 11:00 UTC for one year, clipped for the current year.    Returns the NetCDF path, or None if there are no days to request.
     """
     year_end_date = min(date(year, 12, 31), END_DATE)
 
@@ -366,7 +364,7 @@ def process_year(nc_file: Path, year: int) -> pd.DataFrame:
     # Convert Kelvin to Celsius.
     box_mean_c = box_mean_k - 273.15
 
-    # Daily mean.
+   # Daily value. With one requested time per day, this preserves the 11:00 UTC sample.
     daily = box_mean_c.resample(time="1D").mean(skipna=True)
 
     df = daily.to_dataframe(name="sst_c").reset_index()

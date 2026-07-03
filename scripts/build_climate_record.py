@@ -153,8 +153,8 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
             
             if "cost limits exceeded" in error_text or "request is too large" in error_text:
                 raise RuntimeError(
-                    f"CDS request too large for {start_year}-{end_year}. "
-                    "Reduce CLIMATE_CHUNK_YEARS, for example to 3 or 2."
+                    "CDS request too large for {start_year}-{end_year}. "
+                    "Reduce CLIMATE_CHUNK_YEARS, for example to 2 or 1."
                 ) from e
                 
             if "required licences not accepted" in error_text or "licences" in error_text:
@@ -302,12 +302,7 @@ def download_year(year: int, client: cdsapi.Client) -> Path | None:
         "month": months,
         "day": all_days,
         "time": [
-            "00:00", "01:00", "02:00", "03:00",
-            "04:00", "05:00", "06:00", "07:00",
-            "08:00", "09:00", "10:00", "11:00",
-            "12:00", "13:00", "14:00", "15:00",
-            "16:00", "17:00", "18:00", "19:00",
-            "20:00", "21:00", "22:00", "23:00",
+            "11:00",
         ],
         "data_format": "netcdf",
         "download_format": "unarchived",
@@ -482,9 +477,9 @@ def build_json(df: pd.DataFrame) -> dict:
         "baseline": f"{BASELINE_START}-{BASELINE_END}",
         "calendar": "365-day no-leap overlay; 29 February is omitted",
         "sample_method": (
-            "Hourly ERA5 sea surface temperature averaged across a North Tyneside "
-            "coastal grid box, converted from Kelvin to Celsius, then averaged to "
-            "daily means."
+            "ERA5 sea surface temperature sampled once per day at 11:00 UTC, "
+            "averaged across a North Tyneside coastal grid box and converted "
+            "from Kelvin to Celsius."
         ),
         "start_year": int(df["year"].min()),
         "end_year": int(df["year"].max()),

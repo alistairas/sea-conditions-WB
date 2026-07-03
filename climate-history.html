@@ -119,9 +119,8 @@ h1 {
     <div class="eyebrow">North Tyneside coast</div>
     <h1>Sea temperature climate record</h1>
     <p class="intro">
-      Daily 11:00 UTC sea surface temperature sample, compared with the 1991–2020 average.
-      Built as a long-term climate view alongside the local sea-temperature history.
-    </p>
+      Daily 11:00 UTC sea surface temperature sample since 1991, compared with the 1991–2020 average.
+Built as a long-term climate view alongside the local sea-temperature history.    </p>
   </div>
 
   <div class="card">
@@ -315,7 +314,7 @@ function buildChart(payload) {
               return labels[value] || "";
             },
             stepSize: 91
-          }
+          },
           grid: {
             color: "rgba(96, 125, 139, 0.12)"
           }

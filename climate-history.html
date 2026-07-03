@@ -119,7 +119,7 @@ h1 {
     <div class="eyebrow">North Tyneside coast</div>
     <h1>Sea temperature climate record</h1>
     <p class="intro">
-      Daily sea surface temperature since 1940, compared with the 1991–2020 average.
+      Daily 11:00 UTC sea surface temperature sample, compared with the 1991–2020 average.
       Built as a long-term climate view alongside the local sea-temperature history.
     </p>
   </div>
@@ -343,18 +343,36 @@ async function init() {
   const meta = document.getElementById("meta");
 
   try {
-    const response = await fetch(DATA_URL, { cache: "no-store" });
+    status.textContent = "Loading climate data…";
+
+    const response = await fetch(`${DATA_URL}?v=${Date.now()}`, {
+      cache: "no-store"
+    });
+
+    status.textContent = "Checking climate data…";
 
     if (!response.ok) {
-      throw new Error(`Could not load ${DATA_URL}`);
+      throw new Error(`Could not load ${DATA_URL}. HTTP status: ${response.status}`);
     }
 
     const payload = await response.json();
 
-    status.style.display = "none";
-    chartWrap.style.display = "block";
+    status.textContent = "Building chart…";
+
+    console.log("Climate payload loaded", payload);
+
+    if (!payload.years || !payload.years.length) {
+      throw new Error("JSON loaded, but no years were found in payload.years");
+    }
+
+    if (!payload.average_1991_2020 || !payload.average_1991_2020.length) {
+      throw new Error("JSON loaded, but average_1991_2020 is empty");
+    }
 
     buildChart(payload);
+
+    status.style.display = "none";
+    chartWrap.style.display = "block";
 
     meta.innerHTML = `
       Source: ${payload.source}. 
@@ -366,7 +384,7 @@ async function init() {
     `;
   } catch (error) {
     console.error(error);
-    status.textContent = "Climate record could not be loaded yet. Check that data/nt_era5_sst_climate.json exists.";
+    status.textContent = `Climate record could not be loaded: ${error.message}`;
   }
 }
 

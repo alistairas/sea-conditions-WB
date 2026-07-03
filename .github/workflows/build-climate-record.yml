@@ -30,7 +30,7 @@ jobs:
           EOF
 
       - name: Build climate record
-        run: CLIMATE_START_YEAR=2023 CLIMATE_END_YEAR=2026 python scripts/build_climate_record.py
+        run: CLIMATE_START_YEAR=1940 python scripts/build_climate_record.py
 
       - name: Commit updated climate data
         run: |

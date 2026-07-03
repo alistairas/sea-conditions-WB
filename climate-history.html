@@ -305,9 +305,17 @@ function buildChart(payload) {
             text: "Month"
           },
           ticks: {
-            stepSize: 30,
-            callback: value => monthLabelFromDoy(value)
-          },
+            callback: value => {
+              const labels = {
+                1: "Jan",
+                91: "Apr",
+                182: "Jul",
+                274: "Oct"
+              };
+              return labels[value] || "";
+            },
+            stepSize: 91
+          }
           grid: {
             color: "rgba(96, 125, 139, 0.12)"
           }

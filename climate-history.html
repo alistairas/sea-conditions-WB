@@ -318,17 +318,9 @@ function buildChart(payload) {
           afterBuildTicks: axis => {
             axis.ticks = [
               { value: 1 },
-              { value: 32 },
-              { value: 60 },
               { value: 91 },
-              { value: 121 },
-              { value: 152 },
               { value: 182 },
-              { value: 213 },
-              { value: 244 },
-              { value: 274 },
-              { value: 305 },
-              { value: 335 }
+              { value: 274 }
             ];
           },
           ticks: {
@@ -338,17 +330,9 @@ function buildChart(payload) {
             callback: value => {
               const labels = {
                 1: "Jan",
-                32: "Feb",
-                60: "Mar",
                 91: "Apr",
-                121: "May",
-                152: "Jun",
                 182: "Jul",
-                213: "Aug",
-                244: "Sep",
-                274: "Oct",
-                305: "Nov",
-                335: "Dec"
+                274: "Oct"
               };
         
               return labels[Math.round(value)] || "";

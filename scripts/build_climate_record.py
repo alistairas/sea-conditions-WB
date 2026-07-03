@@ -398,6 +398,146 @@ def process_year(nc_file: Path, year: int) -> pd.DataFrame:
         ]
     ]
 
+def build_summary_stats(df: pd.DataFrame) -> dict:
+    """
+    Build simple climate-context stats for the website.
+    Uses the 1991-2020 baseline for daily anomaly comparisons.
+    """
+
+    df = df.copy()
+    df["date"] = pd.to_datetime(df["date"])
+    df["year"] = df["date"].dt.year
+    df["month"] = df["date"].dt.month
+
+    latest_row = df.sort_values("date").iloc[-1]
+    latest_year = int(latest_row["year"])
+    latest_doy = int(latest_row["doy"])
+    latest_month = int(latest_row["month"])
+    latest_date = latest_row["date"]
+    latest_sst = float(latest_row["sst_c"])
+
+    baseline_df = df[
+        (df["year"] >= BASELINE_START)
+        & (df["year"] <= BASELINE_END)
+    ].copy()
+
+    daily_baseline = (
+        baseline_df.groupby("doy", as_index=False)["sst_c"]
+        .mean()
+        .rename(columns={"sst_c": "baseline_sst_c"})
+    )
+
+    latest_baseline_match = daily_baseline[
+        daily_baseline["doy"] == latest_doy
+    ]
+
+    if latest_baseline_match.empty:
+        latest_baseline = None
+        latest_anomaly = None
+    else:
+        latest_baseline = float(latest_baseline_match.iloc[0]["baseline_sst_c"])
+        latest_anomaly = latest_sst - latest_baseline
+
+    # Year-to-date average rank:
+    # Compare each year over the same day-of-year range as the latest date.
+    ytd = df[df["doy"] <= latest_doy].copy()
+
+    ytd_by_year = (
+        ytd.groupby("year", as_index=False)
+        .agg(
+            mean_sst_c=("sst_c", "mean"),
+            days=("sst_c", "count")
+        )
+    )
+
+    # Require broadly complete years for fair comparison.
+    ytd_by_year = ytd_by_year[ytd_by_year["days"] >= latest_doy - 3].copy()
+    ytd_by_year["mean_sst_c"] = ytd_by_year["mean_sst_c"].round(2)
+    ytd_by_year = ytd_by_year.sort_values("mean_sst_c", ascending=False)
+    ytd_by_year["warmest_rank"] = range(1, len(ytd_by_year) + 1)
+
+    latest_ytd = ytd_by_year[ytd_by_year["year"] == latest_year]
+
+    if latest_ytd.empty:
+        ytd_summary = None
+    else:
+        row = latest_ytd.iloc[0]
+        ytd_summary = {
+            "year": latest_year,
+            "to_date": latest_date.date().isoformat(),
+            "mean_sst_c": round(float(row["mean_sst_c"]), 2),
+            "rank": int(row["warmest_rank"]),
+            "out_of": int(len(ytd_by_year)),
+        }
+
+    # Month-to-date rank:
+    # Compare same month and same day-of-month range across years.
+    latest_day = latest_date.day
+
+    mtd = df[
+        (df["month"] == latest_month)
+        & (df["date"].dt.day <= latest_day)
+    ].copy()
+
+    mtd_by_year = (
+        mtd.groupby("year", as_index=False)
+        .agg(
+            mean_sst_c=("sst_c", "mean"),
+            days=("sst_c", "count")
+        )
+    )
+
+    mtd_by_year = mtd_by_year[mtd_by_year["days"] >= latest_day - 1].copy()
+    mtd_by_year["mean_sst_c"] = mtd_by_year["mean_sst_c"].round(2)
+    mtd_by_year = mtd_by_year.sort_values("mean_sst_c", ascending=False)
+    mtd_by_year["warmest_rank"] = range(1, len(mtd_by_year) + 1)
+
+    latest_mtd = mtd_by_year[mtd_by_year["year"] == latest_year]
+
+    if latest_mtd.empty:
+        mtd_summary = None
+    else:
+        row = latest_mtd.iloc[0]
+        mtd_summary = {
+            "year": latest_year,
+            "month": int(latest_month),
+            "to_date": latest_date.date().isoformat(),
+            "mean_sst_c": round(float(row["mean_sst_c"]), 2),
+            "rank": int(row["warmest_rank"]),
+            "out_of": int(len(mtd_by_year)),
+        }
+
+    # Warmest full years in the dataset, useful for later.
+    full_years = (
+        df.groupby("year", as_index=False)
+        .agg(
+            mean_sst_c=("sst_c", "mean"),
+            days=("sst_c", "count")
+        )
+    )
+
+    full_years = full_years[full_years["days"] >= 360].copy()
+    full_years["mean_sst_c"] = full_years["mean_sst_c"].round(2)
+    full_years = full_years.sort_values("mean_sst_c", ascending=False)
+
+    return {
+        "latest_anomaly": {
+            "date": latest_date.date().isoformat(),
+            "sst_c": round(latest_sst, 2),
+            "baseline_1991_2020_c": None if latest_baseline is None else round(latest_baseline, 2),
+            "difference_from_baseline_c": None if latest_anomaly is None else round(latest_anomaly, 2),
+        },
+        "year_to_date_rank": ytd_summary,
+        "month_to_date_rank": mtd_summary,
+        "warmest_full_years": [
+            {
+                "year": int(row["year"]),
+                "mean_sst_c": round(float(row["mean_sst_c"]), 2),
+                "days": int(row["days"]),
+            }
+            for _, row in full_years.head(10).iterrows()
+        ],
+    }
 
 def build_json(df: pd.DataFrame) -> dict:
     """
@@ -483,6 +623,7 @@ def build_json(df: pd.DataFrame) -> dict:
             }
             for _, row in baseline.iterrows()
         ],
+        "summary_stats": build_summary_stats(df),
         "years": years,
     }
 

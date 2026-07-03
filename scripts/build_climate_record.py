@@ -136,6 +136,8 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
     for attempt in range(1, 4):
         try:
             print(f"CDS attempt {attempt}/3 for {start_year}-{end_year}", flush=True)
+            print(f"Years requested: {years}", flush=True)
+            print(f"Times requested: {request['time']}", flush=True)
             client.retrieve(DATASET_ID, request, str(out_file))
             print(f"Downloaded {out_file}", flush=True)
             return out_file

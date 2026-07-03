@@ -144,6 +144,19 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
             print(f"CDS attempt {attempt} failed for {start_year}-{end_year}: {e}", flush=True)
 
             error_text = str(e).lower()
+
+            if "cost limits exceeded" in error_text or "request is too large" in error_text:
+                raise RuntimeError(
+                    f"CDS request too large for {year}. "
+                    "Reduce the request size."
+                ) from e
+            
+            if "cost limits exceeded" in error_text or "request is too large" in error_text:
+                raise RuntimeError(
+                    f"CDS request too large for {start_year}-{end_year}. "
+                    "Reduce CLIMATE_CHUNK_YEARS, for example to 3 or 2."
+                ) from e
+                
             if "required licences not accepted" in error_text or "licences" in error_text:
                 raise RuntimeError(
                     "CDS licence not accepted. Log in to the Copernicus Climate Data Store "

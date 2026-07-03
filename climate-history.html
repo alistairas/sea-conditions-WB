@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Climate Record | North Tyneside Sea Temperature</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f7f8;
+  color: #102027;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 18px 40px;
+}
+
+.header {
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  color: #607d8b;
+  margin-bottom: 6px;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+
+.intro {
+  font-size: 16px;
+  line-height: 1.45;
+  color: #37474f;
+  margin: 0;
+}
+
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 8px 28px rgba(16, 32, 39, 0.08);
+  margin-bottom: 18px;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 440px;
+}
+
+.meta {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #607d8b;
+  margin-top: 14px;
+}
+
+.note {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #455a64;
+  background: #eef5f7;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.links a {
+  display: inline-block;
+  color: #006064;
+  background: #e0f2f1;
+  text-decoration: none;
+  font-weight: 650;
+  border-radius: 999px;
+  padding: 10px 14px;
+}
+
+.status {
+  font-size: 15px;
+  color: #607d8b;
+}
+
+@media (max-width: 560px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .chart-wrap {
+    height: 380px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">North Tyneside coast</div>
+    <h1>Sea temperature climate record</h1>
+    <p class="intro">
+      Daily sea surface temperature since 1940, compared with the 1991–2020 average.
+      Built as a long-term climate view alongside the local sea-temperature history.
+    </p>
+  </div>
+
+  <div class="card">
+    <div id="status" class="status">Loading climate record…</div>
+    <div class="chart-wrap" style="display:none;">
+      <canvas id="climateChart"></canvas>
+    </div>
+    <div id="meta" class="meta"></div>
+  </div>
+
+  <div class="note">
+    This chart uses ERA5 reanalysis data averaged across a North Tyneside coastal grid box.
+    It is useful for comparing years and long-term patterns, but it is not a beach-step thermometer.
+    Nearshore water can feel different depending on tide, wind, depth, freshwater runoff and local conditions.
+  </div>
+
+  <div class="links">
+    <a href="index.html">← Sea conditions</a>
+    <a href="history.html">Sea temp history</a>
+  </div>
+
+</div>
+
+<script>
+const DATA_URL = "data/nt_era5_sst_climate.json";
+
+function monthLabelFromDoy(doy) {
+  const months = [
+    { doy: 1, label: "Jan" },
+    { doy: 32, label: "Feb" },
+    { doy: 60, label: "Mar" },
+    { doy: 91, label: "Apr" },
+    { doy: 121, label: "May" },
+    { doy: 152, label: "Jun" },
+    { doy: 182, label: "Jul" },
+    { doy: 213, label: "Aug" },
+    { doy: 244, label: "Sep" },
+    { doy: 274, label: "Oct" },
+    { doy: 305, label: "Nov" },
+    { doy: 335, label: "Dec" }
+  ];
+
+  const match = months.find(m => m.doy === doy);
+  return match ? match.label : "";
+}
+
+function makeSeries(yearObj, style) {
+  return {
+    label: String(yearObj.year),
+    data: yearObj.values.map(v => ({
+      x: v.doy,
+      y: v.sst_c,
+      date: v.date
+    })),
+    borderWidth: style.borderWidth,
+    borderColor: style.borderColor,
+    backgroundColor: style.borderColor,
+    pointRadius: 0,
+    pointHoverRadius: style.pointHoverRadius ?? 3,
+    tension: 0.25,
+    order: style.order
+  };
+}
+
+function latestYearInData(payload) {
+  return Math.max(...payload.years.map(y => y.year));
+}
+
+function recentHighlightYears(payload) {
+  const maxYear = latestYearInData(payload);
+  return [maxYear - 3, maxYear - 2, maxYear - 1, maxYear];
+}
+
+function buildDatasets(payload) {
+  const latestYear = latestYearInData(payload);
+  const highlightYears = recentHighlightYears(payload);
+
+  const datasets = [];
+
+  // Older years: pale grey traces
+  payload.years.forEach(yearObj => {
+    if (!highlightYears.includes(yearObj.year)) {
+      datasets.push(makeSeries(yearObj, {
+        borderColor: "rgba(120, 144, 156, 0.16)",
+        borderWidth: 1,
+        pointHoverRadius: 0,
+        order: 4
+      }));
+    }
+  });
+
+  // Baseline average
+  datasets.push({
+    label: payload.baseline + " average",
+    data: payload.average_1991_2020.map(v => ({
+      x: v.doy,
+      y: v.sst_c
+    })),
+    borderWidth: 2,
+    borderColor: "rgba(69, 90, 100, 0.85)",
+    backgroundColor: "rgba(69, 90, 100, 0.85)",
+    borderDash: [6, 5],
+    pointRadius: 0,
+    pointHoverRadius: 3,
+    tension: 0.25,
+    order: 2
+  });
+
+  // Recent years
+  const highlightStyles = {
+    [latestYear - 3]: "rgba(0, 121, 107, 0.75)",
+    [latestYear - 2]: "rgba(2, 119, 189, 0.75)",
+    [latestYear - 1]: "rgba(251, 140, 0, 0.80)",
+    [latestYear]: "rgba(198, 40, 40, 0.95)"
+  };
+
+  payload.years.forEach(yearObj => {
+    if (highlightYears.includes(yearObj.year)) {
+      datasets.push(makeSeries(yearObj, {
+        borderColor: highlightStyles[yearObj.year],
+        borderWidth: yearObj.year === latestYear ? 3 : 2,
+        pointHoverRadius: 4,
+        order: yearObj.year === latestYear ? 0 : 1
+      }));
+    }
+  });
+
+  return datasets;
+}
+
+function buildChart(payload) {
+  const ctx = document.getElementById("climateChart");
+
+  const datasets = buildDatasets(payload);
+
+  return new Chart(ctx, {
+    type: "line",
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: "nearest",
+        intersect: false
+      },
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            filter: item => {
+              const label = item.text;
+              return (
+                label.includes("average") ||
+                recentHighlightYears(payload).map(String).includes(label)
+              );
+            },
+            usePointStyle: true,
+            boxWidth: 10
+          }
+        },
+        tooltip: {
+          callbacks: {
+            title: items => {
+              const item = items[0];
+              const raw = item.raw;
+              return raw.date || "Day " + raw.x;
+            },
+            label: item => {
+              return `${item.dataset.label}: ${item.parsed.y.toFixed(2)}°C`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: "linear",
+          min: 1,
+          max: 365,
+          title: {
+            display: true,
+            text: "Month"
+          },
+          ticks: {
+            stepSize: 30,
+            callback: value => monthLabelFromDoy(value)
+          },
+          grid: {
+            color: "rgba(96, 125, 139, 0.12)"
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: "Sea surface temperature (°C)"
+          },
+          ticks: {
+            callback: value => `${value}°`
+          },
+          grid: {
+            color: "rgba(96, 125, 139, 0.12)"
+          }
+        }
+      }
+    }
+  });
+}
+
+async function init() {
+  const status = document.getElementById("status");
+  const chartWrap = document.querySelector(".chart-wrap");
+  const meta = document.getElementById("meta");
+
+  try {
+    const response = await fetch(DATA_URL, { cache: "no-store" });
+
+    if (!response.ok) {
+      throw new Error(`Could not load ${DATA_URL}`);
+    }
+
+    const payload = await response.json();
+
+    status.style.display = "none";
+    chartWrap.style.display = "block";
+
+    buildChart(payload);
+
+    meta.innerHTML = `
+      Source: ${payload.source}. 
+      Dataset: ${payload.dataset}. 
+      Sample area: ${payload.sample_area.description}. 
+      Baseline: ${payload.baseline}. 
+      Updated: ${payload.created}. 
+      Latest value: ${payload.latest.date}, ${payload.latest.sst_c.toFixed(2)}°C.
+    `;
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Climate record could not be loaded yet. Check that data/nt_era5_sst_climate.json exists.";
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>

@@ -84,6 +84,85 @@ print(f"Output JSON: {OUT_JSON}", flush=True)
 # Helpers
 # ------------------------------------------------------------
 
+def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Path | None:
+    """
+    Download ERA5 hourly SST for a multi-year period.
+    This avoids one slow CDS queue per year.
+    """
+    period_start = date(start_year, 1, 1)
+    period_end = min(date(end_year, 12, 31), END_DATE)
+
+    if period_end < period_start:
+        print(f"Skipping {start_year}-{end_year}: after end date", flush=True)
+        return None
+
+    years = [str(y) for y in range(start_year, end_year + 1) if date(y, 1, 1) <= END_DATE]
+
+    months = [f"{m:02d}" for m in range(1, 13)]
+    days = [f"{d:02d}" for d in range(1, 32)]
+
+    out_file = CACHE_DIR / f"era5_sst_nt_{start_year}_{end_year}.nc"
+
+    if out_file.exists() and out_file.stat().st_size > 0:
+        print(f"Using cached file: {out_file}", flush=True)
+        return out_file
+
+    request = {
+        "product_type": ["reanalysis"],
+        "variable": [VARIABLE_REQUEST_NAME],
+        "year": years,
+        "month": months,
+        "day": days,
+        "time": [
+            "00:00", "01:00", "02:00", "03:00",
+            "04:00", "05:00", "06:00", "07:00",
+            "08:00", "09:00", "10:00", "11:00",
+            "12:00", "13:00", "14:00", "15:00",
+            "16:00", "17:00", "18:00", "19:00",
+            "20:00", "21:00", "22:00", "23:00",
+        ],
+        "data_format": "netcdf",
+        "download_format": "unarchived",
+        "area": [
+            ERA5_NORTH,
+            ERA5_WEST,
+            ERA5_SOUTH,
+            ERA5_EAST,
+        ],
+    }
+
+    print(f"Downloading ERA5 SST for {start_year}-{end_year}", flush=True)
+
+    for attempt in range(1, 4):
+        try:
+            print(f"CDS attempt {attempt}/3 for {start_year}-{end_year}", flush=True)
+            client.retrieve(DATASET_ID, request, str(out_file))
+            print(f"Downloaded {out_file}", flush=True)
+            return out_file
+
+        except Exception as e:
+            print(f"CDS attempt {attempt} failed for {start_year}-{end_year}: {e}", flush=True)
+
+            error_text = str(e).lower()
+            if "required licences not accepted" in error_text or "licences" in error_text:
+                raise RuntimeError(
+                    "CDS licence not accepted. Log in to the Copernicus Climate Data Store "
+                    "and accept the ERA5 single-levels licence before re-running."
+                ) from e
+
+            if out_file.exists():
+                try:
+                    out_file.unlink()
+                except Exception:
+                    pass
+
+            if attempt == 3:
+                raise
+
+            time.sleep(60)
+
+    return None
+
 def month_day_list(year: int, month: int, end_date: date) -> list[str]:
     """Return day strings for a month, clipped to end_date."""
     last_day = calendar.monthrange(year, month)[1]
@@ -240,16 +319,24 @@ def download_year(year: int, client: cdsapi.Client) -> Path | None:
 
         except Exception as e:
             print(f"CDS attempt {attempt} failed for {year}: {e}", flush=True)
-
+        
+            error_text = str(e).lower()
+        
+            if "required licences not accepted" in error_text or "licences" in error_text:
+                raise RuntimeError(
+                    "CDS licence not accepted. Log in to the Copernicus Climate Data Store "
+                    "and accept the ERA5 single-levels licence before re-running."
+                ) from e
+        
             if out_file.exists():
                 try:
                     out_file.unlink()
                 except Exception:
                     pass
-
+        
             if attempt == 3:
                 raise
-
+        
             time.sleep(60)
 
     return None
@@ -411,30 +498,45 @@ def build_json(df: pd.DataFrame) -> dict:
 
 def main() -> None:
     print("Creating CDS client", flush=True)
-
-    # cdsapi reads credentials from ~/.cdsapirc by default.
-    # In GitHub Actions, you can create that file from secrets.
     client = cdsapi.Client()
 
-    all_years = []
+    chunk_years = int(os.environ.get("CLIMATE_CHUNK_YEARS", "10"))
 
-    for year in range(START_YEAR, END_YEAR + 1):
-        if date(year, 1, 1) > END_DATE:
-            print(f"Stopping before {year}: after end date", flush=True)
-            break
+    all_periods = []
 
-        nc_file = download_year(year, client)
+    # Only chunk complete years.
+    # The current ERA5/ERA5T year is partial, so handle it separately.
+    latest_complete_year = min(END_YEAR, END_DATE.year - 1)
 
-        if nc_file is None:
-            continue
+    year = START_YEAR
 
-        df_year = process_year(nc_file, year)
-        all_years.append(df_year)
+    while year <= latest_complete_year:
+        chunk_start = year
+        chunk_end = min(year + chunk_years - 1, latest_complete_year)
 
-    if not all_years:
+        nc_file = download_period(chunk_start, chunk_end, client)
+
+        if nc_file is not None:
+            df_period = process_year(nc_file, chunk_start)
+            all_periods.append(df_period)
+
+        year = chunk_end + 1
+
+    # Handle current partial year separately, if requested.
+    if END_YEAR >= END_DATE.year and START_YEAR <= END_DATE.year:
+        current_year = END_DATE.year
+        print(f"Downloading current partial year separately: {current_year}", flush=True)
+
+        nc_file = download_year(current_year, client)
+
+        if nc_file is not None:
+            df_period = process_year(nc_file, current_year)
+            all_periods.append(df_period)
+
+    if not all_periods:
         raise RuntimeError("No climate data was downloaded or processed.")
 
-    df = pd.concat(all_years, ignore_index=True)
+    df = pd.concat(all_periods, ignore_index=True)
     df = df.sort_values("date").reset_index(drop=True)
 
     print(f"Daily rows: {len(df)}", flush=True)
@@ -453,5 +555,8 @@ def main() -> None:
     print("Climate record script finished", flush=True)
 
 
+if __name__ == "__main__":
+    main()
+    
 if __name__ == "__main__":
     main()

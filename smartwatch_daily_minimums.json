@@ -3856,22 +3856,6 @@
     }
   },
   {
-    "date": "2026-06-26",
-    "temperature": {
-      "representative_c": null,
-      "minimum_c": 11.62
-    },
-    "method": "daily_minimum",
-    "confidence": "low",
-    "source": {
-      "device": "smartwatch",
-      "sessions": 1,
-      "observations": 32,
-      "first_observation": "10:30",
-      "last_observation": "10:39"
-    }
-  },
-  {
     "date": "2026-06-27",
     "temperature": {
       "representative_c": null,
@@ -3949,6 +3933,38 @@
       "observations": 77,
       "first_observation": "19:02",
       "last_observation": "19:33"
+    }
+  },
+  {
+    "date": "2026-07-03",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 72,
+      "first_observation": "18:18",
+      "last_observation": "18:38"
+    }
+  },
+  {
+    "date": "2026-07-04",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 78,
+      "first_observation": "08:24",
+      "last_observation": "08:46"
     }
   }
 ]

@@ -118,6 +118,59 @@ h1 {
   padding: 8px 34px 8px 12px;
 }
 
+.year-step {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(96, 125, 139, 0.25);
+  border-radius: 999px;
+  background: #eef5f7;
+  color: #006064;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.year-step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.custom-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #455a64;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.legend-line {
+  width: 28px;
+  height: 0;
+  border-top: 3px dashed rgba(69, 90, 100, 0.85);
+  display: inline-block;
+}
+
+.legend-selected {
+  box-shadow: 0 0 0 2px rgba(123, 31, 162, 0.18);
+}
+
 @media (max-width: 560px) {
   h1 {
     font-size: 28px;
@@ -146,20 +199,27 @@ h1 {
       </p>
  </div>
 
-<div class="card">
-  <div id="status" class="status">Loading climate record…</div>
-
-  <div id="yearControls" class="year-controls" style="display:none;">
-    <label for="yearSelect">Highlight year</label>
-    <select id="yearSelect"></select>
+  <div class="card">
+    <div id="status" class="status">Loading climate record…</div>
+  
+    <div id="yearControls" class="year-controls" style="display:none;">
+      <label for="yearSelect">Highlight year</label>
+  
+      <button id="prevYear" class="year-step" type="button" aria-label="Previous year">‹</button>
+  
+      <select id="yearSelect"></select>
+  
+      <button id="nextYear" class="year-step" type="button" aria-label="Next year">›</button>
+    </div>
+  
+    <div class="chart-wrap" style="display:none;">
+      <canvas id="climateChart"></canvas>
+    </div>
+  
+    <div id="customLegend" class="custom-legend"></div>
+  
+    <div id="meta" class="meta"></div>
   </div>
-
-  <div class="chart-wrap" style="display:none;">
-    <canvas id="climateChart"></canvas>
-  </div>
-
-  <div id="meta" class="meta"></div>
-</div>
 
   <div class="note">
     This chart shows a long-term ERA5 reanalysis view of sea temperature for the North Tyneside coast.
@@ -233,6 +293,21 @@ function recentHighlightYears(payload, selectedYear = null) {
   return years;
 }
 
+function colourForYear(year, latestYear, selectedYear = null) {
+  if (selectedYear && year === selectedYear) {
+    return "rgba(123, 31, 162, 0.95)";
+  }
+
+  const highlightStyles = {
+    [latestYear - 3]: "rgba(0, 121, 107, 0.75)",
+    [latestYear - 2]: "rgba(2, 119, 189, 0.75)",
+    [latestYear - 1]: "rgba(251, 140, 0, 0.80)",
+    [latestYear]: "rgba(198, 40, 40, 0.95)"
+  };
+
+  return highlightStyles[year] || "rgba(0, 96, 100, 0.85)";
+}
+
 function buildDatasets(payload, selectedYear = null) {
   const latestYear = latestYearInData(payload);
   const highlightYears = recentHighlightYears(payload, selectedYear);
@@ -268,13 +343,6 @@ function buildDatasets(payload, selectedYear = null) {
     order: 2
   });
 
-  const highlightStyles = {
-    [latestYear - 3]: "rgba(0, 121, 107, 0.75)",
-    [latestYear - 2]: "rgba(2, 119, 189, 0.75)",
-    [latestYear - 1]: "rgba(251, 140, 0, 0.80)",
-    [latestYear]: "rgba(198, 40, 40, 0.95)"
-  };
-
   payload.years.forEach(yearObj => {
     if (!highlightYears.includes(yearObj.year)) return;
 
@@ -282,9 +350,7 @@ function buildDatasets(payload, selectedYear = null) {
     const isLatest = yearObj.year === latestYear;
 
     datasets.push(makeSeries(yearObj, {
-      borderColor: isSelected
-        ? "rgba(123, 31, 162, 0.95)"
-        : highlightStyles[yearObj.year] || "rgba(0, 96, 100, 0.85)",
+      borderColor: colourForYear(yearObj.year, latestYear, selectedYear),
       borderWidth: isSelected ? 4 : (isLatest ? 3 : 2),
       pointHoverRadius: 4,
       order: isSelected ? 0 : (isLatest ? 1 : 2)
@@ -315,20 +381,7 @@ function buildChart(payload, selectedYear = null) {
       },
       plugins: {
         legend: {
-          position: "bottom",
-          labels: {
-            filter: item => {
-              const label = item.text;
-              const highlighted = recentHighlightYears(payload, selectedYear).map(String);
-
-              return (
-                label.includes("average") ||
-                highlighted.includes(label)
-              );
-            },
-            usePointStyle: true,
-            boxWidth: 10
-          }
+          display: false
         },
         tooltip: {
           callbacks: {
@@ -405,31 +458,114 @@ function buildChart(payload, selectedYear = null) {
     }
   });
 
+  renderCustomLegend(payload, selectedYear);
+
   return climateChart;
+}
+
+function renderCustomLegend(payload, selectedYear = null) {
+  const legend = document.getElementById("customLegend");
+  if (!legend) return;
+
+  const latestYear = latestYearInData(payload);
+  const years = recentHighlightYears(payload, selectedYear);
+
+  const yearItems = years
+    .sort((a, b) => a - b)
+    .map(year => {
+      const colour = colourForYear(year, latestYear, selectedYear);
+      const selectedClass = selectedYear && year === selectedYear ? "legend-selected" : "";
+
+      return `
+        <span class="legend-item">
+          <span class="legend-dot ${selectedClass}" style="background:${colour};"></span>
+          ${year}
+        </span>
+      `;
+    })
+    .join("");
+
+  legend.innerHTML = `
+    ${yearItems}
+    <span class="legend-item">
+      <span class="legend-line"></span>
+      ${payload.baseline} average
+    </span>
+  `;
 }
 
 function setupYearSelector(payload) {
   const controls = document.getElementById("yearControls");
   const select = document.getElementById("yearSelect");
+  const prevButton = document.getElementById("prevYear");
+  const nextButton = document.getElementById("nextYear");
 
-  if (!controls || !select) return;
+  if (!controls || !select || !prevButton || !nextButton) return;
 
-  const years = payload.years
+  const yearsAscending = payload.years
     .map(y => y.year)
-    .sort((a, b) => b - a);
+    .sort((a, b) => a - b);
+
+  const yearsDescending = [...yearsAscending].reverse();
 
   select.innerHTML = `
     <option value="">Recent years only</option>
-    ${years.map(year => `<option value="${year}">${year}</option>`).join("")}
+    ${yearsDescending.map(year => `<option value="${year}">${year}</option>`).join("")}
   `;
 
-  select.value = "";
+  function currentSelectedYear() {
+    return select.value ? Number(select.value) : null;
+  }
+
+  function updateButtons() {
+    const selectedYear = currentSelectedYear();
+
+    if (!selectedYear) {
+      prevButton.disabled = true;
+      nextButton.disabled = true;
+      return;
+    }
+
+    const index = yearsAscending.indexOf(selectedYear);
+
+    prevButton.disabled = index <= 0;
+    nextButton.disabled = index >= yearsAscending.length - 1;
+  }
+
+  function selectYear(year) {
+    select.value = String(year);
+    buildChart(payload, year);
+    updateButtons();
+  }
 
   select.addEventListener("change", () => {
-    const selectedYear = select.value ? Number(select.value) : null;
+    const selectedYear = currentSelectedYear();
     buildChart(payload, selectedYear);
+    updateButtons();
   });
 
+  prevButton.addEventListener("click", () => {
+    const selectedYear = currentSelectedYear();
+    if (!selectedYear) return;
+
+    const index = yearsAscending.indexOf(selectedYear);
+    if (index > 0) {
+      selectYear(yearsAscending[index - 1]);
+    }
+  });
+
+  nextButton.addEventListener("click", () => {
+    const selectedYear = currentSelectedYear();
+    if (!selectedYear) return;
+
+    const index = yearsAscending.indexOf(selectedYear);
+    if (index < yearsAscending.length - 1) {
+      selectYear(yearsAscending[index + 1]);
+    }
+  });
+
+  select.value = "";
+  updateButtons();
   controls.style.display = "flex";
 }
 

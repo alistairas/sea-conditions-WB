@@ -96,6 +96,28 @@ h1 {
   color: #607d8b;
 }
 
+.year-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: #607d8b;
+}
+
+.year-controls label {
+  font-weight: 650;
+}
+
+.year-controls select {
+  font: inherit;
+  color: #102027;
+  background: #eef5f7;
+  border: 1px solid rgba(96, 125, 139, 0.25);
+  border-radius: 999px;
+  padding: 8px 34px 8px 12px;
+}
+
 @media (max-width: 560px) {
   h1 {
     font-size: 28px;
@@ -118,20 +140,26 @@ h1 {
   <div class="header">
     <div class="eyebrow">North Tyneside coast</div>
     <h1>Sea temperature climate record</h1>
-    <p class="intro">
       <p class="intro">
         Daily 11:00 UTC sea surface temperature sample since 1940, compared with the 1991–2020 average.
         Built as a long-term climate view alongside the local sea-temperature history.
       </p>
  </div>
 
-  <div class="card">
-    <div id="status" class="status">Loading climate record…</div>
-    <div class="chart-wrap" style="display:none;">
-      <canvas id="climateChart"></canvas>
-    </div>
-    <div id="meta" class="meta"></div>
+<div class="card">
+  <div id="status" class="status">Loading climate record…</div>
+
+  <div id="yearControls" class="year-controls" style="display:none;">
+    <label for="yearSelect">Highlight year</label>
+    <select id="yearSelect"></select>
   </div>
+
+  <div class="chart-wrap" style="display:none;">
+    <canvas id="climateChart"></canvas>
+  </div>
+
+  <div id="meta" class="meta"></div>
+</div>
 
   <div class="note">
     This chart shows a long-term ERA5 reanalysis view of sea temperature for the North Tyneside coast.
@@ -148,6 +176,9 @@ h1 {
 
 <script>
 const DATA_URL = "data/nt_era5_sst_climate.json";
+
+let climateChart = null;
+let climatePayload = null;
 
 function monthLabelFromDoy(doy) {
   const months = [
@@ -191,14 +222,20 @@ function latestYearInData(payload) {
   return Math.max(...payload.years.map(y => y.year));
 }
 
-function recentHighlightYears(payload) {
+function recentHighlightYears(payload, selectedYear = null) {
   const maxYear = latestYearInData(payload);
-  return [maxYear - 3, maxYear - 2, maxYear - 1, maxYear];
+  const years = [maxYear - 3, maxYear - 2, maxYear - 1, maxYear];
+
+  if (selectedYear && !years.includes(selectedYear)) {
+    years.unshift(selectedYear);
+  }
+
+  return years;
 }
 
-function buildDatasets(payload) {
+function buildDatasets(payload, selectedYear = null) {
   const latestYear = latestYearInData(payload);
-  const highlightYears = recentHighlightYears(payload);
+  const highlightYears = recentHighlightYears(payload, selectedYear);
 
   const datasets = [];
 
@@ -206,10 +243,10 @@ function buildDatasets(payload) {
   payload.years.forEach(yearObj => {
     if (!highlightYears.includes(yearObj.year)) {
       datasets.push(makeSeries(yearObj, {
-        borderColor: "rgba(120, 144, 156, 0.16)",
+        borderColor: "rgba(120, 144, 156, 0.14)",
         borderWidth: 1,
         pointHoverRadius: 0,
-        order: 4
+        order: 5
       }));
     }
   });
@@ -231,7 +268,6 @@ function buildDatasets(payload) {
     order: 2
   });
 
-  // Recent years
   const highlightStyles = {
     [latestYear - 3]: "rgba(0, 121, 107, 0.75)",
     [latestYear - 2]: "rgba(2, 119, 189, 0.75)",
@@ -240,25 +276,34 @@ function buildDatasets(payload) {
   };
 
   payload.years.forEach(yearObj => {
-    if (highlightYears.includes(yearObj.year)) {
-      datasets.push(makeSeries(yearObj, {
-        borderColor: highlightStyles[yearObj.year],
-        borderWidth: yearObj.year === latestYear ? 3 : 2,
-        pointHoverRadius: 4,
-        order: yearObj.year === latestYear ? 0 : 1
-      }));
-    }
+    if (!highlightYears.includes(yearObj.year)) return;
+
+    const isSelected = selectedYear && yearObj.year === selectedYear;
+    const isLatest = yearObj.year === latestYear;
+
+    datasets.push(makeSeries(yearObj, {
+      borderColor: isSelected
+        ? "rgba(123, 31, 162, 0.95)"
+        : highlightStyles[yearObj.year] || "rgba(0, 96, 100, 0.85)",
+      borderWidth: isSelected ? 4 : (isLatest ? 3 : 2),
+      pointHoverRadius: 4,
+      order: isSelected ? 0 : (isLatest ? 1 : 2)
+    }));
   });
 
   return datasets;
 }
 
-function buildChart(payload) {
+function buildChart(payload, selectedYear = null) {
   const ctx = document.getElementById("climateChart");
 
-  const datasets = buildDatasets(payload);
+  const datasets = buildDatasets(payload, selectedYear);
 
-  return new Chart(ctx, {
+  if (climateChart) {
+    climateChart.destroy();
+  }
+
+  climateChart = new Chart(ctx, {
     type: "line",
     data: { datasets },
     options: {
@@ -274,9 +319,11 @@ function buildChart(payload) {
           labels: {
             filter: item => {
               const label = item.text;
+              const highlighted = recentHighlightYears(payload, selectedYear).map(String);
+
               return (
                 label.includes("average") ||
-                recentHighlightYears(payload).map(String).includes(label)
+                highlighted.includes(label)
               );
             },
             usePointStyle: true,
@@ -287,13 +334,13 @@ function buildChart(payload) {
           callbacks: {
             title: items => {
               const raw = items[0].raw;
-            
+
               if (!raw.date) {
                 return "Day " + raw.x;
               }
-            
+
               const d = new Date(raw.date + "T00:00:00Z");
-            
+
               return d.toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
@@ -334,7 +381,7 @@ function buildChart(payload) {
                 182: "Jul",
                 274: "Oct"
               };
-        
+
               return labels[Math.round(value)] || "";
             }
           },
@@ -357,6 +404,33 @@ function buildChart(payload) {
       }
     }
   });
+
+  return climateChart;
+}
+
+function setupYearSelector(payload) {
+  const controls = document.getElementById("yearControls");
+  const select = document.getElementById("yearSelect");
+
+  if (!controls || !select) return;
+
+  const years = payload.years
+    .map(y => y.year)
+    .sort((a, b) => b - a);
+
+  select.innerHTML = `
+    <option value="">Recent years only</option>
+    ${years.map(year => `<option value="${year}">${year}</option>`).join("")}
+  `;
+
+  select.value = "";
+
+  select.addEventListener("change", () => {
+    const selectedYear = select.value ? Number(select.value) : null;
+    buildChart(payload, selectedYear);
+  });
+
+  controls.style.display = "flex";
 }
 
 async function init() {
@@ -391,6 +465,8 @@ async function init() {
       throw new Error("JSON loaded, but average_1991_2020 is empty");
     }
 
+    climatePayload = payload;
+    setupYearSelector(payload);
     buildChart(payload);
 
     status.style.display = "none";

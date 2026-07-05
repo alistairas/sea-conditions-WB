@@ -120,56 +120,63 @@ print(f"Requesting from {start} to {end}", flush=True)
 
 OUT_DIR.mkdir(exist_ok=True)
 
-print("Starting Copernicus subset request...", flush=True)
+print("Starting Copernicus daily subset requests...", flush=True)
 
-for attempt in range(1, 4):
+downloaded_files = []
+
+request_dates = [
+    start + timedelta(days=i)
+    for i in range((end - start).days + 1)
+]
+
+for request_date in request_dates:
+    day_file = f"psc_sst_{request_date}.nc"
+
     try:
-        print(f"Copernicus subset attempt {attempt}/3", flush=True)
+        print(f"Requesting Copernicus date {request_date}", flush=True)
 
-        result = copernicusmarine.subset(
+        copernicusmarine.subset(
             dataset_id=DATASET_ID,
             variables=[VARIABLE, "analysis_error"],
             minimum_longitude=MIN_LON,
             maximum_longitude=MAX_LON,
             minimum_latitude=MIN_LAT,
             maximum_latitude=MAX_LAT,
-            start_datetime=f"{start}T00:00:00",
-            end_datetime=f"{end}T23:59:59",
+            start_datetime=f"{request_date}T00:00:00",
+            end_datetime=f"{request_date}T23:59:59",
             username=username,
             password=password,
             output_directory=str(OUT_DIR),
-            output_filename=OUT_FILE,
+            output_filename=day_file,
             overwrite=True,
             disable_progress_bar=True,
         )
 
-        print("Subset complete", flush=True)
-        break
+        downloaded_files.append(OUT_DIR / day_file)
+        print(f"Downloaded {request_date}", flush=True)
 
     except Exception as e:
-        print(f"Copernicus subset attempt {attempt} failed: {e}", flush=True)
+        print(f"Copernicus failed for {request_date}: {e}", flush=True)
 
-        if attempt == 3:
-            print("Copernicus unavailable after 3 attempts. Keeping previous SST data.", flush=True)
-        
-            try:
-                with open("data.json", "r") as f:
-                    data = json.load(f)
-        
-                data["updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-                data["sst_status"] = "stale_copernicus_unavailable"
-        
-                with open("data.json", "w") as f:
-                    json.dump(data, f, indent=2)
-        
-            except Exception as fallback_error:
-                print(f"Could not preserve previous SST data: {fallback_error}", flush=True)
-        
-            raise SystemExit(0)
+if not downloaded_files:
+    print("No Copernicus files downloaded. Keeping previous SST data.", flush=True)
 
-        time.sleep(60)
+    try:
+        with open("data.json", "r") as f:
+            data = json.load(f)
 
-ds = xr.open_dataset(OUT_DIR / OUT_FILE)
+        data["updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        data["sst_status"] = "stale_copernicus_unavailable"
+
+        with open("data.json", "w") as f:
+            json.dump(data, f, indent=2)
+
+    except Exception as fallback_error:
+        print(f"Could not preserve previous SST data: {fallback_error}", flush=True)
+
+    raise SystemExit(0)
+
+ds = xr.open_mfdataset(downloaded_files, combine="by_coords")
 print(ds["time"].values, flush=True)
 print("Latitudes:", ds.latitude.values, flush=True)
 print("Longitudes:", ds.longitude.values, flush=True)

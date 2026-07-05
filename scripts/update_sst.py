@@ -114,7 +114,7 @@ password = os.environ["COPERNICUS_PASSWORD"]
 print("Credentials found", flush=True)
 
 end = datetime.now(timezone.utc).date() - timedelta(days=2)
-start = end
+start = end - timedelta(days=4)
 
 print(f"Requesting from {start} to {end}", flush=True)
 
@@ -150,7 +150,22 @@ for attempt in range(1, 4):
         print(f"Copernicus subset attempt {attempt} failed: {e}", flush=True)
 
         if attempt == 3:
-            raise
+            print("Copernicus unavailable after 3 attempts. Keeping previous SST data.", flush=True)
+        
+            try:
+                with open("data.json", "r") as f:
+                    data = json.load(f)
+        
+                data["updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+                data["sst_status"] = "stale_copernicus_unavailable"
+        
+                with open("data.json", "w") as f:
+                    json.dump(data, f, indent=2)
+        
+            except Exception as fallback_error:
+                print(f"Could not preserve previous SST data: {fallback_error}", flush=True)
+        
+            raise SystemExit(0)
 
         time.sleep(60)
 
@@ -159,24 +174,57 @@ print(ds["time"].values, flush=True)
 print("Latitudes:", ds.latitude.values, flush=True)
 print("Longitudes:", ds.longitude.values, flush=True)
 
-sst = ds[VARIABLE].isel(time=-1)
-nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")
-print("Requested sample:", LAT, LON, flush=True)
-print("Selected OSTIA cell:", float(nearest["latitude"].values), float(nearest["longitude"].values), flush=True)
-sst_kelvin = float(nearest.values)
-sst_c = round(sst_kelvin - 273.15, 1)
-error = ds["analysis_error"].isel(time=-1)
-nearest_error = error.sel(latitude=LAT, longitude=LON, method="nearest")
-error_c = round(float(nearest_error.values), 1)
-#sst_prev = ds[VARIABLE].isel(time=-2)
-#nearest_prev = sst_prev.sel(latitude=LAT, longitude=LON, method="nearest")
-#sst_prev_c = round(float(nearest_prev.values) - 273.15, 1)
-#temp_change = round(sst_c - sst_prev_c, 1)
+history = []
 
-sst_time = str(ds["time"].values[-1])[:10]
-actual_lat = float(nearest["latitude"].values)
-actual_lon = float(nearest["longitude"].values)
+try:
+    with open("history.json", "r") as f:
+        history = json.load(f)
+except:
+    pass
 
+history_by_date = {h["date"]: h for h in history}
+
+latest_record = None
+
+for t in ds["time"].values:
+    sst = ds[VARIABLE].sel(time=t)
+    nearest = sst.sel(latitude=LAT, longitude=LON, method="nearest")
+
+    error = ds["analysis_error"].sel(time=t)
+    nearest_error = error.sel(latitude=LAT, longitude=LON, method="nearest")
+
+    sst_kelvin = float(nearest.values)
+    sst_c = round(sst_kelvin - 273.15, 1)
+    error_c = round(float(nearest_error.values), 1)
+
+    sst_time = str(t)[:10]
+    actual_lat = float(nearest["latitude"].values)
+    actual_lon = float(nearest["longitude"].values)
+
+    history_by_date[sst_time] = {
+        "date": sst_time,
+        "sea_temp_c": sst_c
+    }
+
+    latest_record = {
+        "date": sst_time,
+        "sea_temp_c": sst_c,
+        "analysis_error_c": error_c,
+        "actual_pixel_lat": actual_lat,
+        "actual_pixel_lon": actual_lon
+    }
+
+history = sorted(history_by_date.values(), key=lambda x: x["date"])[-365:]
+
+if latest_record is None:
+    print("No SST records returned from Copernicus.", flush=True)
+    raise SystemExit(0)
+
+sst_time = latest_record["date"]
+sst_c = latest_record["sea_temp_c"]
+error_c = latest_record["analysis_error_c"]
+actual_lat = latest_record["actual_pixel_lat"]
+actual_lon = latest_record["actual_pixel_lon"]
 data = {
     "version": 1,
     "sea_temp_c": sst_c,
@@ -207,30 +255,15 @@ data = {
     "wind_direction": compass_direction(current["wind_direction_10m"]) if current["wind_direction_10m"] is not None else None
 }
 
-history = []
-
-try:
-    with open("history.json", "r") as f:
-        history = json.load(f)
-except:
-    pass
-
-history = [h for h in history if h["date"] != sst_time]
-
 temp_change = None
 
-if len(history) > 0:
-    previous_temp = history[-1]["sea_temp_c"]
+previous_records = [h for h in history if h["date"] < sst_time]
+
+if previous_records:
+    previous_temp = previous_records[-1]["sea_temp_c"]
     temp_change = round(sst_c - previous_temp, 1)
 
 data["temp_change_24h"] = temp_change
-
-history.append({
-    "date": sst_time,
-    "sea_temp_c": sst_c
-})
-
-history = history[-365:]
 
 with open("history.json", "w") as f:
     json.dump(history, f, indent=2)

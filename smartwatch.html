@@ -65,12 +65,12 @@ a {
 <h2>Dataset overview</h2>
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
-<tr><td>Raw water temperature observations</td><td>5,546</td></tr>
-<tr><td>Observation period</td><td>2025-02-14 to 2026-07-05</td></tr>
-<tr><td>Sessions using 30-minute gap rule</td><td>261</td></tr>
+<tr><td>Raw water temperature observations</td><td>5,501</td></tr>
+<tr><td>Observation period</td><td>2025-02-14 to 2026-07-07</td></tr>
+<tr><td>Sessions using 30-minute gap rule</td><td>260</td></tr>
 <tr><td>Single-observation sessions</td><td>134</td></tr>
 <tr><td>Short sessions, 2–4 readings</td><td>12</td></tr>
-<tr><td>Continuous sessions, 5+ readings</td><td>115</td></tr>
+<tr><td>Continuous sessions, 5+ readings</td><td>114</td></tr>
 </table>
 </div>
 
@@ -78,9 +78,9 @@ a {
 <h2>Key findings</h2>
 
 <ul>
-<li><strong>5,546</strong> smartwatch water temperature observations were analysed.</li>
-<li>These observations formed <strong>261</strong> swim sessions using a 30-minute gap rule.</li>
-<li><strong>115 sessions (44.1%)</strong> contained five or more readings and provide sufficient observations to investigate stable temperature plateau detection. </li>
+<li><strong>5,501</strong> smartwatch water temperature observations were analysed.</li>
+<li>These observations formed <strong>260</strong> swim sessions using a 30-minute gap rule.</li>
+<li><strong>114 sessions (43.8%)</strong> contained five or more readings and provide sufficient observations to investigate stable temperature plateau detection. </li>
 <li>The median sampling interval was <strong>17.0 seconds</strong>, providing high temporal resolution within sessions.</li>
 <li>The data support deriving <strong>one representative temperature per swim session</strong>, rather than treating observations as independent temperature measurements.</li>
 </ul>
@@ -88,8 +88,8 @@ a {
 <table>
 <tr><th>Finding</th><th>Value</th></tr>
 <tr><td>Average readings per session</td><td>21.2</td></tr>
-<tr><td>Readings ≥20°C</td><td>342 (6.2%)</td></tr>
-<tr><td>Readings ≥25°C</td><td>146 (2.6%)</td></tr>
+<tr><td>Readings ≥20°C</td><td>340 (6.2%)</td></tr>
+<tr><td>Readings ≥25°C</td><td>144 (2.6%)</td></tr>
 </table>
 
 </div>
@@ -101,8 +101,8 @@ a {
 <tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Minimum recorded temperature</td><td>5.46°C</td></tr>
 <tr><td>Maximum recorded temperature</td><td>41.97°C</td></tr>
-<tr><td>Readings ≥20°C</td><td>342</td></tr>
-<tr><td>Readings ≥25°C</td><td>146</td></tr>
+<tr><td>Readings ≥20°C</td><td>340</td></tr>
+<tr><td>Readings ≥25°C</td><td>144</td></tr>
 </table>
 <img src="reports/charts/raw_temperature_observations.png" alt="Raw smartwatch water temperature observations">
 </div>
@@ -112,7 +112,7 @@ a {
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Median sampling interval</td><td>17.0 seconds</td></tr>
-<tr><td>Within-session intervals</td><td>5,285</td></tr>
+<tr><td>Within-session intervals</td><td>5,241</td></tr>
 </table>
 <img src="reports/charts/sampling_intervals.png" alt="Sampling interval distribution">
 </div>
@@ -123,8 +123,8 @@ a {
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Median duration</td><td>0.0 minutes</td></tr>
-<tr><td>75th percentile</td><td>16.7 minutes</td></tr>
-<tr><td>95th percentile</td><td>27.1 minutes</td></tr>
+<tr><td>75th percentile</td><td>16.4 minutes</td></tr>
+<tr><td>95th percentile</td><td>27.2 minutes</td></tr>
 </table>
 
 <img src="reports/charts/session_durations.png" alt="Session duration distribution">
@@ -168,14 +168,14 @@ above are excluded before this analysis.
 
 <table>
 <tr><th>Metric</th><th>Value</th></tr>
-<tr><td>Sessions analysed for stability</td><td>112</td></tr>
-<tr><td>Sessions with provisional stable window</td><td>87 (77.7%)</td></tr>
+<tr><td>Sessions analysed for stability</td><td>111</td></tr>
+<tr><td>Sessions with provisional stable window</td><td>86 (77.5%)</td></tr>
 <tr><td>Median time to first stable window</td><td>4.2 minutes</td></tr>
 <tr><td>75th percentile time to stability</td><td>6.8 minutes</td></tr>
-<tr><td>90th percentile time to stability</td><td>10.0 minutes</td></tr>
+<tr><td>90th percentile time to stability</td><td>10.1 minutes</td></tr>
 <tr><td>Median rolling 5-reading range</td><td>0.40°C</td></tr>
-<tr><td>75th percentile rolling range</td><td>0.88°C</td></tr>
-<tr><td>90th percentile rolling range</td><td>1.98°C</td></tr>
+<tr><td>75th percentile rolling range</td><td>0.89°C</td></tr>
+<tr><td>90th percentile rolling range</td><td>2.00°C</td></tr>
 </table>
 
 <img src="reports/charts/first_stable_minute.png" alt="Time to first stable temperature window">

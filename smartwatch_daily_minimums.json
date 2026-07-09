@@ -3856,54 +3856,6 @@
     }
   },
   {
-    "date": "2026-06-29",
-    "temperature": {
-      "representative_c": null,
-      "minimum_c": 12.81
-    },
-    "method": "daily_minimum",
-    "confidence": "low",
-    "source": {
-      "device": "smartwatch",
-      "sessions": 1,
-      "observations": 57,
-      "first_observation": "14:40",
-      "last_observation": "15:04"
-    }
-  },
-  {
-    "date": "2026-06-30",
-    "temperature": {
-      "representative_c": null,
-      "minimum_c": 11.38
-    },
-    "method": "daily_minimum",
-    "confidence": "low",
-    "source": {
-      "device": "smartwatch",
-      "sessions": 1,
-      "observations": 66,
-      "first_observation": "11:25",
-      "last_observation": "11:43"
-    }
-  },
-  {
-    "date": "2026-07-01",
-    "temperature": {
-      "representative_c": null,
-      "minimum_c": 12.98
-    },
-    "method": "daily_minimum",
-    "confidence": "low",
-    "source": {
-      "device": "smartwatch",
-      "sessions": 1,
-      "observations": 77,
-      "first_observation": "19:02",
-      "last_observation": "19:33"
-    }
-  },
-  {
     "date": "2026-07-03",
     "temperature": {
       "representative_c": null,
@@ -3949,6 +3901,38 @@
       "observations": 67,
       "first_observation": "11:36",
       "last_observation": "11:56"
+    }
+  },
+  {
+    "date": "2026-07-06",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 9.88
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 112,
+      "first_observation": "09:23",
+      "last_observation": "09:55"
+    }
+  },
+  {
+    "date": "2026-07-07",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 13.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 43,
+      "first_observation": "20:21",
+      "last_observation": "20:35"
     }
   }
 ]

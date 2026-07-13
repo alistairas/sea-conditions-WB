@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime
 
 HISTORIC_FILE = Path("water_temperatures.csv")
+EXISTING_RAW_FILE = Path("data/apple_health_water_temperature_raw.csv")
 RECENT_FILE = Path("data/apple_health_water_temperature_recent.csv")
 OUTPUT_FILE = Path("data/apple_health_water_temperature_raw.csv")
 
@@ -16,10 +17,7 @@ def normalise_source(source):
         return ""
 
     source = source.strip()
-
-    # Normalise curly apostrophe to straight apostrophe for consistency.
     source = source.replace("’", "'")
-
     return source
 
 
@@ -39,7 +37,12 @@ def read_csv_rows(path, input_label):
         reader.fieldnames = [clean_header(h) for h in reader.fieldnames]
 
         for row in reader:
-            row = {clean_header(k): (v.strip() if isinstance(v, str) else v) for k, v in row.items()}
+            row = {
+                clean_header(k): (
+                    v.strip() if isinstance(v, str) else v
+                )
+                for k, v in row.items()
+            }
 
             date = row.get("Date", "")
             time = row.get("Time", "")
@@ -55,9 +58,11 @@ def read_csv_rows(path, input_label):
                 print(f"Skipping invalid temperature in {path}: {temp_raw}")
                 continue
 
-            # Validate timestamp enough to sort safely.
             try:
-                timestamp = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M:%S")
+                timestamp = datetime.strptime(
+                    f"{date} {time}",
+                    "%Y-%m-%d %H:%M:%S"
+                )
             except ValueError:
                 print(f"Skipping invalid timestamp in {path}: {date} {time}")
                 continue
@@ -74,20 +79,25 @@ def read_csv_rows(path, input_label):
     return rows
 
 
-def merge_rows(historic_rows, recent_rows):
+def merge_rows(*row_groups):
     merged = {}
 
-    # Read historic first, then recent. If the same Date+Time+Temperature appears
-    # in both, prefer the recent row because it may have a more specific Source.
-    for row in historic_rows + recent_rows:
-        key = (
-            row["Date"],
-            row["Time"],
-            row["Temperature"],
-        )
-        merged[key] = row
+    # Order matters:
+    # historic first, then existing cumulative file, then newest Shortcut data.
+    # Later rows replace earlier duplicates.
+    for rows in row_groups:
+        for row in rows:
+            key = (
+                row["Date"],
+                row["Time"],
+                row["Temperature"],
+            )
+            merged[key] = row
 
-    return sorted(merged.values(), key=lambda r: r["_timestamp"])
+    return sorted(
+        merged.values(),
+        key=lambda r: r["_timestamp"]
+    )
 
 
 def write_output(rows):
@@ -109,12 +119,18 @@ def write_output(rows):
 
 def main():
     historic_rows = read_csv_rows(HISTORIC_FILE, "historic")
+    existing_rows = read_csv_rows(EXISTING_RAW_FILE, "existing_raw")
     recent_rows = read_csv_rows(RECENT_FILE, "recent")
 
     print(f"Historic rows read: {len(historic_rows)}")
+    print(f"Existing cumulative rows read: {len(existing_rows)}")
     print(f"Recent rows read: {len(recent_rows)}")
 
-    merged_rows = merge_rows(historic_rows, recent_rows)
+    merged_rows = merge_rows(
+        historic_rows,
+        existing_rows,
+        recent_rows,
+    )
 
     print(f"Merged rows written: {len(merged_rows)}")
 

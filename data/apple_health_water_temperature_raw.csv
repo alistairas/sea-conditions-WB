@@ -5081,53 +5081,268 @@ Date,Time,Temperature,Source
 2026-06-24,09:49:10,13.79,Alistair's Apple Watch
 2026-06-24,09:49:27,14.09,Alistair's Apple Watch
 2026-06-24,09:49:42,14.09,Alistair's Apple Watch
-2026-06-25,05:19:51,25.11,Alistair's Apple Watch
-2026-06-25,05:19:53,10.91,Alistair's Apple Watch
-2026-06-25,05:20:33,13.49,Alistair's Apple Watch
-2026-06-25,05:20:49,13.49,Alistair's Apple Watch
-2026-06-25,05:21:04,13.49,Alistair's Apple Watch
-2026-06-25,05:21:21,13.39,Alistair's Apple Watch
-2026-06-25,05:21:37,13.39,Alistair's Apple Watch
-2026-06-25,05:21:58,13.29,Alistair's Apple Watch
-2026-06-25,05:22:13,13.29,Alistair's Apple Watch
-2026-06-25,05:22:31,13.29,Alistair's Apple Watch
-2026-06-25,05:22:51,13.19,Alistair's Apple Watch
-2026-06-25,05:23:06,13.19,Alistair's Apple Watch
-2026-06-25,05:23:22,13.29,Alistair's Apple Watch
-2026-06-25,05:23:38,13.29,Alistair's Apple Watch
-2026-06-25,05:24:01,13.19,Alistair's Apple Watch
-2026-06-25,05:24:26,13.59,Alistair's Apple Watch
-2026-06-25,05:24:41,13.19,Alistair's Apple Watch
-2026-06-25,05:24:59,13.19,Alistair's Apple Watch
-2026-06-25,05:25:17,13.19,Alistair's Apple Watch
-2026-06-25,05:25:34,13.19,Alistair's Apple Watch
-2026-06-25,05:25:52,13.19,Alistair's Apple Watch
-2026-06-25,05:26:08,13.19,Alistair's Apple Watch
-2026-06-25,05:26:31,13.19,Alistair's Apple Watch
-2026-06-25,05:26:47,13.19,Alistair's Apple Watch
-2026-06-25,05:27:03,13.29,Alistair's Apple Watch
-2026-06-25,05:27:30,13.29,Alistair's Apple Watch
-2026-06-25,05:27:47,13.29,Alistair's Apple Watch
-2026-06-25,05:28:04,13.29,Alistair's Apple Watch
-2026-06-25,05:28:23,13.29,Alistair's Apple Watch
-2026-06-25,05:28:38,13.29,Alistair's Apple Watch
-2026-06-25,05:28:53,13.29,Alistair's Apple Watch
-2026-06-25,05:29:11,13.29,Alistair's Apple Watch
-2026-06-25,05:29:27,13.39,Alistair's Apple Watch
-2026-06-25,05:29:56,13.19,Alistair's Apple Watch
-2026-06-25,05:30:23,13.49,Alistair's Apple Watch
-2026-06-25,05:30:38,13.39,Alistair's Apple Watch
-2026-06-25,05:30:53,13.39,Alistair's Apple Watch
-2026-06-25,05:31:10,13.39,Alistair's Apple Watch
-2026-06-25,05:31:27,13.29,Alistair's Apple Watch
-2026-06-25,05:31:47,13.39,Alistair's Apple Watch
-2026-06-25,05:32:02,13.39,Alistair's Apple Watch
-2026-06-25,05:32:18,13.39,Alistair's Apple Watch
-2026-06-25,05:32:34,13.39,Alistair's Apple Watch
-2026-06-25,05:32:51,13.29,Alistair's Apple Watch
-2026-06-25,05:42:08,13.39,Alistair's Apple Watch
-2026-06-25,05:48:54,13.19,Alistair's Apple Watch
-2026-06-25,05:49:42,13.19,Alistair's Apple Watch
+2026-06-25,05:19:51,25.11,Alistair's Apple Watch S10
+2026-06-25,05:19:53,10.91,Alistair's Apple Watch S10
+2026-06-25,05:20:33,13.49,Alistair's Apple Watch S10
+2026-06-25,05:20:49,13.49,Alistair's Apple Watch S10
+2026-06-25,05:21:04,13.49,Alistair's Apple Watch S10
+2026-06-25,05:21:21,13.39,Alistair's Apple Watch S10
+2026-06-25,05:21:37,13.39,Alistair's Apple Watch S10
+2026-06-25,05:21:58,13.29,Alistair's Apple Watch S10
+2026-06-25,05:22:13,13.29,Alistair's Apple Watch S10
+2026-06-25,05:22:31,13.29,Alistair's Apple Watch S10
+2026-06-25,05:22:51,13.19,Alistair's Apple Watch S10
+2026-06-25,05:23:06,13.19,Alistair's Apple Watch S10
+2026-06-25,05:23:22,13.29,Alistair's Apple Watch S10
+2026-06-25,05:23:38,13.29,Alistair's Apple Watch S10
+2026-06-25,05:24:01,13.19,Alistair's Apple Watch S10
+2026-06-25,05:24:26,13.59,Alistair's Apple Watch S10
+2026-06-25,05:24:41,13.19,Alistair's Apple Watch S10
+2026-06-25,05:24:59,13.19,Alistair's Apple Watch S10
+2026-06-25,05:25:17,13.19,Alistair's Apple Watch S10
+2026-06-25,05:25:34,13.19,Alistair's Apple Watch S10
+2026-06-25,05:25:52,13.19,Alistair's Apple Watch S10
+2026-06-25,05:26:08,13.19,Alistair's Apple Watch S10
+2026-06-25,05:26:31,13.19,Alistair's Apple Watch S10
+2026-06-25,05:26:47,13.19,Alistair's Apple Watch S10
+2026-06-25,05:27:03,13.29,Alistair's Apple Watch S10
+2026-06-25,05:27:30,13.29,Alistair's Apple Watch S10
+2026-06-25,05:27:47,13.29,Alistair's Apple Watch S10
+2026-06-25,05:28:04,13.29,Alistair's Apple Watch S10
+2026-06-25,05:28:23,13.29,Alistair's Apple Watch S10
+2026-06-25,05:28:38,13.29,Alistair's Apple Watch S10
+2026-06-25,05:28:53,13.29,Alistair's Apple Watch S10
+2026-06-25,05:29:11,13.29,Alistair's Apple Watch S10
+2026-06-25,05:29:27,13.39,Alistair's Apple Watch S10
+2026-06-25,05:29:56,13.19,Alistair's Apple Watch S10
+2026-06-25,05:30:23,13.49,Alistair's Apple Watch S10
+2026-06-25,05:30:38,13.39,Alistair's Apple Watch S10
+2026-06-25,05:30:53,13.39,Alistair's Apple Watch S10
+2026-06-25,05:31:10,13.39,Alistair's Apple Watch S10
+2026-06-25,05:31:27,13.29,Alistair's Apple Watch S10
+2026-06-25,05:31:47,13.39,Alistair's Apple Watch S10
+2026-06-25,05:32:02,13.39,Alistair's Apple Watch S10
+2026-06-25,05:32:18,13.39,Alistair's Apple Watch S10
+2026-06-25,05:32:34,13.39,Alistair's Apple Watch S10
+2026-06-25,05:32:51,13.29,Alistair's Apple Watch S10
+2026-06-25,05:42:08,13.39,Alistair's Apple Watch S10
+2026-06-25,05:48:54,13.19,Alistair's Apple Watch S10
+2026-06-25,05:49:42,13.19,Alistair's Apple Watch S10
+2026-06-26,10:30:58,23.91,Alistair's Apple Watch S10
+2026-06-26,10:30:58,11.62,Alistair's Apple Watch S10
+2026-06-26,10:31:12,13.59,Alistair's Apple Watch S10
+2026-06-26,10:31:28,13.49,Alistair's Apple Watch S10
+2026-06-26,10:31:43,13.19,Alistair's Apple Watch S10
+2026-06-26,10:32:03,13.09,Alistair's Apple Watch S10
+2026-06-26,10:32:27,13.09,Alistair's Apple Watch S10
+2026-06-26,10:32:45,13.09,Alistair's Apple Watch S10
+2026-06-26,10:33:03,13.09,Alistair's Apple Watch S10
+2026-06-26,10:33:19,13.09,Alistair's Apple Watch S10
+2026-06-26,10:33:37,13.09,Alistair's Apple Watch S10
+2026-06-26,10:33:55,13.19,Alistair's Apple Watch S10
+2026-06-26,10:34:14,13.19,Alistair's Apple Watch S10
+2026-06-26,10:34:38,13.09,Alistair's Apple Watch S10
+2026-06-26,10:34:57,13.09,Alistair's Apple Watch S10
+2026-06-26,10:35:12,13.09,Alistair's Apple Watch S10
+2026-06-26,10:35:29,13.09,Alistair's Apple Watch S10
+2026-06-26,10:35:45,13.19,Alistair's Apple Watch S10
+2026-06-26,10:36:01,13.19,Alistair's Apple Watch S10
+2026-06-26,10:36:18,13.19,Alistair's Apple Watch S10
+2026-06-26,10:36:36,13.19,Alistair's Apple Watch S10
+2026-06-26,10:36:52,13.19,Alistair's Apple Watch S10
+2026-06-26,10:37:08,13.19,Alistair's Apple Watch S10
+2026-06-26,10:37:24,13.09,Alistair's Apple Watch S10
+2026-06-26,10:37:48,13.09,Alistair's Apple Watch S10
+2026-06-26,10:38:08,12.99,Alistair's Apple Watch S10
+2026-06-26,10:38:25,12.99,Alistair's Apple Watch S10
+2026-06-26,10:38:42,12.99,Alistair's Apple Watch S10
+2026-06-26,10:39:01,12.99,Alistair's Apple Watch S10
+2026-06-26,10:39:19,12.99,Alistair's Apple Watch S10
+2026-06-26,10:39:34,12.99,Alistair's Apple Watch S10
+2026-06-26,10:39:51,12.99,Alistair's Apple Watch S10
+2026-06-27,19:53:29,28.71,Alistair's Apple Watch S10
+2026-06-27,19:54:01,13.49,Alistair's Apple Watch S10
+2026-06-27,19:54:17,13.49,Alistair's Apple Watch S10
+2026-06-27,19:54:36,13.59,Alistair's Apple Watch S10
+2026-06-27,19:54:52,13.69,Alistair's Apple Watch S10
+2026-06-27,19:55:09,13.89,Alistair's Apple Watch S10
+2026-06-27,19:55:24,13.59,Alistair's Apple Watch S10
+2026-06-27,19:55:39,13.49,Alistair's Apple Watch S10
+2026-06-27,19:55:57,13.39,Alistair's Apple Watch S10
+2026-06-27,19:56:16,13.29,Alistair's Apple Watch S10
+2026-06-27,19:56:36,13.39,Alistair's Apple Watch S10
+2026-06-27,19:56:55,13.39,Alistair's Apple Watch S10
+2026-06-27,19:57:15,13.29,Alistair's Apple Watch S10
+2026-06-27,19:57:31,13.39,Alistair's Apple Watch S10
+2026-06-27,19:57:49,13.39,Alistair's Apple Watch S10
+2026-06-27,19:58:07,13.49,Alistair's Apple Watch S10
+2026-06-27,19:58:23,13.29,Alistair's Apple Watch S10
+2026-06-27,19:58:38,13.39,Alistair's Apple Watch S10
+2026-06-27,19:58:55,13.39,Alistair's Apple Watch S10
+2026-06-27,19:59:12,13.39,Alistair's Apple Watch S10
+2026-06-27,19:59:28,13.39,Alistair's Apple Watch S10
+2026-06-27,19:59:46,13.49,Alistair's Apple Watch S10
+2026-06-27,20:00:03,13.49,Alistair's Apple Watch S10
+2026-06-27,20:00:22,13.39,Alistair's Apple Watch S10
+2026-06-27,20:00:42,13.79,Alistair's Apple Watch S10
+2026-06-27,20:01:08,13.59,Alistair's Apple Watch S10
+2026-06-27,20:01:24,13.39,Alistair's Apple Watch S10
+2026-06-27,20:01:41,13.39,Alistair's Apple Watch S10
+2026-06-27,20:02:08,13.49,Alistair's Apple Watch S10
+2026-06-27,20:02:24,13.59,Alistair's Apple Watch S10
+2026-06-27,20:02:47,13.59,Alistair's Apple Watch S10
+2026-06-27,20:14:54,13.61,Alistair's Apple Watch S10
+2026-06-27,20:15:10,13.49,Alistair's Apple Watch S10
+2026-06-27,20:15:34,13.69,Alistair's Apple Watch S10
+2026-06-27,20:15:51,13.39,Alistair's Apple Watch S10
+2026-06-27,20:16:09,13.39,Alistair's Apple Watch S10
+2026-06-27,20:16:25,13.39,Alistair's Apple Watch S10
+2026-06-27,20:17:03,13.39,Alistair's Apple Watch S10
+2026-06-27,20:17:19,13.39,Alistair's Apple Watch S10
+2026-06-27,20:17:35,13.39,Alistair's Apple Watch S10
+2026-06-27,20:17:52,13.39,Alistair's Apple Watch S10
+2026-06-27,20:18:10,13.39,Alistair's Apple Watch S10
+2026-06-27,20:18:26,13.39,Alistair's Apple Watch S10
+2026-06-27,20:18:42,13.49,Alistair's Apple Watch S10
+2026-06-28,17:48:05,21.93,Alistair's Apple Watch S10
+2026-06-28,17:48:05,12.8,Alistair's Apple Watch S10
+2026-06-28,17:48:10,13.43,Alistair's Apple Watch S10
+2026-06-28,17:48:26,13.59,Alistair's Apple Watch S10
+2026-06-28,17:48:32,13.09,Alistair's Apple Watch S10
+2026-06-28,17:48:48,12.99,Alistair's Apple Watch S10
+2026-06-28,17:48:56,13.49,Alistair's Apple Watch S10
+2026-06-28,17:49:14,13.31,Alistair's Apple Watch S10
+2026-06-28,17:49:30,13.19,Alistair's Apple Watch S10
+2026-06-28,17:49:47,13.09,Alistair's Apple Watch S10
+2026-06-28,17:50:05,12.99,Alistair's Apple Watch S10
+2026-06-28,17:50:22,12.89,Alistair's Apple Watch S10
+2026-06-28,17:50:39,12.99,Alistair's Apple Watch S10
+2026-06-28,17:50:55,12.99,Alistair's Apple Watch S10
+2026-06-28,17:51:11,12.99,Alistair's Apple Watch S10
+2026-06-28,17:51:27,12.99,Alistair's Apple Watch S10
+2026-06-28,17:51:43,12.89,Alistair's Apple Watch S10
+2026-06-28,17:51:59,12.89,Alistair's Apple Watch S10
+2026-06-28,17:52:14,12.89,Alistair's Apple Watch S10
+2026-06-28,17:52:31,12.89,Alistair's Apple Watch S10
+2026-06-28,17:52:50,12.79,Alistair's Apple Watch S10
+2026-06-28,17:53:06,12.69,Alistair's Apple Watch S10
+2026-06-28,17:53:22,12.69,Alistair's Apple Watch S10
+2026-06-28,17:53:39,12.79,Alistair's Apple Watch S10
+2026-06-28,17:53:55,12.69,Alistair's Apple Watch S10
+2026-06-28,17:54:17,12.69,Alistair's Apple Watch S10
+2026-06-28,17:54:40,12.69,Alistair's Apple Watch S10
+2026-06-28,17:54:56,12.79,Alistair's Apple Watch S10
+2026-06-28,17:55:13,12.79,Alistair's Apple Watch S10
+2026-06-28,17:55:36,12.79,Alistair's Apple Watch S10
+2026-06-28,17:55:55,12.79,Alistair's Apple Watch S10
+2026-06-28,17:56:14,12.79,Alistair's Apple Watch S10
+2026-06-28,17:56:30,12.69,Alistair's Apple Watch S10
+2026-06-28,17:56:46,12.69,Alistair's Apple Watch S10
+2026-06-28,17:57:03,12.79,Alistair's Apple Watch S10
+2026-06-28,17:57:18,12.79,Alistair's Apple Watch S10
+2026-06-28,17:57:33,12.89,Alistair's Apple Watch S10
+2026-06-28,17:57:49,13.09,Alistair's Apple Watch S10
+2026-06-28,17:58:06,13.09,Alistair's Apple Watch S10
+2026-06-28,17:58:21,13.09,Alistair's Apple Watch S10
+2026-06-28,17:58:42,12.99,Alistair's Apple Watch S10
+2026-06-28,17:58:59,12.99,Alistair's Apple Watch S10
+2026-06-28,17:59:17,12.89,Alistair's Apple Watch S10
+2026-06-28,17:59:36,12.89,Alistair's Apple Watch S10
+2026-06-28,17:59:51,12.89,Alistair's Apple Watch S10
+2026-06-28,18:00:08,12.99,Alistair's Apple Watch S10
+2026-06-28,18:00:27,13.19,Alistair's Apple Watch S10
+2026-06-28,18:00:43,13.19,Alistair's Apple Watch S10
+2026-06-28,18:00:59,12.99,Alistair's Apple Watch S10
+2026-06-28,18:01:33,13.09,Alistair's Apple Watch S10
+2026-06-28,18:01:50,13.09,Alistair's Apple Watch S10
+2026-06-28,18:02:10,13.19,Alistair's Apple Watch S10
+2026-06-28,18:02:31,12.99,Alistair's Apple Watch S10
+2026-06-28,18:02:49,12.89,Alistair's Apple Watch S10
+2026-06-28,18:03:04,12.89,Alistair's Apple Watch S10
+2026-06-28,18:03:26,13.09,Alistair's Apple Watch S10
+2026-06-28,18:03:45,12.99,Alistair's Apple Watch S10
+2026-06-28,18:04:02,12.99,Alistair's Apple Watch S10
+2026-06-28,18:04:20,13.09,Alistair's Apple Watch S10
+2026-06-28,18:04:37,13.09,Alistair's Apple Watch S10
+2026-06-28,18:04:55,13.19,Alistair's Apple Watch S10
+2026-06-28,18:05:11,13.09,Alistair's Apple Watch S10
+2026-06-28,18:05:30,13.19,Alistair's Apple Watch S10
+2026-06-28,18:05:46,12.99,Alistair's Apple Watch S10
+2026-06-28,18:06:04,12.99,Alistair's Apple Watch S10
+2026-06-28,18:06:21,12.99,Alistair's Apple Watch S10
+2026-06-28,18:06:37,12.99,Alistair's Apple Watch S10
+2026-06-28,18:06:57,13.09,Alistair's Apple Watch S10
+2026-06-28,18:07:12,13.09,Alistair's Apple Watch S10
+2026-06-28,18:07:27,13.09,Alistair's Apple Watch S10
+2026-06-28,18:07:45,13.09,Alistair's Apple Watch S10
+2026-06-28,18:08:01,13.09,Alistair's Apple Watch S10
+2026-06-28,18:08:16,13.09,Alistair's Apple Watch S10
+2026-06-28,18:08:41,13.29,Alistair's Apple Watch S10
+2026-06-28,18:09:05,13.09,Alistair's Apple Watch S10
+2026-06-28,18:09:21,13.49,Alistair's Apple Watch S10
+2026-06-28,18:09:37,13.49,Alistair's Apple Watch S10
+2026-06-28,18:09:53,13.59,Alistair's Apple Watch S10
+2026-06-28,18:10:09,13.69,Alistair's Apple Watch S10
+2026-06-28,18:10:25,13.39,Alistair's Apple Watch S10
+2026-06-28,18:11:00,13.69,Alistair's Apple Watch S10
+2026-06-28,18:11:19,13.89,Alistair's Apple Watch S10
+2026-06-29,14:40:38,25.78,Alistair's Apple Watch S10
+2026-06-29,14:40:53,13.18,Alistair's Apple Watch S10
+2026-06-29,14:41:09,13.29,Alistair's Apple Watch S10
+2026-06-29,14:41:25,13.19,Alistair's Apple Watch S10
+2026-06-29,14:41:41,13.19,Alistair's Apple Watch S10
+2026-06-29,14:41:56,13.19,Alistair's Apple Watch S10
+2026-06-29,14:42:12,13.19,Alistair's Apple Watch S10
+2026-06-29,14:42:28,13.09,Alistair's Apple Watch S10
+2026-06-29,14:42:44,13.09,Alistair's Apple Watch S10
+2026-06-29,14:43:01,13.09,Alistair's Apple Watch S10
+2026-06-29,14:43:20,12.99,Alistair's Apple Watch S10
+2026-06-29,14:43:37,13.09,Alistair's Apple Watch S10
+2026-06-29,14:43:54,12.99,Alistair's Apple Watch S10
+2026-06-29,14:44:10,12.89,Alistair's Apple Watch S10
+2026-06-29,14:44:26,12.99,Alistair's Apple Watch S10
+2026-06-29,14:44:42,12.99,Alistair's Apple Watch S10
+2026-06-29,14:44:57,12.99,Alistair's Apple Watch S10
+2026-06-29,14:45:15,13.09,Alistair's Apple Watch S10
+2026-06-29,14:45:34,13.09,Alistair's Apple Watch S10
+2026-06-29,14:45:51,13.19,Alistair's Apple Watch S10
+2026-06-29,14:46:06,13.19,Alistair's Apple Watch S10
+2026-06-29,14:46:29,13.09,Alistair's Apple Watch S10
+2026-06-29,14:46:47,13.09,Alistair's Apple Watch S10
+2026-06-29,14:47:02,13.09,Alistair's Apple Watch S10
+2026-06-29,14:47:19,13.09,Alistair's Apple Watch S10
+2026-06-29,14:47:36,13.09,Alistair's Apple Watch S10
+2026-06-29,14:47:52,13.09,Alistair's Apple Watch S10
+2026-06-29,14:48:08,13.09,Alistair's Apple Watch S10
+2026-06-29,14:48:34,13.09,Alistair's Apple Watch S10
+2026-06-29,14:48:50,13.09,Alistair's Apple Watch S10
+2026-06-29,14:49:05,12.99,Alistair's Apple Watch S10
+2026-06-29,14:50:15,13.29,Alistair's Apple Watch S10
+2026-06-29,14:50:34,13.19,Alistair's Apple Watch S10
+2026-06-29,14:50:50,13.09,Alistair's Apple Watch S10
+2026-06-29,14:51:08,13.29,Alistair's Apple Watch S10
+2026-06-29,14:51:25,13.29,Alistair's Apple Watch S10
+2026-06-29,14:51:42,13.29,Alistair's Apple Watch S10
+2026-06-29,14:51:58,13.29,Alistair's Apple Watch S10
+2026-06-29,14:52:26,13.29,Alistair's Apple Watch S10
+2026-06-29,14:52:43,13.19,Alistair's Apple Watch S10
+2026-06-29,14:53:01,13.29,Alistair's Apple Watch S10
+2026-06-29,14:53:18,13.39,Alistair's Apple Watch S10
+2026-06-29,14:53:33,13.39,Alistair's Apple Watch S10
+2026-06-29,14:53:50,13.39,Alistair's Apple Watch S10
+2026-06-29,14:54:09,13.29,Alistair's Apple Watch S10
+2026-06-29,14:55:08,13.09,Alistair's Apple Watch S10
+2026-06-29,14:55:36,13.39,Alistair's Apple Watch S10
+2026-06-29,14:55:51,13.39,Alistair's Apple Watch S10
+2026-06-29,14:56:10,13.39,Alistair's Apple Watch S10
+2026-06-29,14:56:27,13.39,Alistair's Apple Watch S10
+2026-06-29,14:56:56,13.29,Alistair's Apple Watch S10
+2026-06-29,14:57:54,13.09,Alistair's Apple Watch S10
+2026-06-29,15:00:45,12.81,Alistair's Apple Watch S10
+2026-06-29,15:02:04,13.19,Alistair's Apple Watch S10
+2026-06-29,15:03:45,12.91,Alistair's Apple Watch S10
+2026-06-29,15:04:01,13.19,Alistair's Apple Watch S10
+2026-06-29,15:04:18,12.91,Alistair's Apple Watch S10
 2026-07-06,09:23:17,9.88,Alistair's Apple Watch S10
 2026-07-06,09:23:37,13.19,Alistair's Apple Watch S10
 2026-07-06,09:23:53,13.19,Alistair's Apple Watch S10

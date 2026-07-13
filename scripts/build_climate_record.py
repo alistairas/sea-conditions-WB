@@ -278,9 +278,24 @@ def download_year(year: int, client: cdsapi.Client) -> Path | None:
 
     out_file = CACHE_DIR / f"era5_sst_nt_{year}.nc"
 
+    is_partial_year = year == END_DATE.year
+
     if out_file.exists() and out_file.stat().st_size > 0:
-        print(f"Using cached file for {year}: {out_file}", flush=True)
-        return out_file
+        if not is_partial_year:
+            print(f"Using cached file for {year}: {out_file}", flush=True)
+            return out_file
+    
+        print(
+            f"Refreshing cached partial-year file for {year}: {out_file}",
+            flush=True
+        )
+    
+        try:
+            out_file.unlink()
+        except OSError as e:
+            raise RuntimeError(
+                f"Could not remove stale partial-year cache file: {out_file}"
+            ) from e
 
     request = {
         "product_type": ["reanalysis"],

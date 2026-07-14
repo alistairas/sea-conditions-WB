@@ -673,7 +673,8 @@ async function init() {
     meta.innerHTML = `
       Source: ERA5 hourly sea surface temperature data from the Copernicus Climate Data Store.
       Method: one 11:00 UTC sample per day, averaged across a North Tyneside coastal grid box.
-      Baseline: ${payload.baseline}. Updated: ${payload.created}.
+      Comparison: daily temperatures are compared with the average for the same date during ${payload.baseline}.
+      Updated: ${payload.created}.
     `;
   } catch (error) {
     console.error(error);

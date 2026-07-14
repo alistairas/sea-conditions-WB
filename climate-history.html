@@ -282,53 +282,43 @@ function latestYearInData(payload) {
   return Math.max(...payload.years.map(y => y.year));
 }
 
-function recentHighlightYears(payload, selectedYear = null) {
-  const maxYear = latestYearInData(payload);
-  const years = [maxYear - 3, maxYear - 2, maxYear - 1, maxYear];
-
-  if (selectedYear && !years.includes(selectedYear)) {
-    years.unshift(selectedYear);
+function colourForYear(year, latestYear, selectedYear = null) {
+  if (year === latestYear) {
+    return "rgba(198, 40, 40, 0.95)";
   }
 
-  return years;
-}
-
-function colourForYear(year, latestYear, selectedYear = null) {
   if (selectedYear && year === selectedYear) {
     return "rgba(123, 31, 162, 0.95)";
   }
 
-  const highlightStyles = {
-    [latestYear - 3]: "rgba(0, 121, 107, 0.75)",
-    [latestYear - 2]: "rgba(2, 119, 189, 0.75)",
-    [latestYear - 1]: "rgba(251, 140, 0, 0.80)",
-    [latestYear]: "rgba(198, 40, 40, 0.95)"
-  };
-
-  return highlightStyles[year] || "rgba(0, 96, 100, 0.85)";
+  return "rgba(120, 144, 156, 0.14)";
 }
 
 function buildDatasets(payload, selectedYear = null) {
   const latestYear = latestYearInData(payload);
-  const highlightYears = recentHighlightYears(payload, selectedYear);
-
   const datasets = [];
 
-  // Older years: pale grey traces
+  // All years except the current and selected year:
+  // retain as pale-grey historical traces.
   payload.years.forEach(yearObj => {
-    if (!highlightYears.includes(yearObj.year)) {
-      datasets.push(makeSeries(yearObj, {
-        borderColor: "rgba(120, 144, 156, 0.14)",
-        borderWidth: 1,
-        pointHoverRadius: 0,
-        order: 5
-      }));
+    const isLatest = yearObj.year === latestYear;
+    const isSelected = selectedYear && yearObj.year === selectedYear;
+
+    if (isLatest || isSelected) {
+      return;
     }
+
+    datasets.push(makeSeries(yearObj, {
+      borderColor: "rgba(120, 144, 156, 0.14)",
+      borderWidth: 1,
+      pointHoverRadius: 0,
+      order: 5
+    }));
   });
 
-  // Baseline average
+  // 1991-2020 baseline average.
   datasets.push({
-    label: payload.baseline + " average",
+    label: `${payload.baseline} average`,
     data: payload.average_1991_2020.map(v => ({
       x: v.doy,
       y: v.sst_c
@@ -343,19 +333,44 @@ function buildDatasets(payload, selectedYear = null) {
     order: 2
   });
 
-  payload.years.forEach(yearObj => {
-    if (!highlightYears.includes(yearObj.year)) return;
+  // Selected historical year.
+  // Do not add separately when the selected year is the current year.
+  if (selectedYear && selectedYear !== latestYear) {
+    const selectedYearObj = payload.years.find(
+      yearObj => yearObj.year === selectedYear
+    );
 
-    const isSelected = selectedYear && yearObj.year === selectedYear;
-    const isLatest = yearObj.year === latestYear;
+    if (selectedYearObj) {
+      datasets.push(makeSeries(selectedYearObj, {
+        borderColor: colourForYear(
+          selectedYearObj.year,
+          latestYear,
+          selectedYear
+        ),
+        borderWidth: 4,
+        pointHoverRadius: 4,
+        order: 0
+      }));
+    }
+  }
 
-    datasets.push(makeSeries(yearObj, {
-      borderColor: colourForYear(yearObj.year, latestYear, selectedYear),
-      borderWidth: isSelected ? 4 : (isLatest ? 3 : 2),
+  // Current year is always shown and always uses the current-year colour.
+  const latestYearObj = payload.years.find(
+    yearObj => yearObj.year === latestYear
+  );
+
+  if (latestYearObj) {
+    datasets.push(makeSeries(latestYearObj, {
+      borderColor: colourForYear(
+        latestYearObj.year,
+        latestYear,
+        selectedYear
+      ),
+      borderWidth: 3,
       pointHoverRadius: 4,
-      order: isSelected ? 0 : (isLatest ? 1 : 2)
+      order: 1
     }));
-  });
+  }
 
   return datasets;
 }
@@ -468,25 +483,47 @@ function renderCustomLegend(payload, selectedYear = null) {
   if (!legend) return;
 
   const latestYear = latestYearInData(payload);
-  const years = recentHighlightYears(payload, selectedYear);
 
-  const yearItems = years
-    .sort((a, b) => a - b)
-    .map(year => {
-      const colour = colourForYear(year, latestYear, selectedYear);
-      const selectedClass = selectedYear && year === selectedYear ? "legend-selected" : "";
+  const currentYearItem = `
+    <span class="legend-item">
+      <span
+        class="legend-dot"
+        style="background:${colourForYear(latestYear, latestYear, selectedYear)};"
+      ></span>
+      ${latestYear}
+    </span>
+  `;
 
-      return `
+  const selectedYearItem =
+    selectedYear && selectedYear !== latestYear
+      ? `
         <span class="legend-item">
-          <span class="legend-dot ${selectedClass}" style="background:${colour};"></span>
-          ${year}
+          <span
+            class="legend-dot legend-selected"
+            style="background:${colourForYear(
+              selectedYear,
+              latestYear,
+              selectedYear
+            )};"
+          ></span>
+          ${selectedYear}
         </span>
-      `;
-    })
-    .join("");
+      `
+      : "";
 
   legend.innerHTML = `
-    ${yearItems}
+    ${currentYearItem}
+    ${selectedYearItem}
+
+    <span class="legend-item">
+      <span
+        class="legend-dot"
+        style="background:rgba(120, 144, 156, 0.14);
+               border:1px solid rgba(120, 144, 156, 0.35);"
+      ></span>
+      Other years since ${payload.start_year || 1940}
+    </span>
+
     <span class="legend-item">
       <span class="legend-line"></span>
       ${payload.baseline} average
@@ -509,7 +546,7 @@ function setupYearSelector(payload) {
   const yearsDescending = [...yearsAscending].reverse();
 
   select.innerHTML = `
-    <option value="">Recent years only</option>
+    <option value="">Current year only</option>
     ${yearsDescending.map(year => `<option value="${year}">${year}</option>`).join("")}
   `;
 

@@ -756,18 +756,13 @@ function buildYearToDateHeadline(ytd) {
     return null;
   }
 
-  const dateText = formatClimateDate(ytd.to_date);
-
   if (ytd.rank === 1) {
-    return (
-      `So far, ${ytd.year} is the warmest year in the record ` +
-      `to ${dateText}.`
-    );
+    return `So far, ${ytd.year} is the warmest year in the record.`;
   }
 
   return (
     `So far, ${ytd.year} is the ${ordinal(ytd.rank)} warmest year ` +
-    `in the record to ${dateText}.`
+    `in the record.`
   );
 }
 

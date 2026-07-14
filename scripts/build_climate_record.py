@@ -472,17 +472,30 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
     ytd_by_year["warmest_rank"] = range(1, len(ytd_by_year) + 1)
 
     latest_ytd = ytd_by_year[ytd_by_year["year"] == latest_year]
-
+    
     if latest_ytd.empty:
         ytd_summary = None
     else:
         row = latest_ytd.iloc[0]
+        latest_rank = int(row["warmest_rank"])
+    
+        warmer_years = ytd_by_year[
+            ytd_by_year["warmest_rank"] < latest_rank
+        ].copy()
+    
         ytd_summary = {
             "year": latest_year,
             "to_date": latest_date.date().isoformat(),
             "mean_sst_c": round(float(row["mean_sst_c"]), 2),
-            "rank": int(row["warmest_rank"]),
+            "rank": latest_rank,
             "out_of": int(len(ytd_by_year)),
+            "warmer_years": [
+                {
+                    "year": int(warmer_row["year"]),
+                    "mean_sst_c": round(float(warmer_row["mean_sst_c"]), 2),
+                }
+                for _, warmer_row in warmer_years.iterrows()
+            ],
         }
 
     # Month-to-date rank:

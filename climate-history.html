@@ -717,22 +717,124 @@ function monthName(monthNumber) {
     });
 }
 
-function temperatureDifferenceText(difference) {
+function joinYearList(years) {
+  if (!years.length) {
+    return "";
+  }
+
+  if (years.length === 1) {
+    return String(years[0]);
+  }
+
+  if (years.length === 2) {
+    return `${years[0]} and ${years[1]}`;
+  }
+
+  return `${years.slice(0, -1).join(", ")} and ${years[years.length - 1]}`;
+}
+
+function anomalyDescription(difference) {
   if (difference === null || difference === undefined) {
     return null;
   }
 
-  const absoluteDifference = Math.abs(difference).toFixed(2);
+  const absoluteDifference = Math.abs(Number(difference));
 
-  if (difference > 0.04) {
-    return `${absoluteDifference}°C above`;
+  if (absoluteDifference < 0.05) {
+    return "very close to the average for this date";
   }
 
-  if (difference < -0.04) {
-    return `${absoluteDifference}°C below`;
+  if (difference > 0) {
+    return `${absoluteDifference.toFixed(2)}°C above the average for this date`;
   }
 
-  return "very close to";
+  return `${absoluteDifference.toFixed(2)}°C below the average for this date`;
+}
+
+function buildYearToDateHeadline(ytd) {
+  if (!ytd) {
+    return null;
+  }
+
+  const dateText = formatClimateDate(ytd.to_date);
+
+  if (ytd.rank === 1) {
+    return (
+      `So far, ${ytd.year} is the warmest year in the record ` +
+      `to ${dateText}.`
+    );
+  }
+
+  return (
+    `So far, ${ytd.year} is the ${ordinal(ytd.rank)} warmest year ` +
+    `in the record to ${dateText}.`
+  );
+}
+
+function buildWarmerYearsSentence(ytd) {
+  if (
+    !ytd ||
+    !Array.isArray(ytd.warmer_years) ||
+    !ytd.warmer_years.length
+  ) {
+    return null;
+  }
+
+  const years = ytd.warmer_years.map(item => item.year);
+
+  if (years.length === 1) {
+    return (
+      `Only ${years[0]} was warmer by this stage of the year.`
+    );
+  }
+
+  return (
+    `Only ${joinYearList(years)} were warmer by this stage of the year.`
+  );
+}
+
+function buildLatestTemperatureSentence(anomaly) {
+  if (
+    !anomaly ||
+    anomaly.sst_c === null ||
+    anomaly.sst_c === undefined
+  ) {
+    return null;
+  }
+
+  const temperature = Number(anomaly.sst_c).toFixed(2);
+  const comparison = anomalyDescription(
+    anomaly.difference_from_baseline_c
+  );
+
+  if (!comparison) {
+    return `The latest sea-surface temperature was ${temperature}°C.`;
+  }
+
+  return (
+    `The latest sea-surface temperature was ${temperature}°C, ` +
+    `${comparison} using the 1991–2020 comparison period.`
+  );
+}
+
+function buildMonthSentence(mtd) {
+  if (!mtd) {
+    return null;
+  }
+
+  const month = monthName(mtd.month);
+
+  if (mtd.rank === 1) {
+    return (
+      `${month} is currently the warmest in the record ` +
+      `out of ${mtd.out_of} comparable years.`
+    );
+  }
+
+  return (
+    `${month} so far ranks as the ${ordinal(mtd.rank)} warmest ` +
+    `out of ${mtd.out_of} comparable years.`
+  );
 }
 
 function buildClimateSummary(payload) {
@@ -743,66 +845,44 @@ function buildClimateSummary(payload) {
     return;
   }
 
-  const anomaly = stats.latest_anomaly;
   const ytd = stats.year_to_date_rank;
+  const anomaly = stats.latest_anomaly;
   const mtd = stats.month_to_date_rank;
 
-  const headlineParts = [];
-  const detailParts = [];
+  const headline = buildYearToDateHeadline(ytd);
 
-  if (ytd) {
-    headlineParts.push(
-      `${ytd.year} is currently the ${ordinal(ytd.rank)} warmest year ` +
-      `in the record to ${formatClimateDate(ytd.to_date)}`
-    );
-  }
+  const detailSentences = [
+    buildWarmerYearsSentence(ytd),
+    buildLatestTemperatureSentence(anomaly),
+    buildMonthSentence(mtd)
+  ].filter(Boolean);
 
-  if (
-    anomaly &&
-    anomaly.sst_c !== null &&
-    anomaly.sst_c !== undefined
-  ) {
-    let anomalySentence =
-      `The latest ERA5 temperature was ${anomaly.sst_c.toFixed(2)}°C`;
-
-    const differenceText = temperatureDifferenceText(
-      anomaly.difference_from_baseline_c
-    );
-
-    if (
-      differenceText &&
-      anomaly.baseline_1991_2020_c !== null &&
-      anomaly.baseline_1991_2020_c !== undefined
-    ) {
-      anomalySentence +=
-        `, ${differenceText} the 1991–2020 average ` +
-        `for that point in the year`;
-    }
-
-    detailParts.push(`${anomalySentence}.`);
-  }
-
-  if (mtd) {
-    detailParts.push(
-      `${monthName(mtd.month)} so far ranks ${ordinal(mtd.rank)} ` +
-      `warmest out of ${mtd.out_of} comparable years.`
-    );
-  }
-
-  if (!headlineParts.length && !detailParts.length) {
+  if (!headline && !detailSentences.length) {
     return;
   }
 
+  const updateDate =
+    ytd?.to_date ||
+    anomaly?.date ||
+    mtd?.to_date ||
+    null;
+
   summaryElement.innerHTML = `
     ${
-      headlineParts.length
-        ? `<p class="climate-summary-headline">${headlineParts.join(". ")}.</p>`
+      updateDate
+        ? `<div class="eyebrow">Climate update to ${formatClimateDate(updateDate)}</div>`
+        : `<div class="eyebrow">Climate update</div>`
+    }
+
+    ${
+      headline
+        ? `<p class="climate-summary-headline">${headline}</p>`
         : ""
     }
 
     ${
-      detailParts.length
-        ? `<p class="climate-summary-detail">${detailParts.join(" ")}</p>`
+      detailSentences.length
+        ? `<p class="climate-summary-detail">${detailSentences.join(" ")}</p>`
         : ""
     }
   `;

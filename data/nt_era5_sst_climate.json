@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-07-13 22:38 UTC",
+  "created": "2026-07-15 12:51 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-07-08",
+    "date": "2026-07-10",
     "year": 2026,
-    "doy": 189,
-    "sst_c": 15.36
+    "doy": 191,
+    "sst_c": 16.15
   },
   "average_1991_2020": [
     {
@@ -1495,24 +1495,38 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-07-08",
-      "sst_c": 15.36,
-      "baseline_1991_2020_c": 13.74,
-      "difference_from_baseline_c": 1.62
+      "date": "2026-07-10",
+      "sst_c": 16.15,
+      "baseline_1991_2020_c": 13.81,
+      "difference_from_baseline_c": 2.34
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-07-08",
-      "mean_sst_c": 9.02,
+      "to_date": "2026-07-10",
+      "mean_sst_c": 9.09,
       "rank": 4,
-      "out_of": 87
+      "out_of": 87,
+      "warmer_years": [
+        {
+          "year": 2023,
+          "mean_sst_c": 9.21
+        },
+        {
+          "year": 2007,
+          "mean_sst_c": 9.18
+        },
+        {
+          "year": 2025,
+          "mean_sst_c": 9.13
+        }
+      ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 7,
-      "to_date": "2026-07-08",
-      "mean_sst_c": 14.59,
-      "rank": 5,
+      "to_date": "2026-07-10",
+      "mean_sst_c": 14.83,
+      "rank": 3,
       "out_of": 87
     },
     "warmest_full_years": [
@@ -191475,6 +191489,18 @@
           "doy": 189,
           "month_day": "07-08",
           "sst_c": 15.36
+        },
+        {
+          "date": "2026-07-09",
+          "doy": 190,
+          "month_day": "07-09",
+          "sst_c": 15.43
+        },
+        {
+          "date": "2026-07-10",
+          "doy": 191,
+          "month_day": "07-10",
+          "sst_c": 16.15
         }
       ]
     }

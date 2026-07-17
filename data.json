@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sea_temp_c": 16.2,
-  "updated": "2026-07-16 10:21 UTC",
+  "updated": "2026-07-17 11:48 UTC",
   "source": "Copernicus Marine OSTIA NRT",
   "dataset": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
   "variable": "analysed_sst",
@@ -25,5 +25,6 @@
   "weather_code": 2,
   "forecast": "Partly cloudy",
   "wind_direction": "NE",
-  "temp_change_24h": -0.1
+  "temp_change_24h": -0.1,
+  "sst_status": "stale_copernicus_unavailable"
 }

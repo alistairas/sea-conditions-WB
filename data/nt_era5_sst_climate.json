@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-07-16 21:34 UTC",
+  "created": "2026-07-19 05:58 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-07-11",
+    "date": "2026-07-13",
     "year": 2026,
-    "doy": 192,
-    "sst_c": 16.29
+    "doy": 194,
+    "sst_c": 16.68
   },
   "average_1991_2020": [
     {
@@ -1495,37 +1495,37 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-07-11",
-      "sst_c": 16.29,
-      "baseline_1991_2020_c": 13.86,
-      "difference_from_baseline_c": 2.43
+      "date": "2026-07-13",
+      "sst_c": 16.68,
+      "baseline_1991_2020_c": 13.98,
+      "difference_from_baseline_c": 2.7
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-07-11",
-      "mean_sst_c": 9.13,
+      "to_date": "2026-07-13",
+      "mean_sst_c": 9.21,
       "rank": 4,
       "out_of": 87,
       "warmer_years": [
         {
           "year": 2023,
-          "mean_sst_c": 9.24
+          "mean_sst_c": 9.29
         },
         {
           "year": 2007,
-          "mean_sst_c": 9.2
+          "mean_sst_c": 9.24
         },
         {
           "year": 2025,
-          "mean_sst_c": 9.17
+          "mean_sst_c": 9.24
         }
       ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 7,
-      "to_date": "2026-07-11",
-      "mean_sst_c": 14.96,
+      "to_date": "2026-07-13",
+      "mean_sst_c": 15.2,
       "rank": 2,
       "out_of": 87
     },
@@ -191507,6 +191507,18 @@
           "doy": 192,
           "month_day": "07-11",
           "sst_c": 16.29
+        },
+        {
+          "date": "2026-07-12",
+          "doy": 193,
+          "month_day": "07-12",
+          "sst_c": 16.36
+        },
+        {
+          "date": "2026-07-13",
+          "doy": 194,
+          "month_day": "07-13",
+          "sst_c": 16.68
         }
       ]
     }

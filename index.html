@@ -3,565 +3,996 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seaside Conditions | Whitley Bay </title>
+  <meta name="description" content="A Panama Swimming Club proof of concept showing sea temperature, tides and weather for Whitley Bay, with local records and long-term sea-surface temperature context." />
+  <title>Whitley Bay Beach Conditions</title>
+
   <style>
+    :root {
+      --ink: #102027;
+      --muted: #607d8b;
+      --soft-muted: #78909c;
+      --page: #f4f7f8;
+      --card: #ffffff;
+      --wash: #eef5f7;
+      --teal: #006064;
+      --line: #2f9ed1;
+      --shadow: 0 8px 24px rgba(16, 32, 39, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f7f8;
-      color: #102027;
+      background: var(--page);
+      color: var(--ink);
+    }
+
+    a {
+      color: var(--teal);
+      text-underline-offset: 3px;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid rgba(0, 96, 100, 0.32);
+      outline-offset: 3px;
     }
 
     .page {
-      max-width: 520px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 24px 18px;
+      padding: 28px 20px 44px;
     }
 
     .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
       margin-bottom: 24px;
     }
 
     .eyebrow {
-      font-size: 14px;
-      color: #607d8b;
       margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     h1 {
-      font-size: 30px;
+      max-width: 620px;
       margin: 0;
-      line-height: 1.1;
+      font-size: clamp(30px, 5vw, 38px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .page-updated,
+    .section-meta,
+    .card-meta,
+    .footer-note {
+      color: var(--soft-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .page-updated {
+      margin: 9px 0 0;
+    }
+
+    .share-btn {
+      flex: 0 0 auto;
+      border: 1px solid rgba(96, 125, 139, 0.2);
+      border-radius: 999px;
+      padding: 9px 13px;
+      background: var(--card);
+      color: var(--teal);
+      box-shadow: 0 4px 12px rgba(16, 32, 39, 0.05);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .share-btn:hover {
+      background: var(--wash);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+    }
+
+    .conditions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .small-card,
+    .card {
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .small-card {
+      min-width: 0;
+      border-radius: 18px;
+      padding: 18px;
     }
 
     .card {
-      background: white;
+      margin-top: 18px;
       border-radius: 22px;
       padding: 22px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
     .label {
-      color: #607d8b;
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-
-    .temp {
-      font-size: 58px;
-      font-weight: 700;
-      letter-spacing: -2px;
-    }
-
-    .temp span {
-      font-size: 28px;
-      vertical-align: super;
-    }
-    
-    .hero-card {
-  padding: 20px 22px;
-}
-
-.hero-temp-row {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin: 12px 0 18px;
-}
-
-.hero-temp-row .temp {
-  line-height: 1;
-}
-
-#trend {
-  font-size: 18px;
-  color: #607d8b;
-  font-weight: 500;
-}
-    
-    #trend {
-  font-size: 18px;
-  color: #607d8b;
-  font-weight: 500;
-}
-.trend-up {
-  color: #2e7d32;
-}
-
-.trend-down {
-  color: #c62828;
-}
-
-    .status {
-      font-size:14px;
-      color:#607d8b;
-      margin-top: 8px;
-    }
-
-    .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
-    }
-    
-    .small-card {
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .value {
-      font-size: 22px;
-      font-weight: 650;
+      font-size: clamp(20px, 3.5vw, 24px);
+      font-weight: 700;
+      line-height: 1.15;
     }
 
-    .note {
+    .trend {
+      min-height: 21px;
+      margin-top: 7px;
+      color: #455a64;
       font-size: 14px;
-      color: #607d8b;
-      line-height: 1.45;
-      margin-top: 18px;
+      font-weight: 600;
+      line-height: 1.35;
     }
 
-    .footer {
+    .card-meta {
+      margin: 7px 0 0;
+    }
+
+    .tide-primary {
+      margin-bottom: 9px;
+      font-size: clamp(19px, 3.2vw, 23px);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .tide-list {
       font-size: 13px;
-      color: #78909c;
-      margin-top: 24px;
       line-height: 1.5;
     }
-    
-    .badge {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #eef4f6;
-  color: #607d8b;
-  font-size: 13px;
-}
-.archive-card {
-  margin-top: 28px;
-  padding: 20px;
-  border-radius: 18px;
-  background: #eaf1f3;
-  color: #102027;
-}
 
-.archive-kicker {
-  font-size: 13px;
-  color: #607d8b;
-  margin-bottom: 4px;
-}
+    .tide-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.archive-card h2 {
-  font-size: 22px;
-  margin: 0 0 14px 0;
-}
+    .tide-height {
+      color: var(--muted);
+      white-space: nowrap;
+    }
 
-.archive-card p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.45;
-}
+    .small-link {
+      display: inline-block;
+      margin-top: 9px;
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
+    }
 
-.archive-meta {
-  font-weight: 700;
-  margin-bottom: 10px;
-}
+    .section-meta {
+      margin: 8px 2px 0;
+    }
 
-.archive-notes {
-  margin-top: 12px;
-}
-.footer-note {
-  font-size: 12px;
-  color: #78909c;
-  line-height: 1.45;
-  margin-top: 16px;
-}
-.refresh-btn {
-  border: none;
-  background: white;
-  color: #607d8b;
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  margin-bottom: 16px;
-}
+    .chart-wrap {
+      position: relative;
+      height: 260px;
+    }
 
-.refresh-btn:hover {
-  background: #eef4f6;
-}
+    .chart-key {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 10px;
+      color: #455a64;
+      font-size: 12px;
+    }
 
-.tide-list {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.45;
-}
+    .key-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
 
-.tide-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  white-space: nowrap;
-}
+    .key-item[hidden] {
+      display: none;
+    }
 
-.tide-height {
-  color: #607d8b;
-  font-weight: 500;
-}
+    .key-dot {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--line);
+      border-radius: 50%;
+      background: var(--line);
+    }
+
+    .key-dot.hollow {
+      background: white;
+    }
+
+    .climate-context {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--wash);
+    }
+
+    .climate-kicker {
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .climate-headline {
+      margin: 0 0 6px;
+      font-size: 17px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .climate-detail {
+      margin: 0;
+      color: #455a64;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .climate-link {
+      display: inline-block;
+      margin-top: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .resource-link {
+      display: block;
+      min-width: 0;
+      padding: 15px;
+      border-radius: 15px;
+      background: var(--wash);
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .resource-link:hover {
+      background: #e3eff1;
+    }
+
+    .resource-title {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .resource-description {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .caveat {
+      margin: 20px 2px 0;
+      color: #455a64;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .data-details {
+      margin-top: 12px;
+      border-top: 1px solid rgba(96, 125, 139, 0.18);
+      padding-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .data-details summary {
+      color: var(--teal);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .data-details p {
+      margin: 9px 0 0;
+    }
+
+    footer {
+      margin-top: 24px;
+    }
+
+    .error-message {
+      color: #8a2d1e;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        padding: 22px 16px 36px;
+      }
+
+      .header {
+        gap: 12px;
+      }
+
+      .share-btn {
+        padding: 8px 10px;
+      }
+
+      .small-card {
+        padding: 15px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .chart-wrap {
+        height: 230px;
+      }
+
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .conditions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .share-btn .share-label {
+        display: none;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      .share-btn,
+      .data-details,
+      footer {
+        display: none;
+      }
+
+      .small-card,
+      .card {
+        box-shadow: none;
+        border: 1px solid #d7e1e4;
+      }
+    }
   </style>
 </head>
 
 <body>
   <main class="page">
-<section class="header">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-    <div>
-      <div class="eyebrow">Whitley Bay</div>
-      <h1>Beach Conditions</h1>
-    </div>
+    <header class="header">
+      <div>
+        <div class="eyebrow">Panama Swimming Club Â· conditions prototype</div>
+        <h1>Whitley Bay Beach Conditions</h1>
+        <p class="page-updated" id="page-updated">Loading latest updateâ¦</p>
+      </div>
 
-    <button onclick="location.reload()" class="refresh-btn">
-      ↻
-    </button>
-  </div>
-</section>
-<section class="grid">
-  <div class="small-card">
-    <div class="label">Sea Temp</div>
-    <div class="value" id="temperature">--°C</div>
-    <div class="status" id="trend"></div>
-  </div>
-<div class="small-card tide-card">
-  <div class="label">Next tides</div>
-  <div id="next-tide" class="tide-list">--</div>
-  <p style="margin:10px 0 0;font-size:13px;">
-    <a href="tides.html" style="text-decoration:none;color:#607d8b;">
-      Tide details →
-    </a>
-  </p>
-</div>
-  <div class="small-card">
-    <div class="label">Air temp</div>
-    <div class="value" id="air-temp">--</div>
-  </div>
+      <button id="share-button" class="share-btn" type="button" aria-label="Share Whitley Bay beach conditions">
+        <span aria-hidden="true">â</span>
+        <span class="share-label"> Share</span>
+      </button>
+    </header>
 
-  <div class="small-card">
-    <div class="label">Wind</div>
-    <div class="value" id="wind">--</div>
-  </div>
+    <section aria-labelledby="conditions-heading">
+      <div class="section-heading">
+        <h2 id="conditions-heading">Current conditions</h2>
+      </div>
 
-  <div class="small-card">
-    <div class="label">Forecast</div>
-    <div class="value" id="forecast">--</div>
-  </div>
+      <div class="conditions-grid">
+        <article class="small-card">
+          <div class="label">Sea temperature</div>
+          <div class="value" id="temperature">--Â°C</div>
+          <div class="trend" id="trend">Loading weekly comparisonâ¦</div>
+          <p class="card-meta" id="sea-observation-date">Observation date loadingâ¦</p>
+        </article>
 
-  <div class="small-card">
-    <div class="label">UV</div>
-    <div class="value" id="uv">--</div>
-  </div>
-</section>
-<p class="footer-note" id="observation-date">
-  Observation date: Loading...
-</p>
-    <section class="card">
-      <div class="label">Last 7 days + outlook</div>
-      <canvas id="temp-chart" height="180"></canvas>
-      <p><a href="history.html" style="text-decoration:none; color:inherit;">
-      Sea temp history → </a></p>
-      <p><a href="climate-history.html">Climate record since 1940</a></p>
+        <article class="small-card">
+          <div class="label">Next tides</div>
+          <div id="next-tide-primary" class="tide-primary">--</div>
+          <div id="following-tides" class="tide-list"></div>
+          <p class="card-meta" id="tide-date">Times loadingâ¦</p>
+          <a class="small-link" href="tides.html">Tide details â</a>
+        </article>
+
+        <article class="small-card">
+          <div class="label">Air temperature</div>
+          <div class="value" id="air-temp">--</div>
+        </article>
+
+        <article class="small-card">
+          <div class="label">Wind</div>
+          <div class="value" id="wind">--</div>
+        </article>
+
+        <article class="small-card">
+          <div class="label">Weather</div>
+          <div class="value" id="forecast">--</div>
+        </article>
+
+        <article class="small-card">
+          <div class="label">UV</div>
+          <div class="value" id="uv">--</div>
+        </article>
+      </div>
+
+      <p class="section-meta" id="weather-updated">Weather update loadingâ¦</p>
     </section>
-<p class="footer-note" id="data-note">
-  Data source: Copernicus Marine OSTIA Near Real Time analysis.
-</p>
-<section class="card">
-  <div class="label">PSC logbook</div>
-  <div class="value">From the archives</div>
-  <p><a href="archive.html" style="text-decoration:none; color:inherit;">Browse logbook archive →</a></p>
-</section>
-<section class="card">
-  <div class="label">Water temperature research</div>
-  <div class="value">Smartwatch observations</div>
-  <p>
-    <a href="smartwatch.html" style="text-decoration:none; color:inherit;">
-      View smartwatch report →
-    </a>
-  </p>
-</section>
 
-    <p class="note">
-      Sea temperature derived from Copernicus Marine OSTIA satellite analysis and UK Met Office observations. 
-      <br>Values represent the nearest available grid cell for the North Tyneside coast and should be treated as one source of information on local sea conditions, not a safety assessment.
+    <section class="card" aria-labelledby="temperature-history-heading">
+      <div class="section-heading">
+        <h2 id="temperature-history-heading">Recent sea temperature</h2>
+        <span class="section-meta" id="chart-range"></span>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="temp-chart" aria-label="Recent sea-temperature observations and interpolated values"></canvas>
+      </div>
+
+      <div class="chart-key" aria-label="Chart key">
+        <span class="key-item"><span class="key-dot" aria-hidden="true"></span>Measured</span>
+        <span class="key-item" id="interpolated-key" hidden><span class="key-dot hollow" aria-hidden="true"></span>Interpolated between observations</span>
+      </div>
+
+      <div id="climate-context" class="climate-context" aria-live="polite">
+        <div class="climate-kicker">Sea-surface temperature climate context</div>
+        <p class="climate-headline">Loading the long-term comparisonâ¦</p>
+      </div>
+
+      <a class="small-link" href="history.html">Explore sea-temperature history â</a>
+    </section>
+
+    <section class="card" aria-labelledby="local-record-heading">
+      <h2 id="local-record-heading">Explore the local record</h2>
+
+      <div class="resource-grid">
+        <a class="resource-link" href="history.html">
+          <span class="resource-title">Sea-temperature history</span>
+          <span class="resource-description">Recent observations and the developing local record</span>
+        </a>
+
+        <a class="resource-link" href="archive.html">
+          <span class="resource-title">Panama Swimming Club archive pilot</span>
+          <span class="resource-description">A proof-of-concept archive of historic swims, temperatures and club notes</span>
+        </a>
+
+        <a class="resource-link" href="smartwatch.html">
+          <span class="resource-title">Smartwatch observations</span>
+          <span class="resource-description">Water-temperature readings recorded during swims</span>
+        </a>
+      </div>
+    </section>
+
+    <p class="caveat">
+      Sea temperature is a satellite-based coastal estimate, not a beach-step reading or a safety assessment.
     </p>
 
-    <footer class="footer">
-      Built as a reusable prototype for live sea temperature, local observations,
-      and future comparison with historic PSC bathing water records.
+    <details class="data-details">
+      <summary>About the data</summary>
+      <p id="sea-data-note">
+        Sea-temperature source details loadingâ¦
+      </p>
+      <p>
+        Air temperature, wind, weather and UV data are supplied by Open-Meteo. Tide predictions use Open Waters / Neaps and TICON-4 harmonics for North Shields and are not for navigation.
+      </p>
+    </details>
+
+    <footer>
+      <p class="footer-note">
+        <strong>Panama Swimming Club conditions prototype.</strong> This proof of concept is being developed independently ahead of committee review.
+      </p>
     </footer>
+
+    <p id="share-status" class="visually-hidden" aria-live="polite"></p>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-async function loadData() {
-  const response = await fetch('data.json');
-  const data = await response.json();
-  
-  const tideResponse = await fetch('data/tides.json');
-const tideData = await tideResponse.json();
+    const CLIMATE_DATA_URL = "data/nt_era5_sst_climate.json";
+    let shareSummary = "Whitley Bay Beach Conditions";
 
-const now = new Date();
+    const weatherIcons = {
+      0: "âï¸",
+      1: "ð¤ï¸",
+      2: "â",
+      3: "âï¸",
+      45: "ð«ï¸",
+      48: "ð«ï¸",
+      51: "ð¦ï¸",
+      53: "ð¦ï¸",
+      55: "ð§ï¸",
+      61: "ð¦ï¸",
+      63: "ð§ï¸",
+      65: "âï¸",
+      71: "ð¨ï¸",
+      73: "âï¸",
+      75: "âï¸",
+      80: "ð¦ï¸",
+      81: "ð§ï¸",
+      82: "âï¸",
+      95: "âï¸"
+    };
 
-const nextTides = tideData.events
-  .filter(event => new Date(event.time) > now)
-  .sort((a, b) => new Date(a.time) - new Date(b.time))
-  .slice(0, 3);
+    const uvIcons = {
+      Low: "ð¢",
+      Moderate: "ð¡",
+      High: "ð ",
+      "Very High": "ð´",
+      Extreme: "ð£"
+    };
 
-function formatTideTime(iso) {
-  return new Date(iso).toLocaleTimeString('en-GB', {
-    timeZone: 'Europe/London',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-}
+    function parseDateOnly(dateString) {
+      return new Date(`${dateString}T12:00:00Z`);
+    }
 
-if (nextTides.length) {
-  document.getElementById('next-tide').innerHTML = nextTides.map(tide => `
-    <div class="tide-row">
-      <span>${tide.type} ${formatTideTime(tide.time)}</span>
-      <span class="tide-height">${tide.height_m}m</span>
-    </div>
-  `).join('');
-} else {
-  document.getElementById('next-tide').textContent = "--";
-}
-  
-  document.getElementById('air-temp').textContent =
-  data.air_temp_c + '°C';
+    function formatDate(dateString, options = {}) {
+      if (!dateString) return "Date unavailable";
 
-document.getElementById('wind').textContent =
-  `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction}`;
-
-const weatherIcon = {
-  0: "☀️",   // Clear
-  1: "🌤️",   // Mainly clear
-  2: "⛅",   // Partly cloudy
-  3: "☁️",   // Overcast
-  45: "🌫️",  // Fog
-  48: "🌫️",  // Rime fog
-  51: "🌦️",  // Light drizzle
-  53: "🌦️",  // Moderate drizzle
-  55: "🌧️",  // Dense drizzle
-  61: "🌦️",  // Light rain
-  63: "🌧️",  // Moderate rain
-  65: "⛈️",  // Heavy rain
-  71: "🌨️",  // Light snow
-  73: "❄️",   // Moderate snow
-  75: "❄️",   // Heavy snow
-  80: "🌦️",  // Rain showers
-  81: "🌧️",  // Heavy showers
-  82: "⛈️",  // Violent showers
-  95: "⛈️"   // Thunderstorm
-};
-
-document.getElementById('forecast').textContent =
-  `${weatherIcon[data.weather_code] || ""} ${data.forecast || "--"}`.trim();
-
-const uvIcon = {
-  "Low": "🟢",        // 0-2.9
-  "Moderate": "🟡",   // 3-5.9
-  "High": "🟠",       // 6-7.9
-  "Very High": "🔴",  // 8-10.9
-  "Extreme": "🟣"     // 11+
-};
-
-if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {
-  document.getElementById('uv').textContent =
-    `${uvIcon[data.uv_category] || ""} ${data.uv_category} (${data.uv_max.toFixed(1)})`;
-} else {
-  document.getElementById('uv').textContent = "--";
-}
-  
-document.getElementById('temperature').textContent =
-  `${data.sea_temp_c}°C`;
-
-  const observationDate = new Date(data.sst_date);
-
-const formattedDate = observationDate.toLocaleDateString('en-GB', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric'
-});
-
-document.getElementById('observation-date').textContent =
-  'Observation date: ' + formattedDate;
-
-    document.getElementById('data-note').textContent =
-  `Data source: Copernicus Marine OSTIA analysis, produced by the UK Met Office using satellite and in-situ observations. Grid resolution ${data.grid_resolution}. Estimated analysis uncertainty: ±${data.analysis_error_c}°C.`;
-const rawChange = data.temp_change_24h;
-const change = Number(rawChange);
-
-let trendText = "";
-
-if (rawChange === null || rawChange === undefined || Number.isNaN(change)) {
-  trendText = "";
-} else if (change > 0) {
-  trendText = `↑ ${change.toFixed(1)}°C`;
-} else if (change < 0) {
-  trendText = `↓ ${Math.abs(change).toFixed(1)}°C`;
-} else {
-  trendText = "No change";
-}
-
-const trendEl = document.getElementById('trend');
-
-trendEl.textContent = trendText;
-
-trendEl.classList.remove('trend-up', 'trend-down');
-
-if (change > 0) {
-  trendEl.classList.add('trend-up');
-} else if (change < 0) {
-  trendEl.classList.add('trend-down');
-}
-
-const historyResponse = await fetch('history.json');
-const history = await historyResponse.json();
-
-function fillMissingDays(data) {
-  const sorted = [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
-  const filled = [];
-
-  for (let i = 0; i < sorted.length - 1; i++) {
-    const current = sorted[i];
-    const next = sorted[i + 1];
-
-    filled.push({
-      date: current.date,
-      sea_temp_c: current.sea_temp_c,
-      estimated: false
-    });
-
-    const currentDate = new Date(current.date);
-    const nextDate = new Date(next.date);
-    const daysBetween = Math.round((nextDate - currentDate) / (1000 * 60 * 60 * 24));
-
-    for (let d = 1; d < daysBetween; d++) {
-      const estimateDate = new Date(currentDate);
-      estimateDate.setDate(currentDate.getDate() + d);
-
-      const estimatedTemp =
-        current.sea_temp_c +
-        ((next.sea_temp_c - current.sea_temp_c) * d / daysBetween);
-
-      filled.push({
-        date: estimateDate.toISOString().slice(0, 10),
-        sea_temp_c: Number(estimatedTemp.toFixed(1)),
-        estimated: true
+      return parseDateOnly(dateString).toLocaleDateString("en-GB", {
+        timeZone: "Europe/London",
+        day: "numeric",
+        month: "short",
+        ...options
       });
     }
-  }
 
-  if (sorted.length) {
-    filled.push({
-      ...sorted[sorted.length - 1],
-      estimated: false
-    });
-  }
+    function londonTodayString() {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/London",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
 
-  return filled;
-}
-const recentHistory = history.slice(-14);
-const lastSeven = fillMissingDays(recentHistory).slice(-7);
-
-function addForecastDays(data, daysAhead = 2) {
-  const output = [...data];
-
-  const actuals = data.filter(item => !item.estimated);
-
-  if (actuals.length < 2) return output;
-
-  const last = actuals[actuals.length - 1];
-  const previous = actuals[actuals.length - 2];
-
-  const dailyChange = last.sea_temp_c - previous.sea_temp_c;
-
-  for (let i = 1; i <= daysAhead; i++) {
-    const forecastDate = new Date(last.date);
-    forecastDate.setDate(forecastDate.getDate() + i);
-
-    output.push({
-      date: forecastDate.toISOString().slice(0, 10),
-      sea_temp_c: Number((last.sea_temp_c + dailyChange * i).toFixed(1)),
-      forecast: true
-    });
-  }
-
-  return output;
-}
-
-const chartPoints = addForecastDays(lastSeven, 2);
-
-const chartLabels = chartPoints.map(item => {
-  const date = new Date(item.date);
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short'
-  });
-});
-
-const chartTemps = chartPoints.map(item => item.sea_temp_c);
-
-new Chart(document.getElementById('temp-chart'), {
-  type: 'line',
-  data: {
-    labels: chartLabels,
-    datasets: [{
-  label: 'Sea temperature °C',
-  data: chartTemps,
-  tension: 0.3,
-
-  pointRadius: chartPoints.map(item =>
-    item.estimated || item.forecast ? 0 : 4
-  ),
-  
-  pointHoverRadius: chartPoints.map(item =>
-    item.estimated || item.forecast ? 0 : 5
-  ),
-  
-  borderWidth: 3,
-  
-  segment: {
-    borderDash: ctx =>
-      chartPoints[ctx.p0DataIndex]?.forecast || chartPoints[ctx.p1DataIndex]?.forecast
-        ? [6, 6]
-        : undefined
-  }
-}]
-  },
-  options: {
-    plugins: {
-      legend: {
-        display: false
-      }
-    },
-scales: {
-  y: {
-    suggestedMin: Math.min(...chartTemps) - 0.5,
-suggestedMax: Math.max(...chartTemps) + 0.5,
-    title: {
-      display: true,
-      text: '°C'
+      const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+      return `${values.year}-${values.month}-${values.day}`;
     }
-  }
-}
-  }
-});
-}
 
-loadData();
-</script>
+    function daysBetween(laterDateString, earlierDateString) {
+      const later = Date.parse(`${laterDateString}T00:00:00Z`);
+      const earlier = Date.parse(`${earlierDateString}T00:00:00Z`);
+      return Math.round((later - earlier) / 86400000);
+    }
+
+    function observationAgeText(dateString) {
+      const age = daysBetween(londonTodayString(), dateString);
+
+      if (age <= 0) return "today";
+      if (age === 1) return "1 day ago";
+      return `${age} days ago`;
+    }
+
+    function parseUpdatedTimestamp(timestamp) {
+      if (!timestamp) return null;
+      return new Date(timestamp.replace(" ", "T").replace(" UTC", ":00Z"));
+    }
+
+    function formatUpdatedTimestamp(timestamp) {
+      const date = parseUpdatedTimestamp(timestamp);
+      if (!date || Number.isNaN(date.getTime())) return "Update time unavailable";
+
+      return date.toLocaleString("en-GB", {
+        timeZone: "Europe/London",
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short"
+      });
+    }
+
+    function formatTideTime(iso) {
+      return new Date(iso).toLocaleTimeString("en-GB", {
+        timeZone: "Europe/London",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function formatTideDate(iso) {
+      return new Date(iso).toLocaleDateString("en-GB", {
+        timeZone: "Europe/London",
+        weekday: "short",
+        day: "numeric",
+        month: "short"
+      });
+    }
+
+    function findWeeklyComparison(history, currentDate, currentTemperature) {
+      const candidates = history
+        .filter(item => item.date < currentDate)
+        .map(item => ({
+          ...item,
+          daysEarlier: daysBetween(currentDate, item.date)
+        }))
+        .filter(item => item.daysEarlier >= 6 && item.daysEarlier <= 8)
+        .sort((a, b) => {
+          const distanceDifference = Math.abs(a.daysEarlier - 7) - Math.abs(b.daysEarlier - 7);
+          if (distanceDifference !== 0) return distanceDifference;
+          return a.daysEarlier - b.daysEarlier;
+        });
+
+      if (!candidates.length) return null;
+
+      const comparison = candidates[0];
+      return {
+        ...comparison,
+        change: Number((currentTemperature - comparison.sea_temp_c).toFixed(1))
+      };
+    }
+
+    function renderWeeklyTrend(history, data) {
+      const trendElement = document.getElementById("trend");
+      const comparison = findWeeklyComparison(history, data.sst_date, Number(data.sea_temp_c));
+
+      if (!comparison) {
+        trendElement.textContent = "Weekly comparison unavailable";
+        return;
+      }
+
+      const interval = `${comparison.daysEarlier} days ago`;
+      const fallbackNote = comparison.daysEarlier === 7 ? "" : " (closest reading)";
+
+      if (comparison.change > 0) {
+        trendElement.textContent = `â ${comparison.change.toFixed(1)}Â°C from ${interval}${fallbackNote}`;
+      } else if (comparison.change < 0) {
+        trendElement.textContent = `â ${Math.abs(comparison.change).toFixed(1)}Â°C from ${interval}${fallbackNote}`;
+      } else {
+        trendElement.textContent = `No change from ${interval}${fallbackNote}`;
+      }
+
+      trendElement.title = `Compared with ${formatDate(comparison.date, { year: "numeric" })}`;
+    }
+
+    function fillMissingDays(records) {
+      const sorted = [...records].sort((a, b) => a.date.localeCompare(b.date));
+      const filled = [];
+
+      for (let index = 0; index < sorted.length - 1; index += 1) {
+        const current = sorted[index];
+        const next = sorted[index + 1];
+        filled.push({ ...current, interpolated: false });
+
+        const gap = daysBetween(next.date, current.date);
+
+        for (let offset = 1; offset < gap; offset += 1) {
+          const date = parseDateOnly(current.date);
+          date.setUTCDate(date.getUTCDate() + offset);
+
+          const temperature = current.sea_temp_c +
+            ((next.sea_temp_c - current.sea_temp_c) * offset / gap);
+
+          filled.push({
+            date: date.toISOString().slice(0, 10),
+            sea_temp_c: Number(temperature.toFixed(1)),
+            interpolated: true
+          });
+        }
+      }
+
+      if (sorted.length) {
+        filled.push({ ...sorted[sorted.length - 1], interpolated: false });
+      }
+
+      return filled;
+    }
+
+    function renderTemperatureChart(history) {
+      const chartPoints = fillMissingDays(history).slice(-14);
+
+      if (!chartPoints.length) {
+        throw new Error("No sea-temperature history is available");
+      }
+
+      document.getElementById("interpolated-key").hidden = !chartPoints.some(item => item.interpolated);
+
+      const chartTemperatures = chartPoints.map(item => Number(item.sea_temp_c));
+      const chartRange = document.getElementById("chart-range");
+      chartRange.textContent = `${formatDate(chartPoints[0].date)}â${formatDate(chartPoints[chartPoints.length - 1].date)}`;
+
+      new Chart(document.getElementById("temp-chart"), {
+        type: "line",
+        data: {
+          labels: chartPoints.map(item => formatDate(item.date)),
+          datasets: [{
+            label: "Sea temperature",
+            data: chartTemperatures,
+            tension: 0.28,
+            borderColor: "#2f9ed1",
+            backgroundColor: "#2f9ed1",
+            borderWidth: 3,
+            pointRadius: chartPoints.map(() => 4),
+            pointHoverRadius: chartPoints.map(() => 5),
+            pointBackgroundColor: chartPoints.map(item => item.interpolated ? "#ffffff" : "#2f9ed1"),
+            pointBorderColor: chartPoints.map(() => "#2f9ed1"),
+            pointBorderWidth: chartPoints.map(item => item.interpolated ? 2 : 1.5)
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: "nearest",
+            intersect: false
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: context => {
+                  const item = chartPoints[context.dataIndex];
+                  const qualifier = item.interpolated ? " (interpolated)" : "";
+                  return `${Number(item.sea_temp_c).toFixed(1)}Â°C${qualifier}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                maxRotation: 0,
+                autoSkip: true,
+                maxTicksLimit: 7
+              }
+            },
+            y: {
+              suggestedMin: Math.min(...chartTemperatures) - 0.5,
+              suggestedMax: Math.max(...chartTemperatures) + 0.5,
+              title: {
+                display: true,
+                text: "Â°C"
+              },
+              ticks: {
+                callback: value => `${value}Â°`
+              },
+              grid: {
+                color: "rgba(96, 125, 139, 0.13)"
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function ordinal(number) {
+      const mod100 = number % 100;
+      if (mod100 >= 11 && mod100 <= 13) return `${number}th`;
+
+      switch (number % 10) {
+        case 1: return `${number}st`;
+        case 2: return `${number}nd`;
+        case 3: return `${number}rd`;
+        default: return `${number}th`;
+      }
+    }
+
+    async function loadConditions() {
+      const [dataResponse, historyResponse] = await Promise.all([
+        fetch("data.json", { cache: "no-store" }),
+        fetch("history.json", { cache: "no-store" })
+      ]);
+
+      if (!dataResponse.ok || !historyResponse.ok) {
+        throw new Error("The latest conditions could not be loaded");
+      }
+
+      const data = await dataResponse.json();
+      const history = await historyResponse.json();
+
+      document.getElementById("temperature").textContent = `${data.sea_temp_c}Â°C`;
+      document.getElementById("air-temp").textContent = data.air_temp_c === null ? "Unavailable" : `${data.air_temp_c}Â°C`;
+      document.getElementById("wind").textContent = data.wind_speed_kmh === null
+        ? "Unavailable"
+        : `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction || ""}`.trim();
+      document.getElementById("forecast").textContent = data.forecast
+        ? `${weatherIcons[data.weather_code] || ""} ${data.forecast}`.trim()
+        : "Unavailable";
+
+      if (data.uv_category && data.uv_max !== null && data.uv_max !== undefined) {
+        document.getElementById("uv").textContent = `${uvIcons[data.uv_category] || ""} ${data.uv_category} (${Number(data.uv_max).toFixed(1)})`.trim();
+      } else {
+        document.getElementById("uv").textContent = "Unavailable";
+      }
+
+      document.getElementById("page-updated").textContent = `Page data refreshed ${formatUpdatedTimestamp(data.updated)}`;
+      document.getElementById("weather-updated").textContent = `Weather and wind updated ${formatUpdatedTimestamp(data.updated)}`;
+      document.getElementById("sea-observation-date").textContent = `Observed ${formatDate(data.sst_date, { year: "numeric" })} Â· ${observationAgeText(data.sst_date)}`;
+      document.getElementById("sea-data-note").textContent = `Sea temperature is derived from Copernicus Marine OSTIA analysis produced by the UK Met Office using satellite and in-situ observations. It represents the nearest available grid cell for the North Tyneside coast. Grid resolution ${data.grid_resolution}; estimated analysis uncertainty Â±${data.analysis_error_c}Â°C.`;
+
+      renderWeeklyTrend(history, data);
+      renderTemperatureChart(history);
+
+      shareSummary = `Whitley Bay Beach Conditions: sea temperature ${data.sea_temp_c}Â°C, observed ${formatDate(data.sst_date, { year: "numeric" })}.`;
+    }
+
+    async function loadTides() {
+      const response = await fetch("data/tides.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("Tide information could not be loaded");
+
+      const data = await response.json();
+      const now = new Date();
+      const nextTides = data.events
+        .filter(event => new Date(event.time) > now)
+        .sort((a, b) => new Date(a.time) - new Date(b.time))
+        .slice(0, 3);
+
+      if (!nextTides.length) {
+        throw new Error("No upcoming tide predictions are available");
+      }
+
+      const primary = nextTides[0];
+      const primaryDate = formatTideDate(primary.time);
+      document.getElementById("next-tide-primary").textContent = `${primary.type} ${formatTideTime(primary.time)} Â· ${Number(primary.height_m).toFixed(2)}m`;
+
+      document.getElementById("following-tides").innerHTML = nextTides.slice(1).map(tide => {
+        const tideDate = formatTideDate(tide.time);
+        const dateLabel = tideDate === primaryDate ? "" : ` Â· ${tideDate}`;
+
+        return `
+          <div class="tide-row">
+            <span>${tide.type} ${formatTideTime(tide.time)}${dateLabel}</span>
+            <span class="tide-height">${Number(tide.height_m).toFixed(2)}m</span>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("tide-date").textContent = `Times for ${primaryDate}`;
+    }
+
+    async function loadClimateContext() {
+      const container = document.getElementById("climate-context");
+      const response = await fetch(`${CLIMATE_DATA_URL}?v=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Climate comparison unavailable");
+
+      const payload = await response.json();
+      const ytd = payload.summary_stats?.year_to_date_rank;
+
+      if (!ytd) throw new Error("Climate comparison unavailable");
+
+      const headline = ytd.rank === 1
+        ? `${ytd.year} is the warmest year so far since ${payload.start_year || 1940}.`
+        : `${ytd.year} is the ${ordinal(ytd.rank)} warmest year so far since ${payload.start_year || 1940}.`;
+
+      container.innerHTML = `
+        <div class="climate-kicker">Sea-surface temperature climate context</div>
+        <p class="climate-headline">${headline}</p>
+        <p class="climate-detail">Comparing 1 Januaryâ${formatDate(ytd.to_date)} across ${ytd.out_of} years. Climate data to ${formatDate(ytd.to_date, { year: "numeric" })}.</p>
+        <a class="climate-link" href="climate-history.html">Explore the climate record â</a>
+      `;
+    }
+
+    function showConditionsError(error) {
+      console.error(error);
+      document.getElementById("page-updated").textContent = "Current conditions unavailable";
+      document.getElementById("page-updated").classList.add("error-message");
+      document.getElementById("trend").textContent = "Weekly comparison unavailable";
+      document.getElementById("weather-updated").textContent = "Weather update unavailable";
+      document.getElementById("weather-updated").classList.add("error-message");
+    }
+
+    function showTideError(error) {
+      console.error(error);
+      document.getElementById("next-tide-primary").textContent = "Unavailable";
+      document.getElementById("following-tides").textContent = "Tide predictions could not be loaded.";
+      document.getElementById("tide-date").textContent = "Try the detailed tide page";
+      document.getElementById("tide-date").classList.add("error-message");
+    }
+
+    function showClimateError(error) {
+      console.error(error);
+      document.getElementById("climate-context").innerHTML = `
+        <div class="climate-kicker">Sea-surface temperature climate context</div>
+        <p class="climate-headline error-message">Long-term comparison currently unavailable.</p>
+        <a class="climate-link" href="climate-history.html">Open the climate record â</a>
+      `;
+    }
+
+    async function sharePage() {
+      const button = document.getElementById("share-button");
+      const status = document.getElementById("share-status");
+      const shareData = {
+        title: "Whitley Bay Beach Conditions",
+        text: shareSummary,
+        url: window.location.href
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          status.textContent = "Share options opened.";
+          return;
+        }
+
+        await navigator.clipboard.writeText(window.location.href);
+        button.querySelector(".share-label").textContent = " Copied";
+        status.textContent = "Page link copied.";
+        window.setTimeout(() => {
+          button.querySelector(".share-label").textContent = " Share";
+        }, 1800);
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error(error);
+          status.textContent = "The page could not be shared.";
+        }
+      }
+    }
+
+    document.getElementById("share-button").addEventListener("click", sharePage);
+
+    Promise.allSettled([
+      loadConditions().catch(error => showConditionsError(error)),
+      loadTides().catch(error => showTideError(error)),
+      loadClimateContext().catch(error => showClimateError(error))
+    ]);
+  </script>
 </body>
 </html>

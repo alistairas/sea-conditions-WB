@@ -431,14 +431,13 @@
   <main class="page">
     <header class="header">
       <div>
-        <div class="eyebrow">Panama Swimming Club Â· conditions prototype</div>
+        <div class="eyebrow">Panama Swimming Club &middot; conditions prototype</div>
         <h1>Whitley Bay Beach Conditions</h1>
-        <p class="page-updated" id="page-updated">Loading latest updateâ¦</p>
+        <p class="page-updated" id="page-updated">Loading latest update&hellip;</p>
       </div>
 
       <button id="share-button" class="share-btn" type="button" aria-label="Share Whitley Bay beach conditions">
-        <span aria-hidden="true">â</span>
-        <span class="share-label"> Share</span>
+        <span class="share-label">Share</span>
       </button>
     </header>
 
@@ -450,17 +449,17 @@
       <div class="conditions-grid">
         <article class="small-card">
           <div class="label">Sea temperature</div>
-          <div class="value" id="temperature">--Â°C</div>
-          <div class="trend" id="trend">Loading weekly comparisonâ¦</div>
-          <p class="card-meta" id="sea-observation-date">Observation date loadingâ¦</p>
+          <div class="value" id="temperature">--&deg;C</div>
+          <div class="trend" id="trend">Loading weekly comparison&hellip;</div>
+          <p class="card-meta" id="sea-observation-date">Observation date loading&hellip;</p>
         </article>
 
         <article class="small-card">
           <div class="label">Next tides</div>
           <div id="next-tide-primary" class="tide-primary">--</div>
           <div id="following-tides" class="tide-list"></div>
-          <p class="card-meta" id="tide-date">Times loadingâ¦</p>
-          <a class="small-link" href="tides.html">Tide details â</a>
+          <p class="card-meta" id="tide-date">Times loading&hellip;</p>
+          <a class="small-link" href="tides.html">Tide details &rarr;</a>
         </article>
 
         <article class="small-card">
@@ -484,7 +483,7 @@
         </article>
       </div>
 
-      <p class="section-meta" id="weather-updated">Weather update loadingâ¦</p>
+      <p class="section-meta" id="weather-updated">Weather update loading&hellip;</p>
     </section>
 
     <section class="card" aria-labelledby="temperature-history-heading">
@@ -504,10 +503,10 @@
 
       <div id="climate-context" class="climate-context" aria-live="polite">
         <div class="climate-kicker">Sea-surface temperature climate context</div>
-        <p class="climate-headline">Loading the long-term comparisonâ¦</p>
+        <p class="climate-headline">Loading the long-term comparison&hellip;</p>
       </div>
 
-      <a class="small-link" href="history.html">Explore sea-temperature history â</a>
+      <a class="small-link" href="history.html">Explore sea-temperature history &rarr;</a>
     </section>
 
     <section class="card" aria-labelledby="local-record-heading">
@@ -538,7 +537,7 @@
     <details class="data-details">
       <summary>About the data</summary>
       <p id="sea-data-note">
-        Sea-temperature source details loadingâ¦
+        Sea-temperature source details loading&hellip;
       </p>
       <p>
         Air temperature, wind, weather and UV data are supplied by Open-Meteo. Tide predictions use Open Waters / Neaps and TICON-4 harmonics for North Shields and are not for navigation.
@@ -558,35 +557,36 @@
   <script>
     const CLIMATE_DATA_URL = "data/nt_era5_sst_climate.json";
     let shareSummary = "Whitley Bay Beach Conditions";
+    const icon = (...codePoints) => String.fromCodePoint(...codePoints);
 
     const weatherIcons = {
-      0: "âï¸",
-      1: "ð¤ï¸",
-      2: "â",
-      3: "âï¸",
-      45: "ð«ï¸",
-      48: "ð«ï¸",
-      51: "ð¦ï¸",
-      53: "ð¦ï¸",
-      55: "ð§ï¸",
-      61: "ð¦ï¸",
-      63: "ð§ï¸",
-      65: "âï¸",
-      71: "ð¨ï¸",
-      73: "âï¸",
-      75: "âï¸",
-      80: "ð¦ï¸",
-      81: "ð§ï¸",
-      82: "âï¸",
-      95: "âï¸"
+      0: icon(0x2600, 0xfe0f),
+      1: icon(0x1f324, 0xfe0f),
+      2: icon(0x26c5),
+      3: icon(0x2601, 0xfe0f),
+      45: icon(0x1f32b, 0xfe0f),
+      48: icon(0x1f32b, 0xfe0f),
+      51: icon(0x1f326, 0xfe0f),
+      53: icon(0x1f326, 0xfe0f),
+      55: icon(0x1f327, 0xfe0f),
+      61: icon(0x1f326, 0xfe0f),
+      63: icon(0x1f327, 0xfe0f),
+      65: icon(0x26c8, 0xfe0f),
+      71: icon(0x1f328, 0xfe0f),
+      73: icon(0x2744, 0xfe0f),
+      75: icon(0x2744, 0xfe0f),
+      80: icon(0x1f326, 0xfe0f),
+      81: icon(0x1f327, 0xfe0f),
+      82: icon(0x26c8, 0xfe0f),
+      95: icon(0x26c8, 0xfe0f)
     };
 
     const uvIcons = {
-      Low: "ð¢",
-      Moderate: "ð¡",
-      High: "ð ",
-      "Very High": "ð´",
-      Extreme: "ð£"
+      Low: icon(0x1f7e2),
+      Moderate: icon(0x1f7e1),
+      High: icon(0x1f7e0),
+      "Very High": icon(0x1f534),
+      Extreme: icon(0x1f7e3)
     };
 
     function parseDateOnly(dateString) {
@@ -702,9 +702,9 @@
       const fallbackNote = comparison.daysEarlier === 7 ? "" : " (closest reading)";
 
       if (comparison.change > 0) {
-        trendElement.textContent = `â ${comparison.change.toFixed(1)}Â°C from ${interval}${fallbackNote}`;
+        trendElement.textContent = `Up ${comparison.change.toFixed(1)}\u00B0C from ${interval}${fallbackNote}`;
       } else if (comparison.change < 0) {
-        trendElement.textContent = `â ${Math.abs(comparison.change).toFixed(1)}Â°C from ${interval}${fallbackNote}`;
+        trendElement.textContent = `Down ${Math.abs(comparison.change).toFixed(1)}\u00B0C from ${interval}${fallbackNote}`;
       } else {
         trendElement.textContent = `No change from ${interval}${fallbackNote}`;
       }
@@ -756,7 +756,7 @@
 
       const chartTemperatures = chartPoints.map(item => Number(item.sea_temp_c));
       const chartRange = document.getElementById("chart-range");
-      chartRange.textContent = `${formatDate(chartPoints[0].date)}â${formatDate(chartPoints[chartPoints.length - 1].date)}`;
+      chartRange.textContent = `${formatDate(chartPoints[0].date)} to ${formatDate(chartPoints[chartPoints.length - 1].date)}`;
 
       new Chart(document.getElementById("temp-chart"), {
         type: "line",
@@ -790,7 +790,7 @@
                 label: context => {
                   const item = chartPoints[context.dataIndex];
                   const qualifier = item.interpolated ? " (interpolated)" : "";
-                  return `${Number(item.sea_temp_c).toFixed(1)}Â°C${qualifier}`;
+                  return `${Number(item.sea_temp_c).toFixed(1)}\u00B0C${qualifier}`;
                 }
               }
             }
@@ -809,10 +809,10 @@
               suggestedMax: Math.max(...chartTemperatures) + 0.5,
               title: {
                 display: true,
-                text: "Â°C"
+                text: "\u00B0C"
               },
               ticks: {
-                callback: value => `${value}Â°`
+                callback: value => `${value}\u00B0`
               },
               grid: {
                 color: "rgba(96, 125, 139, 0.13)"
@@ -848,8 +848,8 @@
       const data = await dataResponse.json();
       const history = await historyResponse.json();
 
-      document.getElementById("temperature").textContent = `${data.sea_temp_c}Â°C`;
-      document.getElementById("air-temp").textContent = data.air_temp_c === null ? "Unavailable" : `${data.air_temp_c}Â°C`;
+      document.getElementById("temperature").textContent = `${data.sea_temp_c}\u00B0C`;
+      document.getElementById("air-temp").textContent = data.air_temp_c === null ? "Unavailable" : `${data.air_temp_c}\u00B0C`;
       document.getElementById("wind").textContent = data.wind_speed_kmh === null
         ? "Unavailable"
         : `${Math.round(data.wind_speed_kmh)} km/h ${data.wind_direction || ""}`.trim();
@@ -865,13 +865,13 @@
 
       document.getElementById("page-updated").textContent = `Page data refreshed ${formatUpdatedTimestamp(data.updated)}`;
       document.getElementById("weather-updated").textContent = `Weather and wind updated ${formatUpdatedTimestamp(data.updated)}`;
-      document.getElementById("sea-observation-date").textContent = `Observed ${formatDate(data.sst_date, { year: "numeric" })} Â· ${observationAgeText(data.sst_date)}`;
-      document.getElementById("sea-data-note").textContent = `Sea temperature is derived from Copernicus Marine OSTIA analysis produced by the UK Met Office using satellite and in-situ observations. It represents the nearest available grid cell for the North Tyneside coast. Grid resolution ${data.grid_resolution}; estimated analysis uncertainty Â±${data.analysis_error_c}Â°C.`;
+      document.getElementById("sea-observation-date").textContent = `Observed ${formatDate(data.sst_date, { year: "numeric" })} - ${observationAgeText(data.sst_date)}`;
+      document.getElementById("sea-data-note").textContent = `Sea temperature is derived from Copernicus Marine OSTIA analysis produced by the UK Met Office using satellite and in-situ observations. It represents the nearest available grid cell for the North Tyneside coast. Grid resolution ${data.grid_resolution}; estimated analysis uncertainty \u00B1${data.analysis_error_c}\u00B0C.`;
 
       renderWeeklyTrend(history, data);
       renderTemperatureChart(history);
 
-      shareSummary = `Whitley Bay Beach Conditions: sea temperature ${data.sea_temp_c}Â°C, observed ${formatDate(data.sst_date, { year: "numeric" })}.`;
+      shareSummary = `Whitley Bay Beach Conditions: sea temperature ${data.sea_temp_c}\u00B0C, observed ${formatDate(data.sst_date, { year: "numeric" })}.`;
     }
 
     async function loadTides() {
@@ -891,11 +891,11 @@
 
       const primary = nextTides[0];
       const primaryDate = formatTideDate(primary.time);
-      document.getElementById("next-tide-primary").textContent = `${primary.type} ${formatTideTime(primary.time)} Â· ${Number(primary.height_m).toFixed(2)}m`;
+      document.getElementById("next-tide-primary").textContent = `${primary.type} ${formatTideTime(primary.time)} - ${Number(primary.height_m).toFixed(2)}m`;
 
       document.getElementById("following-tides").innerHTML = nextTides.slice(1).map(tide => {
         const tideDate = formatTideDate(tide.time);
-        const dateLabel = tideDate === primaryDate ? "" : ` Â· ${tideDate}`;
+        const dateLabel = tideDate === primaryDate ? "" : ` - ${tideDate}`;
 
         return `
           <div class="tide-row">
@@ -925,8 +925,8 @@
       container.innerHTML = `
         <div class="climate-kicker">Sea-surface temperature climate context</div>
         <p class="climate-headline">${headline}</p>
-        <p class="climate-detail">Comparing 1 Januaryâ${formatDate(ytd.to_date)} across ${ytd.out_of} years. Climate data to ${formatDate(ytd.to_date, { year: "numeric" })}.</p>
-        <a class="climate-link" href="climate-history.html">Explore the climate record â</a>
+        <p class="climate-detail">Comparing 1 January to ${formatDate(ytd.to_date)} across ${ytd.out_of} years. Climate data to ${formatDate(ytd.to_date, { year: "numeric" })}.</p>
+        <a class="climate-link" href="climate-history.html">Explore the climate record &rarr;</a>
       `;
     }
 
@@ -952,7 +952,7 @@
       document.getElementById("climate-context").innerHTML = `
         <div class="climate-kicker">Sea-surface temperature climate context</div>
         <p class="climate-headline error-message">Long-term comparison currently unavailable.</p>
-        <a class="climate-link" href="climate-history.html">Open the climate record â</a>
+        <a class="climate-link" href="climate-history.html">Open the climate record &rarr;</a>
       `;
     }
 

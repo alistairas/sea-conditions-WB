@@ -143,8 +143,14 @@ input {
 <script>
 let archiveEntries = [];
 
-fetch("PSC_Log_Vol06_archive.json")
-  .then(response => response.json())
+fetch("archives/PSC_Log_Vol06_archive.json")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    return response.json();
+  })
   .then(data => {
     archiveEntries = data.entries || [];
 
@@ -152,9 +158,27 @@ fetch("PSC_Log_Vol06_archive.json")
       `${archiveEntries.length} entries`;
 
     document.getElementById("archive-meta").textContent =
-      `${data.archive || "PSC swim log"} · ${data.volume || ""}`;
+      `${data.archive || "PSC swim log"}${data.volume ? " · " + data.volume : ""}`;
 
     renderEntries();
+  })
+  .catch(error => {
+    console.error("Archive failed to load:", error);
+
+    document.getElementById("archive-count").textContent =
+      "Archive temporarily unavailable";
+
+    document.getElementById("archive-meta").textContent =
+      "We couldn't load the archive entries. Please try refreshing the page in a few moments.";
+
+    document.getElementById("entries").innerHTML = `
+      <section class="card">
+        <div class="value">Archive could not be loaded</div>
+        <div class="notes">
+          Please refresh the page. If the problem continues, the archive data may be temporarily unavailable.
+        </div>
+      </section>
+    `;
   });
 
 function renderEntries(entriesToShow) {

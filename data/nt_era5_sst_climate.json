@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-08-14 23:11 UTC",
+  "created": "2026-08-23 18:24 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-08-09",
+    "date": "2026-08-18",
     "year": 2026,
-    "doy": 221,
-    "sst_c": 15.21
+    "doy": 230,
+    "sst_c": 15.31
   },
   "average_1991_2020": [
     {
@@ -1495,29 +1495,29 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-08-09",
-      "sst_c": 15.21,
-      "baseline_1991_2020_c": 15.08,
-      "difference_from_baseline_c": 0.13
+      "date": "2026-08-18",
+      "sst_c": 15.31,
+      "baseline_1991_2020_c": 14.82,
+      "difference_from_baseline_c": 0.49
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-08-09",
-      "mean_sst_c": 10.05,
+      "to_date": "2026-08-18",
+      "mean_sst_c": 10.26,
       "rank": 2,
       "out_of": 87,
       "warmer_years": [
         {
           "year": 2025,
-          "mean_sst_c": 10.06
+          "mean_sst_c": 10.28
         }
       ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 8,
-      "to_date": "2026-08-09",
-      "mean_sst_c": 15.77,
+      "to_date": "2026-08-18",
+      "mean_sst_c": 15.62,
       "rank": 10,
       "out_of": 87
     },
@@ -191673,6 +191673,60 @@
           "doy": 221,
           "month_day": "08-09",
           "sst_c": 15.21
+        },
+        {
+          "date": "2026-08-10",
+          "doy": 222,
+          "month_day": "08-10",
+          "sst_c": 15.41
+        },
+        {
+          "date": "2026-08-11",
+          "doy": 223,
+          "month_day": "08-11",
+          "sst_c": 15.21
+        },
+        {
+          "date": "2026-08-12",
+          "doy": 224,
+          "month_day": "08-12",
+          "sst_c": 15.44
+        },
+        {
+          "date": "2026-08-13",
+          "doy": 225,
+          "month_day": "08-13",
+          "sst_c": 15.59
+        },
+        {
+          "date": "2026-08-14",
+          "doy": 226,
+          "month_day": "08-14",
+          "sst_c": 15.74
+        },
+        {
+          "date": "2026-08-15",
+          "doy": 227,
+          "month_day": "08-15",
+          "sst_c": 15.55
+        },
+        {
+          "date": "2026-08-16",
+          "doy": 228,
+          "month_day": "08-16",
+          "sst_c": 15.46
+        },
+        {
+          "date": "2026-08-17",
+          "doy": 229,
+          "month_day": "08-17",
+          "sst_c": 15.5
+        },
+        {
+          "date": "2026-08-18",
+          "doy": 230,
+          "month_day": "08-18",
+          "sst_c": 15.31
         }
       ]
     }

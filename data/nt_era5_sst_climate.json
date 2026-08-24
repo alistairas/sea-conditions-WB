@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-08-23 18:24 UTC",
+  "created": "2026-08-24 20:09 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-08-18",
+    "date": "2026-08-19",
     "year": 2026,
-    "doy": 230,
-    "sst_c": 15.31
+    "doy": 231,
+    "sst_c": 15.5
   },
   "average_1991_2020": [
     {
@@ -1495,30 +1495,30 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-08-18",
-      "sst_c": 15.31,
-      "baseline_1991_2020_c": 14.82,
-      "difference_from_baseline_c": 0.49
+      "date": "2026-08-19",
+      "sst_c": 15.5,
+      "baseline_1991_2020_c": 14.76,
+      "difference_from_baseline_c": 0.74
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-08-18",
-      "mean_sst_c": 10.26,
+      "to_date": "2026-08-19",
+      "mean_sst_c": 10.28,
       "rank": 2,
       "out_of": 87,
       "warmer_years": [
         {
           "year": 2025,
-          "mean_sst_c": 10.28
+          "mean_sst_c": 10.31
         }
       ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 8,
-      "to_date": "2026-08-18",
-      "mean_sst_c": 15.62,
-      "rank": 10,
+      "to_date": "2026-08-19",
+      "mean_sst_c": 15.61,
+      "rank": 9,
       "out_of": 87
     },
     "warmest_full_years": [
@@ -191727,6 +191727,12 @@
           "doy": 230,
           "month_day": "08-18",
           "sst_c": 15.31
+        },
+        {
+          "date": "2026-08-19",
+          "doy": 231,
+          "month_day": "08-19",
+          "sst_c": 15.5
         }
       ]
     }

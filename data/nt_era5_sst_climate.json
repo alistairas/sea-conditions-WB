@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-08-25 20:27 UTC",
+  "created": "2026-08-31 07:58 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-08-20",
+    "date": "2026-08-25",
     "year": 2026,
-    "doy": 232,
-    "sst_c": 15.37
+    "doy": 237,
+    "sst_c": 15.58
   },
   "average_1991_2020": [
     {
@@ -1495,30 +1495,30 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-08-20",
-      "sst_c": 15.37,
-      "baseline_1991_2020_c": 14.74,
-      "difference_from_baseline_c": 0.63
+      "date": "2026-08-25",
+      "sst_c": 15.58,
+      "baseline_1991_2020_c": 14.62,
+      "difference_from_baseline_c": 0.96
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-08-20",
-      "mean_sst_c": 10.31,
+      "to_date": "2026-08-25",
+      "mean_sst_c": 10.41,
       "rank": 2,
       "out_of": 87,
       "warmer_years": [
         {
           "year": 2025,
-          "mean_sst_c": 10.33
+          "mean_sst_c": 10.44
         }
       ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 8,
-      "to_date": "2026-08-20",
-      "mean_sst_c": 15.6,
-      "rank": 9,
+      "to_date": "2026-08-25",
+      "mean_sst_c": 15.56,
+      "rank": 7,
       "out_of": 87
     },
     "warmest_full_years": [
@@ -191739,6 +191739,36 @@
           "doy": 232,
           "month_day": "08-20",
           "sst_c": 15.37
+        },
+        {
+          "date": "2026-08-21",
+          "doy": 233,
+          "month_day": "08-21",
+          "sst_c": 15.26
+        },
+        {
+          "date": "2026-08-22",
+          "doy": 234,
+          "month_day": "08-22",
+          "sst_c": 15.29
+        },
+        {
+          "date": "2026-08-23",
+          "doy": 235,
+          "month_day": "08-23",
+          "sst_c": 15.32
+        },
+        {
+          "date": "2026-08-24",
+          "doy": 236,
+          "month_day": "08-24",
+          "sst_c": 15.65
+        },
+        {
+          "date": "2026-08-25",
+          "doy": 237,
+          "month_day": "08-25",
+          "sst_c": 15.58
         }
       ]
     }

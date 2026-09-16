@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-09-11 22:34 UTC",
+  "created": "2026-09-16 06:47 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-09-06",
+    "date": "2026-09-10",
     "year": 2026,
-    "doy": 249,
-    "sst_c": 15.27
+    "doy": 253,
+    "sst_c": 14.42
   },
   "average_1991_2020": [
     {
@@ -1495,15 +1495,15 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-09-06",
-      "sst_c": 15.27,
-      "baseline_1991_2020_c": 13.85,
-      "difference_from_baseline_c": 1.42
+      "date": "2026-09-10",
+      "sst_c": 14.42,
+      "baseline_1991_2020_c": 13.74,
+      "difference_from_baseline_c": 0.68
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-09-06",
-      "mean_sst_c": 10.67,
+      "to_date": "2026-09-10",
+      "mean_sst_c": 10.73,
       "rank": 1,
       "out_of": 87,
       "warmer_years": []
@@ -1511,9 +1511,9 @@
     "month_to_date_rank": {
       "year": 2026,
       "month": 9,
-      "to_date": "2026-09-06",
-      "mean_sst_c": 15.49,
-      "rank": 1,
+      "to_date": "2026-09-10",
+      "mean_sst_c": 15.18,
+      "rank": 5,
       "out_of": 87
     },
     "warmest_full_years": [
@@ -191836,6 +191836,30 @@
           "doy": 249,
           "month_day": "09-06",
           "sst_c": 15.27
+        },
+        {
+          "date": "2026-09-07",
+          "doy": 250,
+          "month_day": "09-07",
+          "sst_c": 15.04
+        },
+        {
+          "date": "2026-09-08",
+          "doy": 251,
+          "month_day": "09-08",
+          "sst_c": 14.78
+        },
+        {
+          "date": "2026-09-09",
+          "doy": 252,
+          "month_day": "09-09",
+          "sst_c": 14.58
+        },
+        {
+          "date": "2026-09-10",
+          "doy": 253,
+          "month_day": "09-10",
+          "sst_c": 14.42
         }
       ]
     }

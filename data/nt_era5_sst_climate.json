@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-09-19 19:45 UTC",
+  "created": "2026-10-02 06:59 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-09-14",
+    "date": "2026-09-26",
     "year": 2026,
-    "doy": 257,
-    "sst_c": 14.7
+    "doy": 269,
+    "sst_c": 13.88
   },
   "average_1991_2020": [
     {
@@ -1495,25 +1495,30 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-09-14",
-      "sst_c": 14.7,
-      "baseline_1991_2020_c": 13.51,
-      "difference_from_baseline_c": 1.19
+      "date": "2026-09-26",
+      "sst_c": 13.88,
+      "baseline_1991_2020_c": 12.82,
+      "difference_from_baseline_c": 1.06
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-09-14",
-      "mean_sst_c": 10.79,
-      "rank": 1,
+      "to_date": "2026-09-26",
+      "mean_sst_c": 10.94,
+      "rank": 2,
       "out_of": 87,
-      "warmer_years": []
+      "warmer_years": [
+        {
+          "year": 2003,
+          "mean_sst_c": 10.97
+        }
+      ]
     },
     "month_to_date_rank": {
       "year": 2026,
       "month": 9,
-      "to_date": "2026-09-14",
-      "mean_sst_c": 14.95,
-      "rank": 6,
+      "to_date": "2026-09-26",
+      "mean_sst_c": 14.58,
+      "rank": 5,
       "out_of": 87
     },
     "warmest_full_years": [
@@ -191884,6 +191889,78 @@
           "doy": 257,
           "month_day": "09-14",
           "sst_c": 14.7
+        },
+        {
+          "date": "2026-09-15",
+          "doy": 258,
+          "month_day": "09-15",
+          "sst_c": 14.53
+        },
+        {
+          "date": "2026-09-16",
+          "doy": 259,
+          "month_day": "09-16",
+          "sst_c": 14.4
+        },
+        {
+          "date": "2026-09-17",
+          "doy": 260,
+          "month_day": "09-17",
+          "sst_c": 14.3
+        },
+        {
+          "date": "2026-09-18",
+          "doy": 261,
+          "month_day": "09-18",
+          "sst_c": 14.16
+        },
+        {
+          "date": "2026-09-19",
+          "doy": 262,
+          "month_day": "09-19",
+          "sst_c": 14.01
+        },
+        {
+          "date": "2026-09-20",
+          "doy": 263,
+          "month_day": "09-20",
+          "sst_c": 13.99
+        },
+        {
+          "date": "2026-09-21",
+          "doy": 264,
+          "month_day": "09-21",
+          "sst_c": 14.12
+        },
+        {
+          "date": "2026-09-22",
+          "doy": 265,
+          "month_day": "09-22",
+          "sst_c": 14.43
+        },
+        {
+          "date": "2026-09-23",
+          "doy": 266,
+          "month_day": "09-23",
+          "sst_c": 14.03
+        },
+        {
+          "date": "2026-09-24",
+          "doy": 267,
+          "month_day": "09-24",
+          "sst_c": 14.06
+        },
+        {
+          "date": "2026-09-25",
+          "doy": 268,
+          "month_day": "09-25",
+          "sst_c": 13.77
+        },
+        {
+          "date": "2026-09-26",
+          "doy": 269,
+          "month_day": "09-26",
+          "sst_c": 13.88
         }
       ]
     }

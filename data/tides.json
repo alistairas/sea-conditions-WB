@@ -24,32 +24,8 @@
   "source": "Open Waters / Neaps tide predictions using TICON-4 harmonics",
   "source_url": "https://openwaters.io/api",
   "not_for_navigation": true,
-  "generated_at": "2026-10-11T10:51:47.980324+00:00",
+  "generated_at": "2026-10-12T12:05:24.875019+00:00",
   "events": [
-    {
-      "time": "2026-10-11T03:16:52.763Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.43
-    },
-    {
-      "time": "2026-10-11T09:43:21.382Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.67
-    },
-    {
-      "time": "2026-10-11T15:43:36.791Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.15
-    },
-    {
-      "time": "2026-10-11T21:52:53.918Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.97
-    },
     {
       "time": "2026-10-12T03:52:52.874Z",
       "label": "High",
@@ -117,7 +93,7 @@
       "height_m": 4.87
     },
     {
-      "time": "2026-10-14T23:32:26.700Z",
+      "time": "2026-10-14T23:32:26.699Z",
       "label": "Low",
       "type": "Low",
       "height_m": 1.29
@@ -153,7 +129,7 @@
       "height_m": 4.49
     },
     {
-      "time": "2026-10-16T12:15:51.252Z",
+      "time": "2026-10-16T12:15:51.251Z",
       "label": "Low",
       "type": "Low",
       "height_m": 1.84
@@ -207,10 +183,34 @@
       "height_m": 2.44
     },
     {
-      "time": "2026-10-18T20:17:59.792Z",
+      "time": "2026-10-18T20:17:59.791Z",
       "label": "High",
       "type": "High",
       "height_m": 4.01
+    },
+    {
+      "time": "2026-10-19T02:52:29.906Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 2.16
+    },
+    {
+      "time": "2026-10-19T09:21:12.332Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 3.79
+    },
+    {
+      "time": "2026-10-19T15:25:00.088Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 2.6
+    },
+    {
+      "time": "2026-10-19T21:38:42.394Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 3.92
     }
   ]
 }

@@ -4734,5 +4734,69 @@
       "first_observation": "12:33",
       "last_observation": "13:02"
     }
+  },
+  {
+    "date": "2026-10-10",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.09
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 47,
+      "first_observation": "08:24",
+      "last_observation": "08:44"
+    }
+  },
+  {
+    "date": "2026-10-11",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 11.59
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 71,
+      "first_observation": "11:21",
+      "last_observation": "11:45"
+    }
+  },
+  {
+    "date": "2026-10-12",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.29
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 65,
+      "first_observation": "14:51",
+      "last_observation": "15:11"
+    }
+  },
+  {
+    "date": "2026-10-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 12.49
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 45,
+      "first_observation": "18:27",
+      "last_observation": "18:42"
+    }
   }
 ]

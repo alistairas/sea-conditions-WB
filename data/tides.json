@@ -24,32 +24,8 @@
   "source": "Open Waters / Neaps tide predictions using TICON-4 harmonics",
   "source_url": "https://openwaters.io/api",
   "not_for_navigation": true,
-  "generated_at": "2026-10-27T09:51:18.130703+00:00",
+  "generated_at": "2026-10-28T10:37:42.557921+00:00",
   "events": [
-    {
-      "time": "2026-10-27T03:27:57.979Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.41
-    },
-    {
-      "time": "2026-10-27T09:52:19.186Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.68
-    },
-    {
-      "time": "2026-10-27T15:49:25.100Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.28
-    },
-    {
-      "time": "2026-10-27T22:06:50.094Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.9
-    },
     {
       "time": "2026-10-28T04:09:11.350Z",
       "label": "High",
@@ -57,7 +33,7 @@
       "height_m": 5.42
     },
     {
-      "time": "2026-10-28T10:31:58.111Z",
+      "time": "2026-10-28T10:31:58.110Z",
       "label": "Low",
       "type": "Low",
       "height_m": 0.78
@@ -171,7 +147,7 @@
       "height_m": 1.54
     },
     {
-      "time": "2026-11-02T09:05:53.640Z",
+      "time": "2026-11-02T09:05:53.639Z",
       "label": "High",
       "type": "High",
       "height_m": 4.3
@@ -201,7 +177,7 @@
       "height_m": 4.26
     },
     {
-      "time": "2026-11-03T16:43:13.002Z",
+      "time": "2026-11-03T16:43:13.001Z",
       "label": "Low",
       "type": "Low",
       "height_m": 2.16
@@ -211,6 +187,30 @@
       "label": "High",
       "type": "High",
       "height_m": 4.46
+    },
+    {
+      "time": "2026-11-04T05:26:12.962Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 1.43
+    },
+    {
+      "time": "2026-11-04T11:44:54.500Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 4.38
+    },
+    {
+      "time": "2026-11-04T17:53:05.448Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 1.98
+    },
+    {
+      "time": "2026-11-04T23:44:39.879Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 4.63
     }
   ]
 }

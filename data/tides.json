@@ -24,34 +24,10 @@
   "source": "Open Waters / Neaps tide predictions using TICON-4 harmonics",
   "source_url": "https://openwaters.io/api",
   "not_for_navigation": true,
-  "generated_at": "2026-10-28T10:37:42.557921+00:00",
+  "generated_at": "2026-10-29T10:55:53.793749+00:00",
   "events": [
     {
-      "time": "2026-10-28T04:09:11.350Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.42
-    },
-    {
-      "time": "2026-10-28T10:31:58.110Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.78
-    },
-    {
-      "time": "2026-10-28T16:28:46.894Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.26
-    },
-    {
-      "time": "2026-10-28T22:48:47.700Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 0.91
-    },
-    {
-      "time": "2026-10-29T04:53:51.570Z",
+      "time": "2026-10-29T04:53:51.569Z",
       "label": "High",
       "type": "High",
       "height_m": 5.31
@@ -93,19 +69,19 @@
       "height_m": 4.97
     },
     {
-      "time": "2026-10-31T00:24:45.149Z",
+      "time": "2026-10-31T00:24:45.148Z",
       "label": "Low",
       "type": "Low",
       "height_m": 1.16
     },
     {
-      "time": "2026-10-31T06:40:26.827Z",
+      "time": "2026-10-31T06:40:26.826Z",
       "label": "High",
       "type": "High",
       "height_m": 4.81
     },
     {
-      "time": "2026-10-31T12:52:49.456Z",
+      "time": "2026-10-31T12:52:49.455Z",
       "label": "Low",
       "type": "Low",
       "height_m": 1.65
@@ -123,7 +99,7 @@
       "height_m": 1.37
     },
     {
-      "time": "2026-11-01T07:47:35.755Z",
+      "time": "2026-11-01T07:47:35.754Z",
       "label": "High",
       "type": "High",
       "height_m": 4.51
@@ -165,13 +141,13 @@
       "height_m": 4.41
     },
     {
-      "time": "2026-11-03T04:05:31.964Z",
+      "time": "2026-11-03T04:05:31.963Z",
       "label": "Low",
       "type": "Low",
       "height_m": 1.57
     },
     {
-      "time": "2026-11-03T10:29:43.658Z",
+      "time": "2026-11-03T10:29:43.657Z",
       "label": "High",
       "type": "High",
       "height_m": 4.26
@@ -211,6 +187,24 @@
       "label": "High",
       "type": "High",
       "height_m": 4.63
+    },
+    {
+      "time": "2026-11-05T06:30:43.235Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 1.23
+    },
+    {
+      "time": "2026-11-05T12:43:22.017Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 4.57
+    },
+    {
+      "time": "2026-11-05T18:48:52.575Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 1.73
     }
   ]
 }

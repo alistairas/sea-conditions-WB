@@ -3,13 +3,60 @@ name: Build climate record
 on:
   workflow_dispatch:
 
+# Avoid two copies of this slow CDS workflow running at once.
+concurrency:
+  group: climate-record-cds
+  cancel-in-progress: false
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build-climate-record:
+  plan:
+    name: Plan ERA5 periods
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.make-plan.outputs.matrix }}
+      end_date: ${{ steps.make-plan.outputs.end_date }}
+      current_year: ${{ steps.make-plan.outputs.current_year }}
+    steps:
+      - name: Work out periods and one fixed end date
+        id: make-plan
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timedelta, timezone
 
+          end_date = datetime.now(timezone.utc).date() - timedelta(days=7)
+          last_complete_year = end_date.year - 1
+          periods = [
+              {"start": year, "end": min(year + 9, last_complete_year)}
+              for year in range(1940, last_complete_year + 1, 10)
+          ]
+          matrix = json.dumps({"include": periods}, separators=(",", ":"))
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"matrix={matrix}\n")
+              f.write(f"end_date={end_date.isoformat()}\n")
+              f.write(f"current_year={end_date.year}\n")
+          print(f"Historical periods: {periods}")
+          print(f"Partial/current year: {end_date.year}, through {end_date}")
+          PY
+
+  historical:
+    name: ERA5 ${{ matrix.start }}-${{ matrix.end }}
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      max-parallel: 1  # CDS asks users to submit requests sequentially.
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      CLIMATE_END_DATE: ${{ needs.plan.outputs.end_date }}
+      CHUNK_START: ${{ matrix.start }}
+      CHUNK_END: ${{ matrix.end }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -17,27 +64,170 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      # Cache persists completed decades between workflow runs, even if a
+      # later decade exceeds its six-hour job limit. Bump v1 if the requested
+      # area, variable, time of day or processing requirements change.
+      - name: Restore or save historical NetCDF
+        uses: actions/cache@v4
+        with:
+          path: climate-cache/era5_sst_nt_${{ matrix.start }}_${{ matrix.end }}.nc
+          key: era5-nt-sst-11utc-v1-${{ matrix.start }}-${{ matrix.end }}
+
+      - name: Configure CDS API
+        env:
+          CDSAPI_KEY: ${{ secrets.CDSAPI_KEY }}
+        run: |
+          printf 'url: https://cds.climate.copernicus.eu/api\nkey: %s\n' "$CDSAPI_KEY" > "$HOME/.cdsapirc"
+          chmod 600 "$HOME/.cdsapirc"
+
+      - name: Fetch or reuse this historical period
+        run: |
+          python - <<'PY'
+          import os
+          import cdsapi
+          from scripts.build_climate_record import download_period
+
+          start = int(os.environ['CHUNK_START'])
+          end = int(os.environ['CHUNK_END'])
+          file = download_period(start, end, cdsapi.Client())
+          if file is None:
+              raise RuntimeError(f'No NetCDF file produced for {start}-{end}')
+          PY
+
+      - name: Check historical file covers every requested day
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import date
+          from pathlib import Path
+          import pandas as pd
+          import xarray as xr
+          from scripts.build_climate_record import normalise_time_dimension, get_sst_variable_name
+
+          start = int(os.environ['CHUNK_START'])
+          end = int(os.environ['CHUNK_END'])
+          path = Path(f'climate-cache/era5_sst_nt_{start}_{end}.nc')
+          with xr.open_dataset(path) as original:
+              ds = normalise_time_dimension(original)
+              get_sst_variable_name(ds)
+              dates = pd.DatetimeIndex(pd.to_datetime(ds['time'].values))
+              expected = (date(end + 1, 1, 1) - date(start, 1, 1)).days
+              if len(dates) != expected:
+                  raise ValueError(f'{path}: {len(dates)} timestamps, expected {expected}')
+              if dates.min().date() != date(start, 1, 1) or dates.max().date() != date(end, 12, 31):
+                  raise ValueError(f'{path}: unexpected date coverage {dates.min()} to {dates.max()}')
+              print(f'Valid historical coverage: {start}-{end} ({len(dates)} daily samples)')
+          PY
+
+      - name: Send historical NetCDF to final job
+        uses: actions/upload-artifact@v4
+        with:
+          name: era5-historical-${{ matrix.start }}-${{ matrix.end }}
+          path: climate-cache/era5_sst_nt_${{ matrix.start }}_${{ matrix.end }}.nc
+          if-no-files-found: error
+          retention-days: 7
+
+  current:
+    name: ERA5 current partial year
+    needs: [plan, historical]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      CLIMATE_END_DATE: ${{ needs.plan.outputs.end_date }}
+      CURRENT_YEAR: ${{ needs.plan.outputs.current_year }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
       - name: Install Python packages
         run: pip install -r requirements.txt
 
       - name: Configure CDS API
+        env:
+          CDSAPI_KEY: ${{ secrets.CDSAPI_KEY }}
         run: |
-          cat > ~/.cdsapirc << EOF
-          url: https://cds.climate.copernicus.eu/api
-          key: ${{ secrets.CDSAPI_KEY }}
-          EOF
+          printf 'url: https://cds.climate.copernicus.eu/api\nkey: %s\n' "$CDSAPI_KEY" > "$HOME/.cdsapirc"
+          chmod 600 "$HOME/.cdsapirc"
 
-      - name: Remove current-year climate cache
-        run: rm -f climate-cache/era5_sst_nt_2026.nc
-    
-      - name: Build climate record
-        run: CLIMATE_START_YEAR=1940 CLIMATE_END_YEAR=2026 CLIMATE_CHUNK_YEARS=10 python scripts/build_climate_record.py
+      - name: Fetch current partial year
+        run: |
+          python - <<'PY'
+          import os
+          import cdsapi
+          from scripts.build_climate_record import download_year
+
+          year = int(os.environ['CURRENT_YEAR'])
+          path = download_year(year, cdsapi.Client())
+          if path is None:
+              raise RuntimeError(f'No partial-year file produced for {year}')
+          PY
+
+      - name: Send current-year NetCDF to final job
+        uses: actions/upload-artifact@v4
+        with:
+          name: era5-current-${{ needs.plan.outputs.current_year }}
+          path: climate-cache/era5_sst_nt_${{ needs.plan.outputs.current_year }}.nc
+          if-no-files-found: error
+          retention-days: 7
+
+  assemble:
+    name: Build and commit climate record
+    needs: [plan, historical, current]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      - name: Restore NetCDFs from all completed jobs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: era5-*
+          path: climate-cache
+          merge-multiple: true
+
+      # Requires the small CLIMATE_OFFLINE edits to build_climate_record.py.
+      - name: Assemble the complete history without CDS downloads
+        env:
+          CLIMATE_OFFLINE: '1'
+          CLIMATE_START_YEAR: '1940'
+          CLIMATE_END_YEAR: ${{ needs.plan.outputs.current_year }}
+          CLIMATE_CHUNK_YEARS: '10'
+          CLIMATE_END_DATE: ${{ needs.plan.outputs.end_date }}
+        run: python scripts/build_climate_record.py
+
       - name: Commit updated climate data
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add data/nt_era5_sst_climate.json data/nt_era5_sst_climate_daily.csv
-          git commit -m "Update climate record" || echo "No changes to commit"
-          git push
+          # Historical NetCDFs are small (~300 KB per decade) and immutable.
+          # Keep them permanently in Git, not solely in evictable Actions cache.
+          # The glob excludes the separately downloaded partial-year file.
+          git add -f climate-cache/era5_sst_nt_*_*.nc
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update climate record"
+            git push
+          fi

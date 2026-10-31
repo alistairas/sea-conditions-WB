@@ -38,7 +38,6 @@ ERA5_EAST = -1.00
 DATASET_ID = "reanalysis-era5-single-levels"
 VARIABLE_REQUEST_NAME = "sea_surface_temperature"
 
-# In NetCDF the ERA5 SST variable often appears as "sst"
 POSSIBLE_SST_VARIABLE_NAMES = [
     "sst",
     "sea_surface_temperature",
@@ -49,7 +48,6 @@ BASELINE_END = 2020
 
 # For first testing, run:
 # CLIMATE_START_YEAR=2023 CLIMATE_END_YEAR=2026 python scripts/build_climate_record.py
-#
 # For full run, leave unset or set CLIMATE_START_YEAR=1940.
 START_YEAR = int(os.environ.get("CLIMATE_START_YEAR", "1940"))
 END_YEAR = int(os.environ.get("CLIMATE_END_YEAR", str(datetime.now(timezone.utc).year)))
@@ -58,9 +56,11 @@ END_YEAR = int(os.environ.get("CLIMATE_END_YEAR", str(datetime.now(timezone.utc)
 # You can override with CLIMATE_END_DATE=YYYY-MM-DD.
 DEFAULT_END_DATE = datetime.now(timezone.utc).date() - timedelta(days=7)
 END_DATE = date.fromisoformat(os.environ.get("CLIMATE_END_DATE", DEFAULT_END_DATE.isoformat()))
-
-# Avoid requesting before the selected start year.
 START_DATE = date(START_YEAR, 1, 1)
+
+# When CLIMATE_OFFLINE=1, all NetCDFs must already exist. This allows
+# an Actions job to assemble all decades without any CDS API requests.
+OFFLINE = os.environ.get("CLIMATE_OFFLINE") == "1"
 
 # ------------------------------------------------------------
 # Paths
@@ -79,15 +79,14 @@ print(f"Start year: {START_YEAR}", flush=True)
 print(f"End year: {END_YEAR}", flush=True)
 print(f"End date: {END_DATE}", flush=True)
 print(f"Output JSON: {OUT_JSON}", flush=True)
+print(f"Offline mode: {OFFLINE}", flush=True)
 
 # ------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------
 
-def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Path | None:
-    """
-    Download ERA5 SST at 11:00 UTC for a multi-year period.    This avoids one slow CDS queue per year.
-    """
+def download_period(start_year: int, end_year: int, client: cdsapi.Client | None) -> Path | None:
+    """Download ERA5 SST at 11:00 UTC for a multi-year period."""
     period_start = date(start_year, 1, 1)
     period_end = min(date(end_year, 12, 31), END_DATE)
 
@@ -96,15 +95,18 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
         return None
 
     years = [str(y) for y in range(start_year, end_year + 1) if date(y, 1, 1) <= END_DATE]
-
     months = [f"{m:02d}" for m in range(1, 13)]
     days = [f"{d:02d}" for d in range(1, 32)]
-
     out_file = CACHE_DIR / f"era5_sst_nt_{start_year}_{end_year}.nc"
 
     if out_file.exists() and out_file.stat().st_size > 0:
         print(f"Using cached file: {out_file}", flush=True)
         return out_file
+
+    if OFFLINE:
+        raise FileNotFoundError(
+            f"Missing historical NetCDF in offline build: {out_file}"
+        )
 
     request = {
         "product_type": ["reanalysis"],
@@ -115,12 +117,7 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
         "time": ["11:00"],
         "data_format": "netcdf",
         "download_format": "unarchived",
-        "area": [
-            ERA5_NORTH,
-            ERA5_WEST,
-            ERA5_SOUTH,
-            ERA5_EAST,
-        ],
+        "area": [ERA5_NORTH, ERA5_WEST, ERA5_SOUTH, ERA5_EAST],
     }
 
     print(f"Downloading ERA5 SST for {start_year}-{end_year}", flush=True)
@@ -136,7 +133,6 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
 
         except Exception as e:
             print(f"CDS attempt {attempt} failed for {start_year}-{end_year}: {e}", flush=True)
-
             error_text = str(e).lower()
 
             if "cost limits exceeded" in error_text or "request is too large" in error_text:
@@ -144,7 +140,7 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
                     f"CDS request too large for {start_year}-{end_year}. "
                     "Reduce CLIMATE_CHUNK_YEARS, for example to 5, 3, 2 or 1."
                 ) from e
-                
+
             if "required licences not accepted" in error_text or "licences" in error_text:
                 raise RuntimeError(
                     "CDS licence not accepted. Log in to the Copernicus Climate Data Store "
@@ -164,65 +160,47 @@ def download_period(start_year: int, end_year: int, client: cdsapi.Client) -> Pa
 
     return None
 
+
 def month_day_list(year: int, month: int, end_date: date) -> list[str]:
     """Return day strings for a month, clipped to end_date."""
     last_day = calendar.monthrange(year, month)[1]
     days = []
-
     for day in range(1, last_day + 1):
         d = date(year, month, day)
-
-        if d < START_DATE:
+        if d < START_DATE or d > end_date:
             continue
-
-        if d > end_date:
-            continue
-
         days.append(f"{day:02d}")
-
     return days
 
 
 def month_list_for_year(year: int, end_date: date) -> list[str]:
     """Return month strings for a year, clipped to end_date."""
     months = []
-
     for month in range(1, 13):
         first_of_month = date(year, month, 1)
-
         if first_of_month > end_date:
             continue
-
         if date(year, month, calendar.monthrange(year, month)[1]) < START_DATE:
             continue
-
         months.append(f"{month:02d}")
-
     return months
 
 
 def noleap_doy(ts: pd.Timestamp) -> int | None:
-    """
-    Return day-of-year on a 365-day no-leap calendar.
-    Feb 29 is dropped. Days after Feb 29 in leap years are shifted back by 1.
-    """
+    """365-day day of year; omit leap day and shift later leap-year dates."""
     if ts.month == 2 and ts.day == 29:
         return None
 
-    doy = int(ts.dayofyear)
-
+    doy = int(ts.day_of_year)
     if calendar.isleap(ts.year) and doy > 59:
         return doy - 1
-
     return doy
 
 
 def get_sst_variable_name(ds: xr.Dataset) -> str:
-    """Find the SST variable in the downloaded NetCDF."""
     for name in POSSIBLE_SST_VARIABLE_NAMES:
         if name in ds.data_vars:
             return name
-
     raise KeyError(
         "Could not find SST variable. Available variables: "
         + ", ".join(ds.data_vars.keys())
@@ -230,195 +208,163 @@ def get_sst_variable_name(ds: xr.Dataset) -> str:
 
 
 def normalise_time_dimension(ds: xr.Dataset) -> xr.Dataset:
-    """
-    ERA5 NetCDF may use 'time' or 'valid_time'.
-    Standardise to 'time'.
-    """
     if "time" in ds.coords or "time" in ds.dims:
         return ds
-
     if "valid_time" in ds.coords or "valid_time" in ds.dims:
         return ds.rename({"valid_time": "time"})
-
     raise KeyError(
         "Could not find a time coordinate. Coordinates: "
         + ", ".join(ds.coords.keys())
     )
 
 
-def download_year(year: int, client: cdsapi.Client) -> Path | None:
-    """
-    Download ERA5 SST at 11:00 UTC for one year, clipped for the current year.    Returns the NetCDF path, or None if there are no days to request.
+def download_year(year: int, client: cdsapi.Client | None) -> Path | None:
+    """Download one partial calendar year without requesting unavailable future days.
+
+    CDS year/month/day selections form a cross-product. When the last month is
+    incomplete, make one request for complete months and a second for the last
+    month; then combine them into the same NetCDF name used by the website.
     """
     year_end_date = min(date(year, 12, 31), END_DATE)
-
     if year_end_date < date(year, 1, 1):
         print(f"Skipping {year}: year is after end date", flush=True)
         return None
 
-    months = month_list_for_year(year, year_end_date)
-
-    if not months:
-        print(f"Skipping {year}: no months to request", flush=True)
-        return None
-
-    # CDS requires day list. For current year, requesting all days in future
-    # months can fail, so build a clipped day list across requested months.
-    all_days = sorted(
-        {
-            day
-            for month_str in months
-            for day in month_day_list(year, int(month_str), year_end_date)
-        }
-    )
-
-    if not all_days:
-        print(f"Skipping {year}: no days to request", flush=True)
-        return None
-
     out_file = CACHE_DIR / f"era5_sst_nt_{year}.nc"
-
     is_partial_year = year == END_DATE.year
+
+    # The assemble job must not remove or re-download the current-year file.
+    if OFFLINE:
+        if out_file.exists() and out_file.stat().st_size > 0:
+            print(f"Using saved current-year file: {out_file}", flush=True)
+            return out_file
+        raise FileNotFoundError(f"Missing current-year NetCDF in offline build: {out_file}")
 
     if out_file.exists() and out_file.stat().st_size > 0:
         if not is_partial_year:
             print(f"Using cached file for {year}: {out_file}", flush=True)
             return out_file
-    
+        print(f"Refreshing cached partial-year file for {year}: {out_file}", flush=True)
+        out_file.unlink()
+
+    last_month = year_end_date.month
+    last_month_complete = (
+        year_end_date.day == calendar.monthrange(year, last_month)[1]
+    )
+    complete_month_count = last_month if last_month_complete else last_month - 1
+
+    parts: list[tuple[str, list[str], list[str]]] = []
+    if complete_month_count:
+        parts.append((
+            "full_months",
+            [f"{m:02d}" for m in range(1, complete_month_count + 1)],
+            [f"{d:02d}" for d in range(1, 32)],
+        ))
+    if not last_month_complete:
+        parts.append((
+            "last_month",
+            [f"{last_month:02d}"],
+            [f"{d:02d}" for d in range(1, year_end_date.day + 1)],
+        ))
+
+    part_paths: list[Path] = []
+    for part_name, months, days in parts:
+        part_path = CACHE_DIR / f"era5_sst_nt_{year}_{part_name}.nc"
+        request = {
+            "product_type": ["reanalysis"],
+            "variable": [VARIABLE_REQUEST_NAME],
+            "year": [str(year)],
+            "month": months,
+            "day": days,
+            "time": ["11:00"],
+            "data_format": "netcdf",
+            "download_format": "unarchived",
+            "area": [ERA5_NORTH, ERA5_WEST, ERA5_SOUTH, ERA5_EAST],
+        }
+
         print(
-            f"Refreshing cached partial-year file for {year}: {out_file}",
-            flush=True
+            f"Downloading ERA5 SST for {year} ({part_name}): "
+            f"months {months[0]}-{months[-1]}, days {days[0]}-{days[-1]}",
+            flush=True,
         )
-    
-        try:
-            out_file.unlink()
-        except OSError as e:
-            raise RuntimeError(
-                f"Could not remove stale partial-year cache file: {out_file}"
-            ) from e
+        for attempt in range(1, 4):
+            try:
+                print(f"CDS attempt {attempt}/3 for {year} {part_name}", flush=True)
+                client.retrieve(DATASET_ID, request, str(part_path))
+                if not part_path.exists() or part_path.stat().st_size == 0:
+                    raise RuntimeError(f"CDS created an empty file: {part_path}")
+                part_paths.append(part_path)
+                break
+            except Exception as e:
+                print(f"CDS attempt {attempt} failed for {year} {part_name}: {e}", flush=True)
+                error_text = str(e).lower()
+                if "required licences not accepted" in error_text or "licences" in error_text:
+                    raise RuntimeError(
+                        "CDS licence not accepted. Log in to the Copernicus Climate Data Store "
+                        "and accept the ERA5 single-levels licence before re-running."
+                    ) from e
+                if part_path.exists():
+                    part_path.unlink()
+                if attempt == 3:
+                    raise
+                time.sleep(60)
 
-    request = {
-        "product_type": ["reanalysis"],
-        "variable": [VARIABLE_REQUEST_NAME],
-        "year": [str(year)],
-        "month": months,
-        "day": all_days,
-        "time": [
-            "11:00",
-        ],
-        "data_format": "netcdf",
-        "download_format": "unarchived",
-        "area": [
-            ERA5_NORTH,
-            ERA5_WEST,
-            ERA5_SOUTH,
-            ERA5_EAST,
-        ],
-    }
+    if len(part_paths) == 1:
+        part_paths[0].replace(out_file)
+    else:
+        # Both files cover disjoint date ranges. Normalise the time coordinate
+        # and make one file for the existing process_year() function.
+        datasets = []
+        for part_path in part_paths:
+            with xr.open_dataset(part_path) as part_ds:
+                datasets.append(normalise_time_dimension(part_ds).load())
+        combined = xr.concat(datasets, dim="time").sortby("time")
+        combined.to_netcdf(out_file)
+        for part_path in part_paths:
+            part_path.unlink()
 
-    print(f"Downloading ERA5 SST for {year}", flush=True)
-    print(f"Months: {months}", flush=True)
-    print(f"Days: {all_days[0]} to {all_days[-1]}", flush=True)
-
-    for attempt in range(1, 4):
-        try:
-            print(f"CDS attempt {attempt}/3 for {year}", flush=True)
-            client.retrieve(DATASET_ID, request, str(out_file))
-            print(f"Downloaded {out_file}", flush=True)
-            return out_file
-
-        except Exception as e:
-            print(f"CDS attempt {attempt} failed for {year}: {e}", flush=True)
-        
-            error_text = str(e).lower()
-        
-            if "required licences not accepted" in error_text or "licences" in error_text:
-                raise RuntimeError(
-                    "CDS licence not accepted. Log in to the Copernicus Climate Data Store "
-                    "and accept the ERA5 single-levels licence before re-running."
-                ) from e
-        
-            if out_file.exists():
-                try:
-                    out_file.unlink()
-                except Exception:
-                    pass
-        
-            if attempt == 3:
-                raise
-        
-            time.sleep(60)
-
-    return None
+    print(f"Downloaded {out_file} through {year_end_date}", flush=True)
+    return out_file
 
 
 def process_year(nc_file: Path, year: int) -> pd.DataFrame:
-    """
-    Read one NetCDF file and return daily mean SST across the box.
-    """
-    print(f"Processing {year}: {nc_file}", flush=True)
+    """Process all daily readings in a NetCDF file (even if it spans a decade)."""
+    print(f"Processing NetCDF period starting {year}: {nc_file}", flush=True)
 
-    ds = xr.open_dataset(nc_file)
-    ds = normalise_time_dimension(ds)
+    with xr.open_dataset(nc_file) as source:
+        ds = normalise_time_dimension(source)
+        var_name = get_sst_variable_name(ds)
+        sst = ds[var_name]
 
-    var_name = get_sst_variable_name(ds)
+        spatial_dims = [dim for dim in ["latitude", "longitude"] if dim in sst.dims]
+        if not spatial_dims:
+            raise ValueError(f"No latitude/longitude dimensions found for {year}")
 
-    sst = ds[var_name]
+        box_mean_k = sst.mean(dim=spatial_dims, skipna=True)
+        box_mean_c = box_mean_k - 273.15
+        daily = box_mean_c.resample(time="1D").mean(skipna=True)
+        df = daily.to_dataframe(name="sst_c").reset_index()
 
-    # Average across the selected coastal box.
-    # skipna=True means land/missing cells will not poison the result.
-    spatial_dims = [
-        dim for dim in ["latitude", "longitude"] if dim in sst.dims
-    ]
-
-    if not spatial_dims:
-        raise ValueError(f"No latitude/longitude dimensions found for {year}")
-
-    box_mean_k = sst.mean(dim=spatial_dims, skipna=True)
-
-    # Convert Kelvin to Celsius.
-    box_mean_c = box_mean_k - 273.15
-
-   # Daily value. With one requested time per day, this preserves the 11:00 UTC sample.
-    daily = box_mean_c.resample(time="1D").mean(skipna=True)
-
-    df = daily.to_dataframe(name="sst_c").reset_index()
     df["date"] = pd.to_datetime(df["time"]).dt.date
     df["year"] = pd.to_datetime(df["time"]).dt.year
     df["month"] = pd.to_datetime(df["time"]).dt.month
     df["day"] = pd.to_datetime(df["time"]).dt.day
 
-    # Remove missing values and future clipped values.
     df = df.dropna(subset=["sst_c"]).copy()
+    df = df[(df["date"] >= START_DATE) & (df["date"] <= END_DATE)].copy()
     df["sst_c"] = df["sst_c"].astype(float).round(2)
 
-    # Add no-leap day-of-year for clean overlay charts.
     timestamps = pd.to_datetime(df["date"])
     df["doy"] = [noleap_doy(ts) for ts in timestamps]
     df = df[df["doy"].notna()].copy()
     df["doy"] = df["doy"].astype(int)
-
-    # Handy label for debugging / hover labels.
     df["month_day"] = timestamps.dt.strftime("%m-%d")
 
-    return df[
-        [
-            "date",
-            "year",
-            "month",
-            "day",
-            "doy",
-            "month_day",
-            "sst_c",
-        ]
-    ]
+    return df[["date", "year", "month", "day", "doy", "month_day", "sst_c"]]
+
 
 def build_summary_stats(df: pd.DataFrame) -> dict:
-    """
-    Build simple climate-context stats for the website.
-    Uses the 1991-2020 baseline for daily anomaly comparisons.
-    """
-
+    """Build 1991-2020 anomaly context and year/month rankings."""
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"])
     df["year"] = df["date"].dt.year
@@ -432,8 +378,7 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
     latest_sst = float(latest_row["sst_c"])
 
     baseline_df = df[
-        (df["year"] >= BASELINE_START)
-        & (df["year"] <= BASELINE_END)
+        (df["year"] >= BASELINE_START) & (df["year"] <= BASELINE_END)
     ].copy()
 
     daily_baseline = (
@@ -442,10 +387,7 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
         .rename(columns={"sst_c": "baseline_sst_c"})
     )
 
-    latest_baseline_match = daily_baseline[
-        daily_baseline["doy"] == latest_doy
-    ]
-
+    latest_baseline_match = daily_baseline[daily_baseline["doy"] == latest_doy]
     if latest_baseline_match.empty:
         latest_baseline = None
         latest_anomaly = None
@@ -453,36 +395,23 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
         latest_baseline = float(latest_baseline_match.iloc[0]["baseline_sst_c"])
         latest_anomaly = latest_sst - latest_baseline
 
-    # Year-to-date average rank:
-    # Compare each year over the same day-of-year range as the latest date.
     ytd = df[df["doy"] <= latest_doy].copy()
-
     ytd_by_year = (
         ytd.groupby("year", as_index=False)
-        .agg(
-            mean_sst_c=("sst_c", "mean"),
-            days=("sst_c", "count")
-        )
+        .agg(mean_sst_c=("sst_c", "mean"), days=("sst_c", "count"))
     )
-
-    # Require broadly complete years for fair comparison.
     ytd_by_year = ytd_by_year[ytd_by_year["days"] >= latest_doy - 3].copy()
     ytd_by_year["mean_sst_c"] = ytd_by_year["mean_sst_c"].round(2)
     ytd_by_year = ytd_by_year.sort_values("mean_sst_c", ascending=False)
     ytd_by_year["warmest_rank"] = range(1, len(ytd_by_year) + 1)
 
     latest_ytd = ytd_by_year[ytd_by_year["year"] == latest_year]
-    
     if latest_ytd.empty:
         ytd_summary = None
     else:
         row = latest_ytd.iloc[0]
         latest_rank = int(row["warmest_rank"])
-    
-        warmer_years = ytd_by_year[
-            ytd_by_year["warmest_rank"] < latest_rank
-        ].copy()
-    
+        warmer_years = ytd_by_year[ytd_by_year["warmest_rank"] < latest_rank].copy()
         ytd_summary = {
             "year": latest_year,
             "to_date": latest_date.date().isoformat(),
@@ -498,30 +427,21 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
             ],
         }
 
-    # Month-to-date rank:
-    # Compare same month and same day-of-month range across years.
     latest_day = latest_date.day
-
     mtd = df[
         (df["month"] == latest_month)
         & (df["date"].dt.day <= latest_day)
     ].copy()
-
     mtd_by_year = (
         mtd.groupby("year", as_index=False)
-        .agg(
-            mean_sst_c=("sst_c", "mean"),
-            days=("sst_c", "count")
-        )
+        .agg(mean_sst_c=("sst_c", "mean"), days=("sst_c", "count"))
     )
-
     mtd_by_year = mtd_by_year[mtd_by_year["days"] >= latest_day - 1].copy()
     mtd_by_year["mean_sst_c"] = mtd_by_year["mean_sst_c"].round(2)
     mtd_by_year = mtd_by_year.sort_values("mean_sst_c", ascending=False)
     mtd_by_year["warmest_rank"] = range(1, len(mtd_by_year) + 1)
 
     latest_mtd = mtd_by_year[mtd_by_year["year"] == latest_year]
-
     if latest_mtd.empty:
         mtd_summary = None
     else:
@@ -535,15 +455,10 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
             "out_of": int(len(mtd_by_year)),
         }
 
-    # Warmest full years in the dataset, useful for later.
     full_years = (
         df.groupby("year", as_index=False)
-        .agg(
-            mean_sst_c=("sst_c", "mean"),
-            days=("sst_c", "count")
-        )
+        .agg(mean_sst_c=("sst_c", "mean"), days=("sst_c", "count"))
     )
-
     full_years = full_years[full_years["days"] >= 360].copy()
     full_years["mean_sst_c"] = full_years["mean_sst_c"].round(2)
     full_years = full_years.sort_values("mean_sst_c", ascending=False)
@@ -567,17 +482,14 @@ def build_summary_stats(df: pd.DataFrame) -> dict:
         ],
     }
 
+
 def build_json(df: pd.DataFrame) -> dict:
-    """
-    Build website-friendly JSON.
-    """
+    """Build website-friendly JSON with existing schema."""
     print("Building JSON", flush=True)
 
     baseline_df = df[
-        (df["year"] >= BASELINE_START)
-        & (df["year"] <= BASELINE_END)
+        (df["year"] >= BASELINE_START) & (df["year"] <= BASELINE_END)
     ].copy()
-
     baseline = (
         baseline_df.groupby("doy", as_index=False)["sst_c"]
         .mean()
@@ -586,10 +498,8 @@ def build_json(df: pd.DataFrame) -> dict:
     baseline["sst_c"] = baseline["sst_c"].round(2)
 
     years = []
-
     for year, group in df.groupby("year"):
         group = group.sort_values("doy")
-
         years.append(
             {
                 "year": int(year),
@@ -606,7 +516,6 @@ def build_json(df: pd.DataFrame) -> dict:
         )
 
     latest_row = df.sort_values("date").iloc[-1]
-
     return {
         "version": 1,
         "created": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -645,10 +554,7 @@ def build_json(df: pd.DataFrame) -> dict:
             "sst_c": round(float(latest_row["sst_c"]), 2),
         },
         "average_1991_2020": [
-            {
-                "doy": int(row["doy"]),
-                "sst_c": round(float(row["sst_c"]), 2),
-            }
+            {"doy": int(row["doy"]), "sst_c": round(float(row["sst_c"]), 2)}
             for _, row in baseline.iterrows()
         ],
         "summary_stats": build_summary_stats(df),
@@ -661,38 +567,32 @@ def build_json(df: pd.DataFrame) -> dict:
 # ------------------------------------------------------------
 
 def main() -> None:
-    print("Creating CDS client", flush=True)
-    client = cdsapi.Client()
+    if OFFLINE:
+        print("Assembling from cached NetCDFs only (no CDS client)", flush=True)
+        client = None
+    else:
+        print("Creating CDS client", flush=True)
+        client = cdsapi.Client()
 
     chunk_years = int(os.environ.get("CLIMATE_CHUNK_YEARS", "10"))
-
     all_periods = []
 
-    # Only chunk complete years.
-    # The current ERA5/ERA5T year is partial, so handle it separately.
     latest_complete_year = min(END_YEAR, END_DATE.year - 1)
-
     year = START_YEAR
 
     while year <= latest_complete_year:
         chunk_start = year
         chunk_end = min(year + chunk_years - 1, latest_complete_year)
-
         nc_file = download_period(chunk_start, chunk_end, client)
-
         if nc_file is not None:
             df_period = process_year(nc_file, chunk_start)
             all_periods.append(df_period)
-
         year = chunk_end + 1
 
-    # Handle current partial year separately, if requested.
     if END_YEAR >= END_DATE.year and START_YEAR <= END_DATE.year:
         current_year = END_DATE.year
-        print(f"Downloading current partial year separately: {current_year}", flush=True)
-
+        print(f"Including current partial year: {current_year}", flush=True)
         nc_file = download_year(current_year, client)
-
         if nc_file is not None:
             df_period = process_year(nc_file, current_year)
             all_periods.append(df_period)
@@ -711,12 +611,11 @@ def main() -> None:
     print(f"Wrote CSV: {OUT_CSV}", flush=True)
 
     payload = build_json(df)
-
     with open(OUT_JSON, "w") as f:
         json.dump(payload, f, indent=2)
-
     print(f"Wrote JSON: {OUT_JSON}", flush=True)
     print("Climate record script finished", flush=True)
-    
+
+
 if __name__ == "__main__":
     main()

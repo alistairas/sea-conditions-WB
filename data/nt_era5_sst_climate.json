@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "created": "2026-10-02 06:59 UTC",
+  "created": "2026-11-01 13:58 UTC",
   "location": "North Tyneside coast",
   "location_description": "Offshore coastal waters around Whitley Bay, Cullercoats and Tynemouth",
   "reference_point": {
@@ -26,10 +26,10 @@
   "start_year": 1940,
   "end_year": 2026,
   "latest": {
-    "date": "2026-09-26",
+    "date": "2026-10-25",
     "year": 2026,
-    "doy": 269,
-    "sst_c": 13.88
+    "doy": 298,
+    "sst_c": 11.6
   },
   "average_1991_2020": [
     {
@@ -1495,29 +1495,29 @@
   ],
   "summary_stats": {
     "latest_anomaly": {
-      "date": "2026-09-26",
-      "sst_c": 13.88,
-      "baseline_1991_2020_c": 12.82,
-      "difference_from_baseline_c": 1.06
+      "date": "2026-10-25",
+      "sst_c": 11.6,
+      "baseline_1991_2020_c": 11.3,
+      "difference_from_baseline_c": 0.3
     },
     "year_to_date_rank": {
       "year": 2026,
-      "to_date": "2026-09-26",
-      "mean_sst_c": 10.94,
+      "to_date": "2026-10-25",
+      "mean_sst_c": 11.13,
       "rank": 2,
       "out_of": 87,
       "warmer_years": [
         {
           "year": 2003,
-          "mean_sst_c": 10.97
+          "mean_sst_c": 11.19
         }
       ]
     },
     "month_to_date_rank": {
       "year": 2026,
-      "month": 9,
-      "to_date": "2026-09-26",
-      "mean_sst_c": 14.58,
+      "month": 10,
+      "to_date": "2026-10-25",
+      "mean_sst_c": 12.76,
       "rank": 5,
       "out_of": 87
     },
@@ -191961,6 +191961,180 @@
           "doy": 269,
           "month_day": "09-26",
           "sst_c": 13.88
+        },
+        {
+          "date": "2026-09-27",
+          "doy": 270,
+          "month_day": "09-27",
+          "sst_c": 13.7
+        },
+        {
+          "date": "2026-09-28",
+          "doy": 271,
+          "month_day": "09-28",
+          "sst_c": 13.73
+        },
+        {
+          "date": "2026-09-29",
+          "doy": 272,
+          "month_day": "09-29",
+          "sst_c": 13.46
+        },
+        {
+          "date": "2026-09-30",
+          "doy": 273,
+          "month_day": "09-30",
+          "sst_c": 13.79
+        },
+        {
+          "date": "2026-10-01",
+          "doy": 274,
+          "month_day": "10-01",
+          "sst_c": 13.78
+        },
+        {
+          "date": "2026-10-02",
+          "doy": 275,
+          "month_day": "10-02",
+          "sst_c": 13.64
+        },
+        {
+          "date": "2026-10-03",
+          "doy": 276,
+          "month_day": "10-03",
+          "sst_c": 13.62
+        },
+        {
+          "date": "2026-10-04",
+          "doy": 277,
+          "month_day": "10-04",
+          "sst_c": 13.61
+        },
+        {
+          "date": "2026-10-05",
+          "doy": 278,
+          "month_day": "10-05",
+          "sst_c": 13.59
+        },
+        {
+          "date": "2026-10-06",
+          "doy": 279,
+          "month_day": "10-06",
+          "sst_c": 13.47
+        },
+        {
+          "date": "2026-10-07",
+          "doy": 280,
+          "month_day": "10-07",
+          "sst_c": 13.39
+        },
+        {
+          "date": "2026-10-08",
+          "doy": 281,
+          "month_day": "10-08",
+          "sst_c": 13.45
+        },
+        {
+          "date": "2026-10-09",
+          "doy": 282,
+          "month_day": "10-09",
+          "sst_c": 13.16
+        },
+        {
+          "date": "2026-10-10",
+          "doy": 283,
+          "month_day": "10-10",
+          "sst_c": 12.93
+        },
+        {
+          "date": "2026-10-11",
+          "doy": 284,
+          "month_day": "10-11",
+          "sst_c": 12.76
+        },
+        {
+          "date": "2026-10-12",
+          "doy": 285,
+          "month_day": "10-12",
+          "sst_c": 12.8
+        },
+        {
+          "date": "2026-10-13",
+          "doy": 286,
+          "month_day": "10-13",
+          "sst_c": 12.72
+        },
+        {
+          "date": "2026-10-14",
+          "doy": 287,
+          "month_day": "10-14",
+          "sst_c": 12.59
+        },
+        {
+          "date": "2026-10-15",
+          "doy": 288,
+          "month_day": "10-15",
+          "sst_c": 12.43
+        },
+        {
+          "date": "2026-10-16",
+          "doy": 289,
+          "month_day": "10-16",
+          "sst_c": 12.47
+        },
+        {
+          "date": "2026-10-17",
+          "doy": 290,
+          "month_day": "10-17",
+          "sst_c": 12.33
+        },
+        {
+          "date": "2026-10-18",
+          "doy": 291,
+          "month_day": "10-18",
+          "sst_c": 12.27
+        },
+        {
+          "date": "2026-10-19",
+          "doy": 292,
+          "month_day": "10-19",
+          "sst_c": 12.23
+        },
+        {
+          "date": "2026-10-20",
+          "doy": 293,
+          "month_day": "10-20",
+          "sst_c": 12.09
+        },
+        {
+          "date": "2026-10-21",
+          "doy": 294,
+          "month_day": "10-21",
+          "sst_c": 12.25
+        },
+        {
+          "date": "2026-10-22",
+          "doy": 295,
+          "month_day": "10-22",
+          "sst_c": 12.06
+        },
+        {
+          "date": "2026-10-23",
+          "doy": 296,
+          "month_day": "10-23",
+          "sst_c": 11.93
+        },
+        {
+          "date": "2026-10-24",
+          "doy": 297,
+          "month_day": "10-24",
+          "sst_c": 11.8
+        },
+        {
+          "date": "2026-10-25",
+          "doy": 298,
+          "month_day": "10-25",
+          "sst_c": 11.6
         }
       ]
     }

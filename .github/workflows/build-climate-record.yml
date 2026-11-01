@@ -59,10 +59,10 @@ jobs:
       CHUNK_END: ${{ matrix.end }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -73,7 +73,7 @@ jobs:
       # later decade exceeds its six-hour job limit. Bump v1 if the requested
       # area, variable, time of day or processing requirements change.
       - name: Restore or save historical NetCDF
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: climate-cache/era5_sst_nt_${{ matrix.start }}_${{ matrix.end }}.nc
           key: era5-nt-sst-11utc-v1-${{ matrix.start }}-${{ matrix.end }}
@@ -125,7 +125,7 @@ jobs:
           PY
 
       - name: Send historical NetCDF to final job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: era5-historical-${{ matrix.start }}-${{ matrix.end }}
           path: climate-cache/era5_sst_nt_${{ matrix.start }}_${{ matrix.end }}.nc
@@ -142,10 +142,10 @@ jobs:
       CURRENT_YEAR: ${{ needs.plan.outputs.current_year }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -173,7 +173,7 @@ jobs:
           PY
 
       - name: Send current-year NetCDF to final job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: era5-current-${{ needs.plan.outputs.current_year }}
           path: climate-cache/era5_sst_nt_${{ needs.plan.outputs.current_year }}.nc
@@ -189,10 +189,10 @@ jobs:
       contents: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -200,7 +200,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Restore NetCDFs from all completed jobs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: era5-*
           path: climate-cache
@@ -217,17 +217,46 @@ jobs:
         run: python scripts/build_climate_record.py
 
       - name: Commit updated climate data
+        shell: bash
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add data/nt_era5_sst_climate.json data/nt_era5_sst_climate_daily.csv
-          # Historical NetCDFs are small (~300 KB per decade) and immutable.
-          # Keep them permanently in Git, not solely in evictable Actions cache.
-          # The glob excludes the separately downloaded partial-year file.
-          git add -f climate-cache/era5_sst_nt_*_*.nc
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # A long CDS run may outlast other workflows that update main.
+          # Keep our generated output safe while updating to the latest main.
+          output_dir="$(mktemp -d)"
+          mkdir -p "$output_dir/data" "$output_dir/climate-cache"
+          cp data/nt_era5_sst_climate.json data/nt_era5_sst_climate_daily.csv "$output_dir/data/"
+          cp climate-cache/era5_sst_nt_*_*.nc "$output_dir/climate-cache/"
+
+          for attempt in 1 2 3; do
+            echo "Push attempt $attempt/3: fetching latest main"
+            git fetch origin +refs/heads/main:refs/remotes/origin/main
+            git reset --hard origin/main
+
+            # Apply only climate output files on top of the latest commit,
+            # keeping changes made by other workflows or by people.
+            mkdir -p data climate-cache
+            cp "$output_dir"/data/* data/
+            cp "$output_dir"/climate-cache/* climate-cache/
+            git add data/nt_era5_sst_climate.json data/nt_era5_sst_climate_daily.csv
+            git add -f climate-cache/era5_sst_nt_*_*.nc
+
+            if git diff --cached --quiet; then
+              echo "Climate record is already up to date"
+              exit 0
+            fi
+
             git commit -m "Update climate record"
-            git push
-          fi
+            if git push origin HEAD:main; then
+              echo "Climate record successfully pushed"
+              exit 0
+            fi
+
+            echo "Main moved while pushing; retrying with latest changes"
+            sleep 5
+          done
+
+          echo "::error::Could not push climate record after 3 attempts"
+          exit 1

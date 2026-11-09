@@ -4894,5 +4894,21 @@
       "first_observation": "08:30",
       "last_observation": "08:51"
     }
+  },
+  {
+    "date": "2026-11-08",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 10.19
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 66,
+      "first_observation": "11:27",
+      "last_observation": "11:51"
+    }
   }
 ]

@@ -24,32 +24,8 @@
   "source": "Open Waters / Neaps tide predictions using TICON-4 harmonics",
   "source_url": "https://openwaters.io/api",
   "not_for_navigation": true,
-  "generated_at": "2026-11-10T12:43:04.925999+00:00",
+  "generated_at": "2026-11-11T11:55:05.804439+00:00",
   "events": [
-    {
-      "time": "2026-11-10T03:31:42.331Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.07
-    },
-    {
-      "time": "2026-11-10T09:48:29.441Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 1.13
-    },
-    {
-      "time": "2026-11-10T15:47:05.660Z",
-      "label": "High",
-      "type": "High",
-      "height_m": 5.04
-    },
-    {
-      "time": "2026-11-10T22:05:23.657Z",
-      "label": "Low",
-      "type": "Low",
-      "height_m": 1.19
-    },
     {
       "time": "2026-11-11T04:06:56.635Z",
       "label": "High",
@@ -211,6 +187,30 @@
       "label": "High",
       "type": "High",
       "height_m": 4.17
+    },
+    {
+      "time": "2026-11-18T03:19:14.285Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 1.96
+    },
+    {
+      "time": "2026-11-18T09:47:35.094Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 3.92
+    },
+    {
+      "time": "2026-11-18T15:46:38.748Z",
+      "label": "Low",
+      "type": "Low",
+      "height_m": 2.38
+    },
+    {
+      "time": "2026-11-18T21:49:42.260Z",
+      "label": "High",
+      "type": "High",
+      "height_m": 4.16
     }
   ]
 }

@@ -4910,5 +4910,37 @@
       "first_observation": "11:27",
       "last_observation": "11:51"
     }
+  },
+  {
+    "date": "2026-11-14",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.39
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 44,
+      "first_observation": "08:19",
+      "last_observation": "08:32"
+    }
+  },
+  {
+    "date": "2026-11-15",
+    "temperature": {
+      "representative_c": null,
+      "minimum_c": 8.89
+    },
+    "method": "daily_minimum",
+    "confidence": "low",
+    "source": {
+      "device": "smartwatch",
+      "sessions": 1,
+      "observations": 35,
+      "first_observation": "11:19",
+      "last_observation": "11:39"
+    }
   }
 ]
